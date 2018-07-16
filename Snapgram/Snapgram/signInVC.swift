@@ -29,19 +29,30 @@ class signInVC: UIViewController {
         super.viewDidLoad()
         
         // Pacifico font of label
-        label.font = UIFont(name: "Pacifico", size: 25)
+        // label.font = UIFont(name: "Pacifico", size: 25)
         
         // alignment
-        label.frame = CGRect(x: 10, y: 80, width: self.view.frame.size.width - 20, height: 50)
-        usernameTxt.frame = CGRect(x: 10, y: label.frame.origin.y + 70, width: self.view.frame.size.width - 20, height: 30)
-        passwordTxt.frame = CGRect(x: 10, y: usernameTxt.frame.origin.y + 40, width: self.view.frame.size.width - 20, height: 30)
-        forgotBtn.frame = CGRect(x: 10, y: passwordTxt.frame.origin.y + 30, width: self.view.frame.size.width - 20, height: 30)
+        label.frame = CGRect(x: 20, y: 120, width: self.view.frame.size.width - 40, height: 50)
         
-        signInBtn.frame = CGRect(x: 20, y: forgotBtn.frame.origin.y + 40, width: self.view.frame.size.width / 4, height: 30)
-        signInBtn.layer.cornerRadius = signInBtn.frame.size.width / 20
+        usernameTxt.frame = CGRect(x: 20, y: label.frame.origin.y + 70, width: self.view.frame.size.width - 40, height: 40)
+        usernameTxt.layer.cornerRadius = usernameTxt.frame.size.height/2
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.usernameTxt.frame.height))
+        usernameTxt.leftView = paddingView
+        usernameTxt.leftViewMode = UITextFieldViewMode.always
         
-        signUpBtn.frame = CGRect(x: self.view.frame.size.width - self.view.frame.size.width / 4 - 20, y: signInBtn.frame.origin.y, width: self.view.frame.size.width / 4, height: 30)
-        signUpBtn.layer.cornerRadius = signUpBtn.frame.size.width / 20
+        passwordTxt.frame = CGRect(x: 20, y: usernameTxt.frame.origin.y + 70, width: self.view.frame.size.width - 40, height: 40)
+        passwordTxt.layer.cornerRadius = passwordTxt.frame.size.height/2
+        let paddingViewPass = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.passwordTxt.frame.height))
+        passwordTxt.leftView = paddingViewPass
+        passwordTxt.leftViewMode = UITextFieldViewMode.always
+        
+        forgotBtn.frame = CGRect(x: 20, y: signInBtn.frame.origin.y + 134, width: self.view.frame.size.width - 50, height: 30)
+        
+        signInBtn.frame = CGRect(x: 20, y: passwordTxt.frame.origin.y + 70, width: self.view.frame.size.width / 3, height: 40)
+        signInBtn.layer.cornerRadius = signInBtn.frame.size.height / 2
+        
+        signUpBtn.frame = CGRect(x: self.view.frame.size.width - self.view.frame.size.width / 3 - 20, y: signInBtn.frame.origin.y, width: self.view.frame.size.width / 3, height: 40)
+        signUpBtn.layer.cornerRadius = signUpBtn.frame.size.height / 2
         
         // tap to hide keyboard
         let hideTap = UITapGestureRecognizer(target: self, action: #selector(signInVC.hideKeyboard(_:)))
@@ -50,10 +61,10 @@ class signInVC: UIViewController {
         self.view.addGestureRecognizer(hideTap)
         
         // background
-        let bg = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        bg.image = UIImage(named: "bg.jpg")
-        bg.layer.zPosition = -1
-        self.view.addSubview(bg)
+        //let bg = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+        //bg.image = UIImage(named: "bg.jpg")
+        //bg.layer.zPosition = -1
+        //self.view.addSubview(bg)
     }
     
     
@@ -104,4 +115,91 @@ class signInVC: UIViewController {
         
     }
     
+}
+
+extension UIView {
+    
+    @IBInspectable
+    var cornerRadius: CGFloat {
+        get {
+            return layer.cornerRadius
+        }
+        set {
+            layer.cornerRadius = newValue
+        }
+    }
+    
+    @IBInspectable
+    var borderWidth: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    @IBInspectable
+    var borderColor: UIColor? {
+        get {
+            if let color = layer.borderColor {
+                return UIColor(cgColor: color)
+            }
+            return nil
+        }
+        set {
+            if let color = newValue {
+                layer.borderColor = color.cgColor
+            } else {
+                layer.borderColor = nil
+            }
+        }
+    }
+    
+    @IBInspectable
+    var shadowRadius: CGFloat {
+        get {
+            return layer.shadowRadius
+        }
+        set {
+            layer.shadowRadius = newValue
+        }
+    }
+    
+    @IBInspectable
+    var shadowOpacity: Float {
+        get {
+            return layer.shadowOpacity
+        }
+        set {
+            layer.shadowOpacity = newValue
+        }
+    }
+    
+    @IBInspectable
+    var shadowOffset: CGSize {
+        get {
+            return layer.shadowOffset
+        }
+        set {
+            layer.shadowOffset = newValue
+        }
+    }
+    
+    @IBInspectable
+    var shadowColor: UIColor? {
+        get {
+            if let color = layer.shadowColor {
+                return UIColor(cgColor: color)
+            }
+            return nil
+        }
+        set {
+            if let color = newValue {
+                layer.shadowColor = color.cgColor
+            } else {
+                layer.shadowColor = nil
+            }
+        }
+    }
 }

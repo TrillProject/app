@@ -34,7 +34,7 @@ class feedVC: UITableViewController {
         super.viewDidLoad()
         
         // title at the top
-        self.navigationItem.title = "FEED"
+        self.navigationItem.title = "TRILL"
         
         // automatic row height - dynamic cell
         tableView.rowHeight = UITableViewAutomaticDimension

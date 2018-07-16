@@ -34,7 +34,8 @@ class guestVC: UICollectionViewController {
         self.collectionView?.backgroundColor = .white
         
         // top title
-        self.navigationItem.title = guestname.last?.uppercased()
+        //self.navigationItem.title = guestname.last?.uppercased()
+        
         
         // new back button
         self.navigationItem.hidesBackButton = true
@@ -213,11 +214,12 @@ class guestVC: UICollectionViewController {
                 
                 // find related to user information
                 for object in objects! {
-                    header.fullnameLbl.text = (object.object(forKey: "fullname") as? String)?.uppercased()
-                    header.bioLbl.text = object.object(forKey: "bio") as? String
-                    header.bioLbl.sizeToFit()
-                    header.webTxt.text = object.object(forKey: "web") as? String
-                    header.webTxt.sizeToFit()
+                    //header.fullnameLbl.text = (object.object(forKey: "fullname") as? String)?.uppercased()
+                    self.navigationItem.title = (object.object(forKey: "fname") as? String)?.capitalized
+                    //header.bioLbl.text = object.object(forKey: "bio") as? String
+                    //header.bioLbl.sizeToFit()
+                    //header.webTxt.text = object.object(forKey: "web") as? String
+                    //header.webTxt.sizeToFit()
                     let avaFile : PFFile = (object.object(forKey: "ava") as? PFFile)!
                     avaFile.getDataInBackground(block: { (data, error) -> Void in
                         header.avaImg.image = UIImage(data: data!)

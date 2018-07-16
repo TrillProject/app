@@ -73,13 +73,13 @@ class editVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UI
     
     
     // func to hide keyboard
-    func hideKeyboard() {
+    @objc func hideKeyboard() {
         self.view.endEditing(true)
     }
     
     
     // func when keyboard is shown
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
     
         // define keyboard frame size
         keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
@@ -92,7 +92,7 @@ class editVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UI
     
     
     // func when keyboard is hidden
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         
         // move down with animation
         UIView.animate(withDuration: 0.4, animations: { () -> Void in
@@ -102,7 +102,7 @@ class editVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UI
     
     
     // func to call UIImagePickerController
-    func loadImg (_ recognizer : UITapGestureRecognizer) {
+    @objc func loadImg (_ recognizer : UITapGestureRecognizer) {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
@@ -152,9 +152,13 @@ class editVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UI
     func information() {
         
         // receive profile picture
-        let ava = PFUser.current()?.object(forKey: "ava") as! PFFile
-        ava.getDataInBackground { (data, error) -> Void in
-            self.avaImg.image = UIImage(data: data!)
+        if PFUser.current()?.object(forKey: "ava") == nil {
+            self.avaImg.image = UIImage(named: "pp")
+        } else {
+            let ava = PFUser.current()?.object(forKey: "ava") as! PFFile
+            ava.getDataInBackground { (data, error) -> Void in
+                self.avaImg.image = UIImage(data: data!)
+            }
         }
         
         // receive text information

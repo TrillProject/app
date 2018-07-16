@@ -33,7 +33,8 @@ class homeVC: UICollectionViewController {
         collectionView?.backgroundColor = .white
 
         // title at the top
-        self.navigationItem.title = PFUser.current()?.username?.uppercased()
+        //self.navigationItem.title = PFUser.current()?.username?.capitalized
+        self.navigationItem.title = (PFUser.current()?.object(forKey: "fname") as? String)?.capitalized
         
         // pull to refresh
         refresher = UIRefreshControl()
@@ -183,14 +184,19 @@ class homeVC: UICollectionViewController {
         
         // STEP 1. Get user data
         // get users data with connections to collumns of PFuser class
-        header.fullnameLbl.text = (PFUser.current()?.object(forKey: "fullname") as? String)?.uppercased()
-        header.webTxt.text = PFUser.current()?.object(forKey: "web") as? String
-        header.webTxt.sizeToFit()
-        header.bioLbl.text = PFUser.current()?.object(forKey: "bio") as? String
-        header.bioLbl.sizeToFit()
-        let avaQuery = PFUser.current()?.object(forKey: "ava") as! PFFile
-        avaQuery.getDataInBackground { (data, error) -> Void in
-            header.avaImg.image = UIImage(data: data!)
+        //header.fullnameLbl.text = (PFUser.current()?.object(forKey: "fullname") as? String)?.uppercased()
+        //header.webTxt.text = PFUser.current()?.object(forKey: "web") as? String
+        //header.webTxt.sizeToFit()
+        //header.bioLbl.text = PFUser.current()?.object(forKey: "bio") as? String
+        //header.bioLbl.sizeToFit()
+        
+        if PFUser.current()?.object(forKey: "ava") == nil {
+            header.avaImg.image = UIImage(named: "pp")
+        } else {
+            let avaQuery = PFUser.current()?.object(forKey: "ava") as! PFFile
+            avaQuery.getDataInBackground { (data, error) -> Void in
+                header.avaImg.image = UIImage(data: data!)
+            }
         }
         header.button.setTitle("edit profile", for: UIControlState())
         

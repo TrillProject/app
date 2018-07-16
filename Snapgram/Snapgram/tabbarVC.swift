@@ -26,22 +26,22 @@ class tabbarVC: UITabBarController {
         super.viewDidLoad()
 
         // color of item
-        self.tabBar.tintColor = .white
+        self.tabBar.tintColor = UIColor(red: 185.0 / 255.0, green: 172.0 / 255.0, blue: 244.0 / 255.0, alpha: 1)
         
         // color of background
-        self.tabBar.barTintColor = UIColor(red: 37.0 / 255.0, green: 39.0 / 255.0, blue: 42.0 / 255.0, alpha: 1)
+        self.tabBar.barTintColor = UIColor(red: 255.0 / 255.0, green: 255.0 / 255.0, blue: 255.0 / 255.0, alpha: 1)
         
         // disable translucent
         self.tabBar.isTranslucent = false
         
         // custom button
-        let itemWidth = self.view.frame.size.width / 5
-        let itemHeight = self.tabBar.frame.size.height
-        tabBarPostButton.frame = CGRect(x: itemWidth * 2, y: self.view.frame.size.height - itemHeight, width: itemWidth - 10, height: itemHeight)
-        tabBarPostButton.setBackgroundImage(UIImage(named: "upload"), for: UIControlState())
-        tabBarPostButton.adjustsImageWhenHighlighted = false
-        tabBarPostButton.addTarget(self, action: #selector(tabbarVC.upload(_:)), for: UIControlEvents.touchUpInside)
-        self.view.addSubview(tabBarPostButton)
+        //let itemWidth = self.view.frame.size.width / 5
+        //let itemHeight = self.tabBar.frame.size.height
+        //tabBarPostButton.frame = CGRect(x: itemWidth * 2, y: self.view.frame.size.height - itemHeight, width: itemWidth - 10, height: itemHeight)
+        //tabBarPostButton.setBackgroundImage(UIImage(named: "upload"), for: UIControlState())
+        //tabBarPostButton.adjustsImageWhenHighlighted = false
+        //tabBarPostButton.addTarget(self, action: #selector(tabbarVC.upload(_:)), for: UIControlEvents.touchUpInside)
+        //self.view.addSubview(tabBarPostButton)
         
         
         // create total icons

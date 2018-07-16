@@ -25,19 +25,23 @@ class resetPasswordVC: UIViewController {
         super.viewDidLoad()
         
         // alignment
-        emailTxt.frame = CGRect(x: 10, y: 120, width: self.view.frame.size.width - 20, height: 30)
+        emailTxt.frame = CGRect(x: 20, y: 190, width: self.view.frame.size.width - 40, height: 40)
+        emailTxt.layer.cornerRadius = emailTxt.frame.size.height/2
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.emailTxt.frame.height))
+        emailTxt.leftView = paddingView
+        emailTxt.leftViewMode = UITextFieldViewMode.always
         
-        resetBtn.frame = CGRect(x: 20, y: emailTxt.frame.origin.y + 50, width: self.view.frame.size.width / 4, height: 30)
-        resetBtn.layer.cornerRadius = resetBtn.frame.size.width / 20
+        resetBtn.frame = CGRect(x: 20, y: emailTxt.frame.origin.y + 70, width: self.view.frame.size.width / 3, height: 40)
+        resetBtn.layer.cornerRadius = resetBtn.frame.size.height / 2
         
-        cancelBtn.frame = CGRect(x: self.view.frame.size.width - self.view.frame.size.width / 4 - 20, y: resetBtn.frame.origin.y, width: self.view.frame.size.width / 4, height: 30)
-        cancelBtn.layer.cornerRadius = cancelBtn.frame.size.width / 20
+        cancelBtn.frame = CGRect(x: self.view.frame.size.width - self.view.frame.size.width / 3 - 20, y: resetBtn.frame.origin.y, width: self.view.frame.size.width / 3, height: 40)
+        cancelBtn.layer.cornerRadius = cancelBtn.frame.size.height / 2
         
         // background
-        let bg = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        bg.image = UIImage(named: "bg.jpg")
-        bg.layer.zPosition = -1
-        self.view.addSubview(bg)
+        //let bg = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
+        //bg.image = UIImage(named: "bg.jpg")
+        //bg.layer.zPosition = -1
+        //self.view.addSubview(bg)
     }
     
     
