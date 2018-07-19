@@ -75,60 +75,61 @@ class feedVC: UITableViewController {
         
         // STEP 1. Find posts realted to people who we are following
         let followQuery = PFQuery(className: "follow")
-        followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
-        followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
-            if error == nil {
+        if PFUser.current() != nil {
+            followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+            followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+                if error == nil {
                 
-                // clean up
-                self.followArray.removeAll(keepingCapacity: false)
+                    // clean up
+                    self.followArray.removeAll(keepingCapacity: false)
                 
-                // find related objects
-                for object in objects! {
-                    self.followArray.append(object.object(forKey: "following") as! String)
-                }
-                
-                // append current user to see own posts in feed
-                self.followArray.append(PFUser.current()!.username!)
-                
-                // STEP 2. Find posts made by people appended to followArray
-                let query = PFQuery(className: "posts")
-                query.whereKey("username", containedIn: self.followArray)
-                query.limit = self.page
-                query.addDescendingOrder("createdAt")
-                query.findObjectsInBackground(block: { (objects, error) -> Void in
-                    if error == nil {
-                        
-                        // clean up
-                        self.usernameArray.removeAll(keepingCapacity: false)
-                        self.avaArray.removeAll(keepingCapacity: false)
-                        self.dateArray.removeAll(keepingCapacity: false)
-                        self.picArray.removeAll(keepingCapacity: false)
-                        self.titleArray.removeAll(keepingCapacity: false)
-                        self.uuidArray.removeAll(keepingCapacity: false)
-                        
-                        // find related objects
-                        for object in objects! {
-                            self.usernameArray.append(object.object(forKey: "username") as! String)
-                            self.avaArray.append(object.object(forKey: "ava") as! PFFile)
-                            self.dateArray.append(object.createdAt)
-                            self.picArray.append(object.object(forKey: "pic") as! PFFile)
-                            self.titleArray.append(object.object(forKey: "title") as! String)
-                            self.uuidArray.append(object.object(forKey: "uuid") as! String)
-                        }
-                        
-                        // reload tableView & end spinning of refresher
-                        self.tableView.reloadData()
-                        self.refresher.endRefreshing()
-                        
-                    } else {
-                        print(error!.localizedDescription)
+                    // find related objects
+                    for object in objects! {
+                        self.followArray.append(object.object(forKey: "following") as! String)
                     }
-                })
-            } else {
-                print(error!.localizedDescription)
-            }
-        })
-        
+                
+                    // append current user to see own posts in feed
+                    self.followArray.append(PFUser.current()!.username!)
+                
+                    // STEP 2. Find posts made by people appended to followArray
+                    let query = PFQuery(className: "posts")
+                    query.whereKey("username", containedIn: self.followArray)
+                    query.limit = self.page
+                    query.addDescendingOrder("createdAt")
+                    query.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                        
+                            // clean up
+                            self.usernameArray.removeAll(keepingCapacity: false)
+                            self.avaArray.removeAll(keepingCapacity: false)
+                            self.dateArray.removeAll(keepingCapacity: false)
+                            self.picArray.removeAll(keepingCapacity: false)
+                            self.titleArray.removeAll(keepingCapacity: false)
+                            self.uuidArray.removeAll(keepingCapacity: false)
+                            
+                            // find related objects
+                            for object in objects! {
+                                self.usernameArray.append(object.object(forKey: "username") as! String)
+                                self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                                self.dateArray.append(object.createdAt)
+                                self.picArray.append(object.object(forKey: "pic") as! PFFile)
+                                self.titleArray.append(object.object(forKey: "title") as! String)
+                                self.uuidArray.append(object.object(forKey: "uuid") as! String)
+                            }
+                        
+                            // reload tableView & end spinning of refresher
+                            self.tableView.reloadData()
+                            self.refresher.endRefreshing()
+                        
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }
     }
     
     
@@ -305,12 +306,12 @@ class feedVC: UITableViewController {
             
             // if tapped on @currentUser go home, else go guest
             if mention.lowercased() == PFUser.current()?.username {
-                let home = self.storyboard?.instantiateViewController(withIdentifier: "homeVC") as! homeVC
-                self.navigationController?.pushViewController(home, animated: true)
+                let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
+                self.navigationController?.pushViewController(profile, animated: true)
             } else {
                 guestname.append(mention.lowercased())
-                let guest = self.storyboard?.instantiateViewController(withIdentifier: "guestVC") as! guestVC
-                self.navigationController?.pushViewController(guest, animated: true)
+                let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
+                self.navigationController?.pushViewController(profileUser, animated: true)
             }
         }
         
@@ -338,12 +339,12 @@ class feedVC: UITableViewController {
         
         // if user tapped on himself go home, else go guest
         if cell.usernameBtn.titleLabel?.text == PFUser.current()?.username {
-            let home = self.storyboard?.instantiateViewController(withIdentifier: "homeVC") as! homeVC
-            self.navigationController?.pushViewController(home, animated: true)
+            let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
+            self.navigationController?.pushViewController(profile, animated: true)
         } else {
             guestname.append(cell.usernameBtn.titleLabel!.text!)
-            let guest = self.storyboard?.instantiateViewController(withIdentifier: "guestVC") as! guestVC
-            self.navigationController?.pushViewController(guest, animated: true)
+            let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
+            self.navigationController?.pushViewController(profileUser, animated: true)
         }
         
     }

@@ -22,7 +22,6 @@ class guestVC: UICollectionViewController {
     var uuidArray = [String]()
     var picArray = [PFFile]()
     
-    
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,16 +29,12 @@ class guestVC: UICollectionViewController {
         // allow vertical scroll
         self.collectionView!.alwaysBounceVertical = true
         
-        // backgroung color
+        // background color
         self.collectionView?.backgroundColor = .white
-        
-        // top title
-        //self.navigationItem.title = guestname.last?.uppercased()
-        
         
         // new back button
         self.navigationItem.hidesBackButton = true
-        let backBtn = UIBarButtonItem(image: UIImage(named: "back.png"), style: .plain, target: self, action: #selector(guestVC.back(_:)))
+        let backBtn = UIBarButtonItem(image: UIImage(named: "prev.png"), style: .plain, target: self, action: #selector(guestVC.back(_:)))
         self.navigationItem.leftBarButtonItem = backBtn
         
         // swipe to go back
@@ -194,6 +189,19 @@ class guestVC: UICollectionViewController {
         // define header
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! headerView
         
+        header.addBottomBorderWithColor(color: lightGrey, width: 1)
+        
+        header.feedBtn.image = header.feedBtn.image!.withRenderingMode(.alwaysTemplate)
+        header.globeBtn.image = header.globeBtn.image!.withRenderingMode(.alwaysTemplate)
+        
+        header.feedBtn.tintColor = darkGrey
+        header.globeBtn.tintColor = lightGrey
+        
+        let followingImage = UIImage(named: "check")
+        let followingTintedImage = followingImage?.withRenderingMode(.alwaysTemplate)
+        let notFollowingTintedImage = followingImage?.withRenderingMode(.alwaysTemplate)
+        header.editOrFollowBtn.setBackgroundImage(notFollowingTintedImage, for: .normal)
+        header.editOrFollowBtn.tintColor = lightGrey
         
         // STEP 1. Load data of guest
         let infoQuery = PFQuery(className: "_User")
@@ -214,12 +222,7 @@ class guestVC: UICollectionViewController {
                 
                 // find related to user information
                 for object in objects! {
-                    //header.fullnameLbl.text = (object.object(forKey: "fullname") as? String)?.uppercased()
-                    self.navigationItem.title = (object.object(forKey: "fname") as? String)?.capitalized
-                    //header.bioLbl.text = object.object(forKey: "bio") as? String
-                    //header.bioLbl.sizeToFit()
-                    //header.webTxt.text = object.object(forKey: "web") as? String
-                    //header.webTxt.sizeToFit()
+                    self.navigationItem.title = (object.object(forKey: "firstname") as? String)?.capitalized
                     let avaFile : PFFile = (object.object(forKey: "ava") as? PFFile)!
                     avaFile.getDataInBackground(block: { (data, error) -> Void in
                         header.avaImg.image = UIImage(data: data!)
@@ -239,11 +242,11 @@ class guestVC: UICollectionViewController {
         followQuery.countObjectsInBackground (block: { (count, error) -> Void in
             if error == nil {
                 if count == 0 {
-                    header.button.setTitle("FOLLOW", for: UIControlState())
-                    header.button.backgroundColor = .lightGray
+                    header.editOrFollowBtn.setBackgroundImage(notFollowingTintedImage, for: .normal)
+                    header.editOrFollowBtn.tintColor = lightGrey
                 } else {
-                    header.button.setTitle("FOLLOWING", for: UIControlState())
-                    header.button.backgroundColor = .green
+                    header.editOrFollowBtn.setBackgroundImage(followingTintedImage, for: .normal)
+                    header.editOrFollowBtn.tintColor = mainColor
                 }
             } else {
                 print(error?.localizedDescription)
@@ -252,17 +255,6 @@ class guestVC: UICollectionViewController {
         
         
         // STEP 3. Count statistics
-        // count posts
-        let posts = PFQuery(className: "posts")
-        posts.whereKey("username", equalTo: guestname.last!)
-        posts.countObjectsInBackground (block: { (count, error) -> Void in
-            if error == nil {
-                header.posts.text = "\(count)"
-            } else {
-                print(error?.localizedDescription)
-            }
-        })
-        
         // count followers
         let followers = PFQuery(className: "follow")
         followers.whereKey("following", equalTo: guestname.last!)
@@ -288,10 +280,10 @@ class guestVC: UICollectionViewController {
         
         // STEP 4. Implement tap gestures
         // tap to posts label
-        let postsTap = UITapGestureRecognizer(target: self, action: #selector(guestVC.postsTap))
-        postsTap.numberOfTapsRequired = 1
-        header.posts.isUserInteractionEnabled = true
-        header.posts.addGestureRecognizer(postsTap)
+        //let postsTap = UITapGestureRecognizer(target: self, action: #selector(guestVC.postsTap))
+        //postsTap.numberOfTapsRequired = 1
+        //header.posts.isUserInteractionEnabled = true
+        //header.posts.addGestureRecognizer(postsTap)
         
         // tap to followers label
         let followersTap = UITapGestureRecognizer(target: self, action: #selector(guestVC.followersTap))
@@ -311,12 +303,12 @@ class guestVC: UICollectionViewController {
 
     
     // tapped posts label
-    func postsTap() {
-        if !picArray.isEmpty {
-            let index = IndexPath(item: 0, section: 0)
-            self.collectionView?.scrollToItem(at: index, at: UICollectionViewScrollPosition.top, animated: true)
-        }
-    }
+    //func postsTap() {
+    //    if !picArray.isEmpty {
+    //        let index = IndexPath(item: 0, section: 0)
+    //        self.collectionView?.scrollToItem(at: index, at: UICollectionViewScrollPosition.top, animated: true)
+    //    }
+    //}
     
     // tapped followers label
     func followersTap() {

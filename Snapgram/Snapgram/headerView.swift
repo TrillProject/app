@@ -14,17 +14,18 @@ class headerView: UICollectionReusableView {
     
     // UI objects
     @IBOutlet weak var avaImg: UIImageView!
+    @IBOutlet weak var coverImg: UIImageView!
     
-    @IBOutlet weak var posts: UILabel!
     @IBOutlet weak var followers: UILabel!
     @IBOutlet weak var followings: UILabel!
     
-    @IBOutlet weak var postTitle: UILabel!
     @IBOutlet weak var followersTitle: UILabel!
     @IBOutlet weak var followingsTitle: UILabel!
     
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var editOrFollowBtn: UIButton!
     
+    @IBOutlet weak var feedBtn: UIImageView!
+    @IBOutlet weak var globeBtn: UIImageView!
     
     // default func
     override func awakeFromNib() {
@@ -32,45 +33,57 @@ class headerView: UICollectionReusableView {
         
         // alignment
         let width = UIScreen.main.bounds.width
+        let spacingVertical = CGFloat(20)
+        let avaSize = CGFloat(100)
         
-        avaImg.frame = CGRect(x: width / 16, y: width / 16, width: width / 4, height: width / 4)
+        avaImg.frame = CGRect(x: (width / 2) - (avaSize / 2), y: spacingVertical, width: avaSize, height: avaSize)
+        coverImg.frame = CGRect(x: 0, y: 0, width: width, height: avaImg.frame.size.height + (spacingVertical * 2))
         
-        posts.frame = CGRect(x: width / 2.5, y: avaImg.frame.origin.y, width: 50, height: 30)
-        followers.frame = CGRect(x: width / 1.7, y: avaImg.frame.origin.y, width: 50, height: 30)
-        followings.frame = CGRect(x: width / 1.25, y: avaImg.frame.origin.y, width: 50, height: 30)
+        let iconsY = avaImg.frame.origin.y + avaImg.frame.size.height + (spacingVertical * 1.75)
+        let iconSize = 28
+        let iconSpacing = (width - CGFloat(40 + iconSize * 5)) / 4
         
-        postTitle.center = CGPoint(x: posts.center.x, y: posts.center.y + 20)
-        followersTitle.center = CGPoint(x: followers.center.x, y: followers.center.y + 20)
-        followingsTitle.center = CGPoint(x: followings.center.x, y: followings.center.y + 20)
+        feedBtn.frame = CGRect(x: 20, y: Int(iconsY), width: iconSize, height: iconSize)
+        globeBtn.frame = CGRect(x: Int(feedBtn.frame.origin.x + iconSpacing) + Int(iconSize), y: Int(iconsY), width: iconSize, height: iconSize)
+        followers.frame = CGRect(x: Int(globeBtn.frame.origin.x + iconSpacing) + Int(iconSize), y: Int(iconsY - 7), width: 50, height: 30)
+        followings.frame = CGRect(x: Int(followers.frame.origin.x + iconSpacing) + Int(iconSize), y: Int(iconsY - 7), width: 50, height: 30)
+        editOrFollowBtn.frame = CGRect(x: Int(followings.frame.origin.x + iconSpacing) + Int(iconSize), y: Int(iconsY), width: iconSize, height: iconSize)
         
-        button.frame = CGRect(x: postTitle.frame.origin.x, y: postTitle.center.y + 20, width: width - postTitle.frame.origin.x - 10, height: 30)
-        button.layer.cornerRadius = button.frame.size.width / 50
+        followersTitle.center = CGPoint(x: followers.center.x, y: followers.center.y + 17)
+        followingsTitle.center = CGPoint(x: followings.center.x, y: followings.center.y + 17)
         
         // round ava
         avaImg.layer.cornerRadius = avaImg.frame.size.width / 2
         avaImg.clipsToBounds = true
     }
     
-    
     // clicked follow button from GuestVC
     @IBAction func followBtn_clicked(_ sender: AnyObject) {
         
-        let title = button.title(for: UIControlState())
+        let followingImage = UIImage(named: "check")
+        let followingTintedImage = followingImage?.withRenderingMode(.alwaysTemplate)
+        let notFollowingTintedImage = followingImage?.withRenderingMode(.alwaysTemplate)
         
         // to follow
-        if title == "FOLLOW" {
+        if self.editOrFollowBtn.tintColor == lightGrey {
             let object = PFObject(className: "follow")
             object["follower"] = PFUser.current()?.username
             object["following"] = guestname.last!
             object.saveInBackground(block: { (success, error) -> Void in
                 if success {
-                    self.button.setTitle("FOLLOWING", for: UIControlState())
-                    self.button.backgroundColor = .green
+                    self.editOrFollowBtn.setBackgroundImage(followingTintedImage, for: .normal)
+                    self.editOrFollowBtn.tintColor = mainColor
                     
                     // send follow notification
                     let newsObj = PFObject(className: "news")
                     newsObj["by"] = PFUser.current()?.username
-                    newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
+                    if PFUser.current()?.object(forKey: "ava") != nil {
+                        newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
+                    } else {
+                        let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                        let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                        newsObj["ava"] = avaFile!
+                    }
                     newsObj["to"] = guestname.last
                     newsObj["owner"] = ""
                     newsObj["uuid"] = ""
@@ -94,10 +107,8 @@ class headerView: UICollectionReusableView {
                     
                     for object in objects! {
                         object.deleteInBackground(block: { (success, error) -> Void in
-                            if success {
-                                self.button.setTitle("FOLLOW", for: UIControlState())
-                                self.button.backgroundColor = .lightGray
-                                
+                            if success { self.editOrFollowBtn.setBackgroundImage(notFollowingTintedImage, for: .normal)
+                                self.editOrFollowBtn.tintColor = lightGrey
                                 
                                 // delete follow notification
                                 let newsQuery = PFQuery(className: "news")
@@ -111,7 +122,6 @@ class headerView: UICollectionReusableView {
                                         }
                                     }
                                 })
-                                
                                 
                             } else {
                                 print(error?.localizedDescription)

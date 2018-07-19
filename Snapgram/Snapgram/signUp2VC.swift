@@ -93,10 +93,12 @@ class signUp2VC: UIViewController {
         user.password = passwordTxt.text
         user["firstname"] = firstname
         user["lastname"] = lastname
-        //let avaData = UIImageJPEGRepresentation(avaImg.image!, 0.5)
         let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
         let avaFile = PFFile(name: "ava.jpg", data: avaData!)
         user["ava"] = avaFile
+        let coverData = UIImageJPEGRepresentation(UIImage(named: "transparent")!, 0.5)
+        let coverFile = PFFile(name: "cover.jpg", data: coverData!)
+        user["cover"] = coverFile
         
         // save data in server
         user.signUpInBackground { (success, error) -> Void in

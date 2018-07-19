@@ -33,7 +33,7 @@ class followersVC: UITableViewController {
         
         // new back button
         self.navigationItem.hidesBackButton = true
-        let backBtn = UIBarButtonItem(image: UIImage(named: "back.png"), style: .plain, target: self, action: #selector(followersVC.back(_:)))
+        let backBtn = UIBarButtonItem(image: UIImage(named: "prev.png"), style: .plain, target: self, action: #selector(followersVC.back(_:)))
         self.navigationItem.leftBarButtonItem = backBtn
         
         // swipe to go back
@@ -89,7 +89,13 @@ class followersVC: UITableViewController {
                         // find related objects in User class of Parse
                         for object in objects! {
                             self.usernameArray.append(object.object(forKey: "username") as! String)
-                            self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                            if object.object(forKey: "ava") == nil {
+                                let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                                let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                                self.avaArray.append(avaFile!)
+                            } else {
+                                self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                            }
                             self.tableView.reloadData()
                         }
                     } else {

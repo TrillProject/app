@@ -33,8 +33,7 @@ class homeVC: UICollectionViewController {
         collectionView?.backgroundColor = .white
 
         // title at the top
-        //self.navigationItem.title = PFUser.current()?.username?.capitalized
-        self.navigationItem.title = (PFUser.current()?.object(forKey: "fname") as? String)?.capitalized
+        self.navigationItem.title = (PFUser.current()?.object(forKey: "firstname") as? String)?.capitalized
         
         // pull to refresh
         refresher = UIRefreshControl()
@@ -72,30 +71,33 @@ class homeVC: UICollectionViewController {
         
         // request infomration from server
         let query = PFQuery(className: "posts")
-        query.whereKey("username", equalTo: PFUser.current()!.username!)
-        query.limit = page
-        query.findObjectsInBackground (block: { (objects, error) -> Void in
-            if error == nil {
-                
-                // clean up
-                self.uuidArray.removeAll(keepingCapacity: false)
-                self.picArray.removeAll(keepingCapacity: false)
-                
-                // find objects related to our request
-                for object in objects! {
+        if PFUser.current() != nil {
+            query.whereKey("username", equalTo: PFUser.current()!.username!)
+            query.limit = page
+            query.findObjectsInBackground (block: { (objects, error) -> Void in
+                if error == nil {
                     
-                    // add found data to arrays (holders)
-                    self.uuidArray.append(object.value(forKey: "uuid") as! String)
-                    self.picArray.append(object.value(forKey: "pic") as! PFFile)
-                }
-                
-                self.collectionView?.reloadData()
+                    // clean up
+                    self.uuidArray.removeAll(keepingCapacity: false)
+                    self.picArray.removeAll(keepingCapacity: false)
+                    
+                    // find objects related to our request
+                    for object in objects! {
+                        
+                        // add found data to arrays (holders)
+                        self.uuidArray.append(object.value(forKey: "uuid") as! String)
+                        self.picArray.append(object.value(forKey: "pic") as! PFFile)
+                    }
+                    
+                    self.collectionView?.reloadData()
 
-            } else {
-                print(error!.localizedDescription)
-            }
-        })
-        
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        } else {
+            print("no current user")
+        }
     }
     
     
@@ -181,14 +183,20 @@ class homeVC: UICollectionViewController {
         // define header
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! headerView
         
+        header.addBottomBorderWithColor(color: lightGrey, width: 1)
+        
+        header.feedBtn.image = header.feedBtn.image!.withRenderingMode(.alwaysTemplate)
+        header.globeBtn.image = header.globeBtn.image!.withRenderingMode(.alwaysTemplate)
+        
+        header.feedBtn.tintColor = darkGrey
+        header.globeBtn.tintColor = lightGrey
+        
+        let editImage = UIImage(named: "edit")
+        let tintedEditImage = editImage?.withRenderingMode(.alwaysTemplate)
+        header.editOrFollowBtn.setBackgroundImage(tintedEditImage, for: .normal)
+        header.editOrFollowBtn.tintColor = lightGrey
         
         // STEP 1. Get user data
-        // get users data with connections to collumns of PFuser class
-        //header.fullnameLbl.text = (PFUser.current()?.object(forKey: "fullname") as? String)?.uppercased()
-        //header.webTxt.text = PFUser.current()?.object(forKey: "web") as? String
-        //header.webTxt.sizeToFit()
-        //header.bioLbl.text = PFUser.current()?.object(forKey: "bio") as? String
-        //header.bioLbl.sizeToFit()
         
         if PFUser.current()?.object(forKey: "ava") == nil {
             header.avaImg.image = UIImage(named: "pp")
@@ -198,44 +206,37 @@ class homeVC: UICollectionViewController {
                 header.avaImg.image = UIImage(data: data!)
             }
         }
-        header.button.setTitle("edit profile", for: UIControlState())
         
-        
-        // STEP 2. Count statistics
-        // count total posts
-        let posts = PFQuery(className: "posts")
-        posts.whereKey("username", equalTo: PFUser.current()!.username!)
-        posts.countObjectsInBackground (block: { (count, error) -> Void in
-            if error == nil {
-                header.posts.text = "\(count)"
-            }
-        })
-        
-        // count total followers
-        let followers = PFQuery(className: "follow")
-        followers.whereKey("following", equalTo: PFUser.current()!.username!)
-        followers.countObjectsInBackground (block: { (count, error) -> Void in
-            if error == nil {
-                header.followers.text = "\(count)"
-            }
-        })
-        
-        // count total followings
-        let followings = PFQuery(className: "follow")
-        followings.whereKey("follower", equalTo: PFUser.current()!.username!)
-        followings.countObjectsInBackground (block: { (count, error) -> Void in
-            if error == nil {
-                header.followings.text = "\(count)"
-            }
-        })
-        
+        if PFUser.current() != nil {
+            // STEP 2. Count statistics
+            
+            // count total followers
+            let followers = PFQuery(className: "follow")
+            followers.whereKey("following", equalTo: PFUser.current()!.username!)
+            followers.countObjectsInBackground (block: { (count, error) -> Void in
+                if error == nil {
+                    header.followers.text = "\(count)"
+                }
+            })
+            
+            // count total followings
+            let followings = PFQuery(className: "follow")
+            followings.whereKey("follower", equalTo: PFUser.current()!.username!)
+            followings.countObjectsInBackground (block: { (count, error) -> Void in
+                if error == nil {
+                    header.followings.text = "\(count)"
+                }
+            })
+        } else {
+            print("no current user")
+        }
         
         // STEP 3. Implement tap gestures
         // tap posts
-        let postsTap = UITapGestureRecognizer(target: self, action: #selector(homeVC.postsTap))
-        postsTap.numberOfTapsRequired = 1
-        header.posts.isUserInteractionEnabled = true
-        header.posts.addGestureRecognizer(postsTap)
+        //let postsTap = UITapGestureRecognizer(target: self, action: #selector(homeVC.postsTap))
+        //postsTap.numberOfTapsRequired = 1
+        //header.posts.isUserInteractionEnabled = true
+        //header.posts.addGestureRecognizer(postsTap)
         
         // tap followers
         let followersTap = UITapGestureRecognizer(target: self, action: #selector(homeVC.followersTap))
@@ -254,12 +255,12 @@ class homeVC: UICollectionViewController {
     
     
     // taped posts label
-    func postsTap() {
-        if !picArray.isEmpty {
-            let index = IndexPath(item: 0, section: 0)
-            self.collectionView?.scrollToItem(at: index, at: UICollectionViewScrollPosition.top, animated: true)
-        }
-    }
+    //func postsTap() {
+    //    if !picArray.isEmpty {
+    //        let index = IndexPath(item: 0, section: 0)
+    //        self.collectionView?.scrollToItem(at: index, at: UICollectionViewScrollPosition.top, animated: true)
+    //    }
+    //}
     
     // tapped followers label
     func followersTap() {

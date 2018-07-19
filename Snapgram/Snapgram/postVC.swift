@@ -31,7 +31,7 @@ class postVC: UITableViewController {
         
         // new back button
         self.navigationItem.hidesBackButton = true
-        let backBtn = UIBarButtonItem(image: UIImage(named: "back.png"), style: .plain, target: self, action: #selector(postVC.back(_:)))
+        let backBtn = UIBarButtonItem(image: UIImage(named: "prev.png"), style: .plain, target: self, action: #selector(postVC.back(_:)))
         self.navigationItem.leftBarButtonItem = backBtn
         
         // swipe to go back

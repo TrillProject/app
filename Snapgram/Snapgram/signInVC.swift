@@ -28,9 +28,6 @@ class signInVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Pacifico font of label
-        // label.font = UIFont(name: "Pacifico", size: 25)
-        
         // alignment
         label.frame = CGRect(x: 20, y: 120, width: self.view.frame.size.width - 40, height: 50)
         
@@ -59,12 +56,6 @@ class signInVC: UIViewController {
         hideTap.numberOfTapsRequired = 1
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(hideTap)
-        
-        // background
-        //let bg = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        //bg.image = UIImage(named: "bg.jpg")
-        //bg.layer.zPosition = -1
-        //self.view.addSubview(bg)
     }
     
     
@@ -115,91 +106,4 @@ class signInVC: UIViewController {
         
     }
     
-}
-
-extension UIView {
-    
-    @IBInspectable
-    var cornerRadius: CGFloat {
-        get {
-            return layer.cornerRadius
-        }
-        set {
-            layer.cornerRadius = newValue
-        }
-    }
-    
-    @IBInspectable
-    var borderWidth: CGFloat {
-        get {
-            return layer.borderWidth
-        }
-        set {
-            layer.borderWidth = newValue
-        }
-    }
-    
-    @IBInspectable
-    var borderColor: UIColor? {
-        get {
-            if let color = layer.borderColor {
-                return UIColor(cgColor: color)
-            }
-            return nil
-        }
-        set {
-            if let color = newValue {
-                layer.borderColor = color.cgColor
-            } else {
-                layer.borderColor = nil
-            }
-        }
-    }
-    
-    @IBInspectable
-    var shadowRadius: CGFloat {
-        get {
-            return layer.shadowRadius
-        }
-        set {
-            layer.shadowRadius = newValue
-        }
-    }
-    
-    @IBInspectable
-    var shadowOpacity: Float {
-        get {
-            return layer.shadowOpacity
-        }
-        set {
-            layer.shadowOpacity = newValue
-        }
-    }
-    
-    @IBInspectable
-    var shadowOffset: CGSize {
-        get {
-            return layer.shadowOffset
-        }
-        set {
-            layer.shadowOffset = newValue
-        }
-    }
-    
-    @IBInspectable
-    var shadowColor: UIColor? {
-        get {
-            if let color = layer.shadowColor {
-                return UIColor(cgColor: color)
-            }
-            return nil
-        }
-        set {
-            if let color = newValue {
-                layer.shadowColor = color.cgColor
-            } else {
-                layer.shadowColor = nil
-            }
-        }
-    }
 }

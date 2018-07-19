@@ -127,7 +127,13 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
                 // found related objects
                 for object in objects! {
                     self.usernameArray.append(object.object(forKey: "username") as! String)
-                    self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                    if object.object(forKey: "ava") != nil {
+                        self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                    } else {
+                        let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                        let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                        self.avaArray.append(avaFile!)
+                    }
                 }
                 
                 // reload
