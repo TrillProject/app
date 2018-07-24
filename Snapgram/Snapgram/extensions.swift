@@ -13,6 +13,7 @@ let lightGrey = UIColor(red: 204.0 / 255.0, green: 204.0 / 255.0, blue: 204.0 / 
 let mediumGrey = UIColor(red: 153.0 / 255.0, green: 153.0 / 255.0, blue: 153.0 / 255.0, alpha: 1)
 let darkGrey = UIColor(red: 102.0 / 255.0, green: 102.0 / 255.0, blue: 102.0 / 255.0, alpha: 1)
 let borderColor = UIColor(red: 232.0 / 255.0, green: 232.0 / 255.0, blue: 232.0 / 255.0, alpha: 1)
+let redColor = UIColor(red: 255.0 / 255.0, green: 102.0 / 255.0, blue: 122.0 / 255.0, alpha: 1)
 
 extension UIView {
     

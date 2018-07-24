@@ -14,7 +14,6 @@ class signUp1VC: UIViewController {
     
     @IBOutlet weak var fnameTxt: UITextField!
     @IBOutlet weak var lnameTxt: UITextField!
-    @IBOutlet weak var usernameTxt: UITextField!
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var nextBtn: UIButton!
     
@@ -23,14 +22,7 @@ class signUp1VC: UIViewController {
         
         // alignment
         
-        usernameTxt.frame = CGRect(x: 20, y: 120, width: self.view.frame.size.width - 40, height: 40)
-        usernameTxt.layer.cornerRadius = usernameTxt.frame.size.height / 2
-        usernameTxt.clipsToBounds = true
-        let paddingViewUsername = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.usernameTxt.frame.height))
-        usernameTxt.leftView = paddingViewUsername
-        usernameTxt.leftViewMode = UITextFieldViewMode.always
-        
-        fnameTxt.frame = CGRect(x: 20, y: usernameTxt.frame.origin.y + 70, width: self.view.frame.size.width - 40, height: 40)
+        fnameTxt.frame = CGRect(x: 20, y: 120, width: self.view.frame.size.width - 40, height: 40)
         fnameTxt.layer.cornerRadius = fnameTxt.frame.size.height / 2
         fnameTxt.clipsToBounds = true
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.fnameTxt.frame.height))
@@ -70,7 +62,7 @@ class signUp1VC: UIViewController {
             self.view.endEditing(true)
             
             // if fields are empty
-            if (usernameTxt.text!.isEmpty || fnameTxt.text!.isEmpty || lnameTxt.text!.isEmpty) {
+            if (fnameTxt.text!.isEmpty || lnameTxt.text!.isEmpty) {
                 
                 // alert message
                 let alert = UIAlertController(title: "PLEASE", message: "fill all fields", preferredStyle: UIAlertControllerStyle.alert)
@@ -80,7 +72,6 @@ class signUp1VC: UIViewController {
                 return
             } else {
                 let vc = segue.destination as? signUp2VC
-                vc?.username = (usernameTxt.text?.lowercased())!
                 vc?.firstname = (fnameTxt.text?.lowercased())!
                 vc?.lastname = (lnameTxt.text?.lowercased())!
             }

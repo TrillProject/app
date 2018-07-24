@@ -12,8 +12,7 @@ import UIKit
 import Parse
 
 class signUp2VC: UIViewController {
-    
-    var username = ""
+
     var firstname = ""
     var lastname = ""
     
@@ -66,7 +65,7 @@ class signUp2VC: UIViewController {
         if (emailTxt.text!.isEmpty || passwordTxt.text!.isEmpty || repeatPasswordTxt.text!.isEmpty) {
             
             // alert message
-            let alert = UIAlertController(title: "PLEASE", message: "fill all fields", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "Fields empty", message: "Please fill out all fields", preferredStyle: UIAlertControllerStyle.alert)
             let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
             alert.addAction(ok)
             self.present(alert, animated: true, completion: nil)
@@ -78,7 +77,7 @@ class signUp2VC: UIViewController {
         if passwordTxt.text != repeatPasswordTxt.text {
             
             // alert message
-            let alert = UIAlertController(title: "PASSWORDS", message: "do not match", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "Passwords don't match", message: "Please check that the password you entered matches in both fields", preferredStyle: UIAlertControllerStyle.alert)
             let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
             alert.addAction(ok)
             self.present(alert, animated: true, completion: nil)
@@ -88,11 +87,12 @@ class signUp2VC: UIViewController {
         
         // send data to server to related columns
         let user = PFUser()
-        user.username = username
+        user.username = emailTxt.text?.lowercased()
         user.email = emailTxt.text?.lowercased()
         user.password = passwordTxt.text
         user["firstname"] = firstname
         user["lastname"] = lastname
+        user["private"] = false
         let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
         let avaFile = PFFile(name: "ava.jpg", data: avaData!)
         user["ava"] = avaFile

@@ -9,6 +9,8 @@
 import UIKit
 import Parse
 
+var guestname = [String]()
+
 class profileUserVC: UIViewController {
     
     @IBOutlet weak var avaImg: UIImageView!

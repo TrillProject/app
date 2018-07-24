@@ -10,5 +10,11 @@ import UIKit
 import Parse
 
 class profileFeedVC: UIViewController {
-
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+    }
+    
 }

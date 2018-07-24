@@ -37,11 +37,6 @@ class resetPasswordVC: UIViewController {
         cancelBtn.frame = CGRect(x: self.view.frame.size.width - self.view.frame.size.width / 3 - 20, y: resetBtn.frame.origin.y, width: self.view.frame.size.width / 3, height: 40)
         cancelBtn.layer.cornerRadius = cancelBtn.frame.size.height / 2
         
-        // background
-        //let bg = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        //bg.image = UIImage(named: "bg.jpg")
-        //bg.layer.zPosition = -1
-        //self.view.addSubview(bg)
     }
     
     
