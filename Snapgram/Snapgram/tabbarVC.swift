@@ -18,12 +18,14 @@ var dot = UIView()
 // custom tabbar button
 let tabBarPostButton = UIButton()
 
-class tabbarVC: UITabBarController {
+class tabbarVC: UITabBarController, UITabBarControllerDelegate {
     
     
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.delegate = self
 
         // color of item
         self.tabBar.tintColor = mainColor
@@ -123,6 +125,17 @@ class tabbarVC: UITabBarController {
     // clicked upload button (go to upload)
     func upload(_ sender : UIButton) {
         self.selectedIndex = 2
+    }
+    
+    // clicked on profile tab
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        
+        if viewController is navVC {
+            let firstVC = viewController.childViewControllers[0]
+            if firstVC is profileVC{
+                user = PFUser.current()!.username!
+            }
+        }
     }
     
 }

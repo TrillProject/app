@@ -242,7 +242,7 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
         
         // define frame of collectionView
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - self.tabBarController!.tabBar.frame.size.height - self.navigationController!.navigationBar.frame.size.height - 20)
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - self.navigationController!.navigationBar.frame.size.height - 20)
         
         // declare collectionView
         collectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
@@ -345,7 +345,7 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
     // pagination
     func loadMore() {
         
-        // if more posts are unloaded, we wanna load them
+        // if more posts are unloaded, we want to load them
         if page <= picArray.count {
             
             // increase page size
@@ -379,4 +379,8 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
         
     }
     
+    @IBAction func back_clicked(_ sender: UIBarButtonItem) {
+        self.view.endEditing(true)
+        self.dismiss(animated: true, completion: nil)
+    }
 }

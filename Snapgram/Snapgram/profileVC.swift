@@ -9,6 +9,8 @@
 import UIKit
 import Parse
 
+var user = String()
+var showDetails = String()
 
 class profileVC: UIViewController {
     

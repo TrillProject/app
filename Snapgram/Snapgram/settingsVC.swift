@@ -39,7 +39,10 @@ class settingsVC: UITableViewController {
     
     // clicked log out
     @IBAction func logout_clicked(_ sender: UIButton) {
-        
+        self.logout()
+    }
+    
+    func logout() {
         PFUser.logOutInBackground { (error) -> Void in
             if error == nil {
                 
@@ -67,12 +70,70 @@ class settingsVC: UITableViewController {
         let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
             print("Ok button clicked")
             
+            let username = PFUser.current()!.username!
+            
             PFUser.current()?.deleteInBackground(block: { (success, error) -> Void in
             
                 if success {
-                    let signin = self.storyboard?.instantiateViewController(withIdentifier: "signInVC") as! signInVC
-                    let appDelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                    appDelegate.window?.rootViewController = signin
+                    // delete following relationships associated with user
+                    let query = PFQuery(className: "follow")
+                    query.whereKey("follower", equalTo: username)
+                    query.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteInBackground(block: { (success, error) -> Void in
+                                    if success {
+                                        // delete follow notification
+                                        let newsQuery = PFQuery(className: "news")
+                                        newsQuery.whereKey("by", equalTo: username)
+                                        newsQuery.whereKey("to", equalTo: object.object(forKey: "following")!)
+                                        newsQuery.whereKey("type", equalTo: "follow")
+                                        newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                                            if error == nil {
+                                                for object in objects! {
+                                                    object.deleteEventually()
+                                                }
+                                            }
+                                        })
+                                    } else {
+                                        print(error?.localizedDescription ?? "error")
+                                    }
+                                })
+                            }
+                        } else {
+                            print(error?.localizedDescription ?? "error")
+                        }
+                    })
+                    // delete follower relationships associated with user
+                    let queryFollower = PFQuery(className: "follow")
+                    queryFollower.whereKey("following", equalTo: username)
+                    queryFollower.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteInBackground(block: { (success, error) -> Void in
+                                    if success {
+                                        // delete follow notification
+                                        let newsQuery = PFQuery(className: "news")
+                                        newsQuery.whereKey("by", equalTo: object.object(forKey: "follower")!)
+                                        newsQuery.whereKey("to", equalTo: username)
+                                        newsQuery.whereKey("type", equalTo: "follow")
+                                        newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                                            if error == nil {
+                                                for object in objects! {
+                                                    object.deleteEventually()
+                                                }
+                                            }
+                                        })
+                                    } else {
+                                        print(error?.localizedDescription ?? "error")
+                                    }
+                                })
+                            }
+                        } else {
+                            print(error?.localizedDescription ?? "error")
+                        }
+                    })
+                    self.logout()
                 } else {
                     print(error ?? "Account deletion failed")
                 }
