@@ -39,7 +39,6 @@
 		1F7901E11DEC690E00D921C8 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F7901E01DEC690E00D921C8 /* CFNetwork.framework */; };
 		1F7901E41DEC6B2200D921C8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F7901E31DEC6B2200D921C8 /* Main.storyboard */; };
 		1F7901FB1DEC6BDA00D921C8 /* signInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7901E51DEC6BDA00D921C8 /* signInVC.swift */; };
-		1F7901FC1DEC6BDA00D921C8 /* signUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7901E61DEC6BDA00D921C8 /* signUpVC.swift */; };
 		1F7901FD1DEC6BDA00D921C8 /* resetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7901E71DEC6BDA00D921C8 /* resetPasswordVC.swift */; };
 		1F7901FE1DEC6BDA00D921C8 /* feedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7901E81DEC6BDA00D921C8 /* feedVC.swift */; };
 		1F7901FF1DEC6BDA00D921C8 /* uploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7901E91DEC6BDA00D921C8 /* uploadVC.swift */; };
@@ -62,6 +61,7 @@
 		1F7902101DEC6BDA00D921C8 /* tabbarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7901FA1DEC6BDA00D921C8 /* tabbarVC.swift */; };
 		1F79024A1DEC80BA00D921C8 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F7902491DEC80BA00D921C8 /* SplashScreen.storyboard */; };
 		2A0BED7420FD8B13006AB72E /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A0BED7320FD8B13006AB72E /* extensions.swift */; };
+		2A179838210921CF0094FFF2 /* editProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A179837210921CF0094FFF2 /* editProfileVC.swift */; };
 		2A25147220FBE13D0079F3DE /* signUp2VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A25147120FBE13D0079F3DE /* signUp2VC.swift */; };
 		2A2957332107807700D60D7D /* followerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2957322107807700D60D7D /* followerCell.swift */; };
 		2A6742A421066C6D00B13987 /* changePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6742A321066C6D00B13987 /* changePasswordVC.swift */; };
@@ -131,7 +131,6 @@
 		1F7901E01DEC690E00D921C8 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		1F7901E31DEC6B2200D921C8 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		1F7901E51DEC6BDA00D921C8 /* signInVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signInVC.swift; sourceTree = "<group>"; };
-		1F7901E61DEC6BDA00D921C8 /* signUpVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = signUpVC.swift; sourceTree = "<group>"; };
 		1F7901E71DEC6BDA00D921C8 /* resetPasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = resetPasswordVC.swift; sourceTree = "<group>"; };
 		1F7901E81DEC6BDA00D921C8 /* feedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = feedVC.swift; sourceTree = "<group>"; };
 		1F7901E91DEC6BDA00D921C8 /* uploadVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = uploadVC.swift; sourceTree = "<group>"; };
@@ -154,6 +153,7 @@
 		1F7901FA1DEC6BDA00D921C8 /* tabbarVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tabbarVC.swift; sourceTree = "<group>"; };
 		1F7902491DEC80BA00D921C8 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		2A0BED7320FD8B13006AB72E /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
+		2A179837210921CF0094FFF2 /* editProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = editProfileVC.swift; sourceTree = "<group>"; };
 		2A25147120FBE13D0079F3DE /* signUp2VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUp2VC.swift; sourceTree = "<group>"; };
 		2A2957322107807700D60D7D /* followerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = followerCell.swift; sourceTree = "<group>"; };
 		2A6742A321066C6D00B13987 /* changePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changePasswordVC.swift; sourceTree = "<group>"; };
@@ -252,7 +252,6 @@
 				1F7901E31DEC6B2200D921C8 /* Main.storyboard */,
 				1F7901AA1DEC679500D921C8 /* AppDelegate.swift */,
 				1F7901E51DEC6BDA00D921C8 /* signInVC.swift */,
-				1F7901E61DEC6BDA00D921C8 /* signUpVC.swift */,
 				2A6FC84520FCEC380023B5DE /* signUp1VC.swift */,
 				2A25147120FBE13D0079F3DE /* signUp2VC.swift */,
 				1F7901E71DEC6BDA00D921C8 /* resetPasswordVC.swift */,
@@ -284,6 +283,7 @@
 				2A2957322107807700D60D7D /* followerCell.swift */,
 				2AF099492101313E007555CE /* settingsVC.swift */,
 				2A6742A321066C6D00B13987 /* changePasswordVC.swift */,
+				2A179837210921CF0094FFF2 /* editProfileVC.swift */,
 				2A0BED7320FD8B13006AB72E /* extensions.swift */,
 				1F7901C41DEC683500D921C8 /* Assets.xcassets */,
 				1F4BE6551DEF4CF000C9129A /* Core */,
@@ -452,7 +452,6 @@
 				1F4BE66D1DEF4CF000C9129A /* FSVideoCameraView.swift in Sources */,
 				1F7902061DEC6BDA00D921C8 /* headerView.swift in Sources */,
 				1F7901FE1DEC6BDA00D921C8 /* feedVC.swift in Sources */,
-				1F7901FC1DEC6BDA00D921C8 /* signUpVC.swift in Sources */,
 				1F7902081DEC6BDA00D921C8 /* postVC.swift in Sources */,
 				2AC4DB4821001A0F00040525 /* profileGlobeVC.swift in Sources */,
 				2A6742A421066C6D00B13987 /* changePasswordVC.swift in Sources */,
@@ -482,6 +481,7 @@
 				1F4BE66F1DEF4CF000C9129A /* FusumaViewController.swift in Sources */,
 				1F7902011DEC6BDA00D921C8 /* homeVC.swift in Sources */,
 				1F7902101DEC6BDA00D921C8 /* tabbarVC.swift in Sources */,
+				2A179838210921CF0094FFF2 /* editProfileVC.swift in Sources */,
 				1F4BE66C1DEF4CF000C9129A /* FSImageCropView.swift in Sources */,
 				2AD2DD7820FFAF8300F65CD0 /* profileUserVC.swift in Sources */,
 				1F4BE66B1DEF4CF000C9129A /* FSConstants.swift in Sources */,

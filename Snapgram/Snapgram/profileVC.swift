@@ -13,7 +13,7 @@ var user = String()
 var showDetails = String()
 
 class profileVC: UIViewController {
-    
+
     @IBOutlet weak var avaImg: UIImageView!
     @IBOutlet weak var coverImg: UIImageView!
     
@@ -40,6 +40,9 @@ class profileVC: UIViewController {
         
         // title at the top
         self.navigationItem.title = (PFUser.current()?.object(forKey: "firstname") as? String)?.capitalized
+        
+        // receive notification from editProfileVC
+        NotificationCenter.default.addObserver(self, selector: #selector(profileVC.reload(_:)), name: NSNotification.Name(rawValue: "reload"), object: nil)
         
         //alignment
         let width = UIScreen.main.bounds.width
@@ -101,10 +104,10 @@ class profileVC: UIViewController {
             if PFUser.current()?.object(forKey: "cover") == nil {
                 self.coverImg.image = UIImage(named: "transparent")
             } else {
-                let coverQuery = PFUser.current()?.object(forKey: "cover") as! PFFile
-                coverQuery.getDataInBackground { (data, error) -> Void in
+                let coverFile = PFUser.current()?.object(forKey: "cover") as! PFFile
+                coverFile.getDataInBackground(block: { (data, error) -> Void in
                     self.coverImg.image = UIImage(data: data!)
-                }
+                })
             }
             
             // STEP 2. Count statistics
@@ -128,6 +131,11 @@ class profileVC: UIViewController {
         } else {
             print("no current user")
         }
+    }
+    
+    // reloading func after received notification
+    func reload(_ notification:Notification) {
+        self.viewDidLoad()
     }
     
     @IBAction func indexChanged(_ sender: UISegmentedControl) {

@@ -65,7 +65,7 @@ class signUp1VC: UIViewController {
             if (fnameTxt.text!.isEmpty || lnameTxt.text!.isEmpty) {
                 
                 // alert message
-                let alert = UIAlertController(title: "PLEASE", message: "fill all fields", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "Empty Fields", message: "Please fill out all fields", preferredStyle: UIAlertControllerStyle.alert)
                 let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
                 alert.addAction(ok)
                 self.present(alert, animated: true, completion: nil)

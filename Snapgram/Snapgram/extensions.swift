@@ -9,6 +9,7 @@
 import UIKit
 
 let mainColor = UIColor(red: 185.0 / 255.0, green: 172.0 / 255.0, blue: 244.0 / 255.0, alpha: 1)
+let mainFadedColor = UIColor(red: 222.0 / 255.0, green: 216.0 / 255.0, blue: 249.0 / 255.0, alpha: 1)
 let lightGrey = UIColor(red: 204.0 / 255.0, green: 204.0 / 255.0, blue: 204.0 / 255.0, alpha: 1)
 let mediumGrey = UIColor(red: 153.0 / 255.0, green: 153.0 / 255.0, blue: 153.0 / 255.0, alpha: 1)
 let darkGrey = UIColor(red: 102.0 / 255.0, green: 102.0 / 255.0, blue: 102.0 / 255.0, alpha: 1)
