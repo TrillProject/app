@@ -207,12 +207,12 @@ class postVC: UITableViewController {
         
         // if user tapped on himself go home, else go guest
         if cell.usernameBtn.titleLabel?.text == PFUser.current()?.username {
-            let home = self.storyboard?.instantiateViewController(withIdentifier: "homeVC") as! homeVC
-            self.navigationController?.pushViewController(home, animated: true)
+            let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
+            self.navigationController?.pushViewController(profile, animated: true)
         } else {
             guestname.append(cell.usernameBtn.titleLabel!.text!)
-            let guest = self.storyboard?.instantiateViewController(withIdentifier: "guestVC") as! guestVC
-            self.navigationController?.pushViewController(guest, animated: true)
+            let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
+            self.navigationController?.pushViewController(profileUser, animated: true)
         }
         
     }

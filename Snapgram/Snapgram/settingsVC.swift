@@ -83,25 +83,26 @@ class settingsVC: UITableViewController {
                             for object in objects! {
                                 object.deleteInBackground(block: { (success, error) -> Void in
                                     if success {
-                                        // delete follow notification
+                                        // delete notifications
                                         let newsQuery = PFQuery(className: "news")
                                         newsQuery.whereKey("by", equalTo: username)
                                         newsQuery.whereKey("to", equalTo: object.object(forKey: "following")!)
-                                        newsQuery.whereKey("type", equalTo: "follow")
-                                        newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                                        newsQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
                                             if error == nil {
-                                                for object in objects! {
-                                                    object.deleteEventually()
+                                                for newsobject in newsObjects! {
+                                                    newsobject.deleteEventually()
                                                 }
+                                            } else {
+                                                print(error!.localizedDescription)
                                             }
                                         })
                                     } else {
-                                        print(error?.localizedDescription ?? "error")
+                                        print(error!.localizedDescription)
                                     }
                                 })
                             }
                         } else {
-                            print(error?.localizedDescription ?? "error")
+                            print(error!.localizedDescription)
                         }
                     })
                     // delete follower relationships associated with user
@@ -112,25 +113,26 @@ class settingsVC: UITableViewController {
                             for object in objects! {
                                 object.deleteInBackground(block: { (success, error) -> Void in
                                     if success {
-                                        // delete follow notification
+                                        // delete notifications
                                         let newsQuery = PFQuery(className: "news")
                                         newsQuery.whereKey("by", equalTo: object.object(forKey: "follower")!)
                                         newsQuery.whereKey("to", equalTo: username)
-                                        newsQuery.whereKey("type", equalTo: "follow")
-                                        newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                                        newsQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
                                             if error == nil {
-                                                for object in objects! {
-                                                    object.deleteEventually()
+                                                for newsObject in newsObjects! {
+                                                    newsObject.deleteEventually()
                                                 }
+                                            } else {
+                                                print(error!.localizedDescription)
                                             }
                                         })
                                     } else {
-                                        print(error?.localizedDescription ?? "error")
+                                        print(error!.localizedDescription)
                                     }
                                 })
                             }
                         } else {
-                            print(error?.localizedDescription ?? "error")
+                            print(error!.localizedDescription)
                         }
                     })
                     self.logout()

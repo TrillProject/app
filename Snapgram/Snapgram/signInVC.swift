@@ -23,7 +23,6 @@ class signInVC: UIViewController {
     @IBOutlet weak var signUpBtn: UIButton!
     @IBOutlet weak var forgotBtn: UIButton!
     
-    
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()

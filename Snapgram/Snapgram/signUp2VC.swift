@@ -54,6 +54,37 @@ class signUp2VC: UIViewController {
         
     }
     
+    // regex restrictions for email textfield
+    func validateEmail (_ email : String) -> Bool {
+        let regex = "[A-Z0-9a-z._%+-]{2}+@[A-Za-z0-9.-]+\\.[A-Za-z]{2}"
+        let range = email.range(of: regex, options: .regularExpression)
+        let result = range != nil ? true : false
+        return result
+    }
+    
+    // check if username is already taken
+    func validateUsername (_ username : String) {
+        let query = PFQuery(className: "_User")
+        query.whereKey("username", equalTo: username)
+        query.findObjectsInBackground (block: { (objects, error) -> Void in
+            if error == nil {
+                if (objects!.count > 0){
+                    self.alert("Invalid Email", message: "There is already an account with the provided email address")
+                }
+            } else {
+                print(error!.localizedDescription)
+            }
+        })
+    }
+    
+    // alert message function
+    func alert (_ error: String, message : String) {
+        let alert = UIAlertController(title: error, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     @IBAction func signUpBtn_clicked(_ sender: UIButton) {
         
         print("sign up pressed")
@@ -63,25 +94,22 @@ class signUp2VC: UIViewController {
         
         // if fields are empty
         if (emailTxt.text!.isEmpty || passwordTxt.text!.isEmpty || repeatPasswordTxt.text!.isEmpty) {
-            
-            // alert message
-            let alert = UIAlertController(title: "Fields empty", message: "Please fill out all fields", preferredStyle: UIAlertControllerStyle.alert)
-            let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            
+            alert("Empty Fields", message: "Please fill out all fields")
+            return
+        }
+        
+        // validate that email is not already taken
+        validateUsername(emailTxt.text!)
+        
+        // if incorrect email according to regex
+        if !validateEmail(emailTxt.text!) {
+            alert("Incorrect Email", message: "Please provide correctly formatted email address")
             return
         }
         
         // if different passwords
         if passwordTxt.text != repeatPasswordTxt.text {
-            
-            // alert message
-            let alert = UIAlertController(title: "Passwords don't match", message: "Please check that the password you entered matches in both fields", preferredStyle: UIAlertControllerStyle.alert)
-            let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
-            alert.addAction(ok)
-            self.present(alert, animated: true, completion: nil)
-            
+            alert("Passwords Don't Match", message: "Please check that the password you entered matches in both fields")
             return
         }
         
@@ -114,12 +142,7 @@ class signUp2VC: UIViewController {
                 appDelegate.login()
                 
             } else {
-                
-                // show alert message
-                let alert = UIAlertController(title: "Error", message: error!.localizedDescription, preferredStyle: UIAlertControllerStyle.alert)
-                let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel, handler: nil)
-                alert.addAction(ok)
-                self.present(alert, animated: true, completion: nil)
+                self.alert("Error", message: error!.localizedDescription)
             }
         }
     }

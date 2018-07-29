@@ -128,6 +128,18 @@ class profileVC: UIViewController {
                     self.following.text = "\(count)"
                 }
             })
+            
+            let followQuery = PFQuery(className: "follow")
+            followQuery.whereKey("following", equalTo: user)
+            followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+                if error == nil {
+                    for object in objects! {
+                        print(object.value(forKey: "follower") as! String)
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
         } else {
             print("no current user")
         }
@@ -135,7 +147,24 @@ class profileVC: UIViewController {
     
     // reloading func after received notification
     func reload(_ notification:Notification) {
-        self.viewDidLoad()
+        self.navigationItem.title = (PFUser.current()?.object(forKey: "firstname") as? String)?.capitalized
+        if PFUser.current()?.object(forKey: "ava") == nil {
+            self.avaImg.image = UIImage(named: "pp")
+        } else {
+            let avaQuery = PFUser.current()?.object(forKey: "ava") as! PFFile
+            avaQuery.getDataInBackground { (data, error) -> Void in
+                self.avaImg.image = UIImage(data: data!)
+            }
+        }
+        
+        if PFUser.current()?.object(forKey: "cover") == nil {
+            self.coverImg.image = UIImage(named: "transparent")
+        } else {
+            let coverFile = PFUser.current()?.object(forKey: "cover") as! PFFile
+            coverFile.getDataInBackground(block: { (data, error) -> Void in
+                self.coverImg.image = UIImage(data: data!)
+            })
+        }
     }
     
     @IBAction func indexChanged(_ sender: UISegmentedControl) {

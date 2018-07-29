@@ -164,10 +164,30 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
     
     // regex restrictions for email textfield
     func validateEmail (_ email : String) -> Bool {
-        let regex = "[A-Z0-9a-z._%+-]{4}+@[A-Za-z0-9.-]+\\.[A-Za-z]{2}"
+        let regex = "[A-Z0-9a-z._%+-]{2}+@[A-Za-z0-9.-]+\\.[A-Za-z]{2}"
         let range = email.range(of: regex, options: .regularExpression)
         let result = range != nil ? true : false
         return result
+    }
+    
+    // check if username is already taken
+    func validateUsername (_ username : String) {
+        let currentUsername = PFUser.current()!.username!
+        if username == currentUsername {
+            return
+        } else {
+            let query = PFQuery(className: "_User")
+            query.whereKey("username", equalTo: username)
+            query.findObjectsInBackground (block: { (objects, error) -> Void in
+                if error == nil {
+                    if (objects!.count > 0){
+                        self.alert("Invalid Email", message: "There is already an account with the provided email address")
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }
     }
     
     // alert message function
@@ -180,10 +200,16 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
     
     @IBAction func save_clicked(_ sender: UIBarButtonItem) {
         
+        let oldUsername = PFUser.current()!.username!
+        
         // if fields are empty
         if (firstnameTxt.text!.isEmpty || lastnameTxt.text!.isEmpty || emailTxt.text!.isEmpty) {
             alert("Empty Fields", message: "Please fill out all fields")
+            return
         }
+        
+        // if username is already taken
+        validateUsername(emailTxt.text!)
         
         // if incorrect email according to regex
         if !validateEmail(emailTxt.text!) {
@@ -212,6 +238,79 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
         user.saveInBackground (block: { (success, error) -> Void in
             if success{
                 
+                // update follower and news objects if username changed
+                let newUsername = PFUser.current()!.username!
+                if oldUsername != newUsername {
+                    let followQuery = PFQuery(className: "follow")
+                    followQuery.whereKey("follower", equalTo: oldUsername)
+                    followQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object["follower"] = newUsername
+                                object.saveInBackground(block: { (success, error) -> Void in
+                                    if success {
+                                        let newsQuery = PFQuery(className: "news")
+                                        newsQuery.whereKey("by", equalTo: oldUsername)
+                                        newsQuery.whereKey("to", equalTo: object.object(forKey: "following")!)
+                                        newsQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
+                                            if error == nil {
+                                                for newsObject in newsObjects! {
+                                                    newsObject["by"] = newUsername
+                                                    newsObject.saveInBackground(block: { (success, error) -> Void in
+                                                        if !success {
+                                                             print(error!.localizedDescription)
+                                                        }
+                                                    })
+                                                }
+                                            } else {
+                                                print(error!.localizedDescription)
+                                            }
+                                        })
+                                    } else {
+                                        print(error!.localizedDescription)
+                                    }
+                                })
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    let followingQuery = PFQuery(className: "follow")
+                    followingQuery.whereKey("following", equalTo: oldUsername)
+                    followingQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object["following"] = newUsername
+                                object.saveInBackground(block: { (success, error) -> Void in
+                                    if success {
+                                        let newsQuery = PFQuery(className: "news")
+                                        newsQuery.whereKey("by", equalTo: object.object(forKey: "follower")!)
+                                        newsQuery.whereKey("to", equalTo: oldUsername)
+                                        newsQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
+                                            if error == nil {
+                                                for newsObject in newsObjects! {
+                                                    newsObject["to"] = newUsername
+                                                    newsObject.saveInBackground(block: { (success, error) -> Void in
+                                                        if !success {
+                                                            print(error!.localizedDescription)
+                                                        }
+                                                    })
+                                                }
+                                            } else {
+                                                print(error!.localizedDescription)
+                                            }
+                                        })
+                                    } else {
+                                        print(error!.localizedDescription)
+                                    }
+                                })
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                }
+                
                 // hide keyboard
                 self.view.endEditing(true)
                 
@@ -222,6 +321,7 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "reload"), object: nil)
                 
             } else {
+                self.alert("Error", message: error!.localizedDescription)
                 print(error!.localizedDescription)
             }
         })
