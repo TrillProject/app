@@ -15,15 +15,27 @@ class postCell: UITableViewCell {
     // header objects
     @IBOutlet weak var avaImg: UIImageView!
     @IBOutlet weak var usernameBtn: UIButton!
-    @IBOutlet weak var dateLbl: UILabel!
+    //@IBOutlet weak var dateLbl: UILabel!
+    @IBOutlet weak var locationLbl: UILabel!
+    @IBOutlet weak var locationBtn: UIButton!
     
     // main picture
     @IBOutlet weak var picImg: UIImageView!
     
+    // review
+    @IBOutlet weak var reviewBackground: UIView!
+    @IBOutlet weak var reviewOverlay: UIView!
+    
     // buttons
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
-    @IBOutlet weak var moreBtn: UIButton!
+    //@IBOutlet weak var moreBtn: UIButton!
+    @IBOutlet weak var suitcaseBtn: UIButton!
+    
+    // tags
+    @IBOutlet weak var tag1Lbl: UILabel!
+    @IBOutlet weak var tag2Lbl: UILabel!
+    @IBOutlet weak var tag3Lbl: UILabel!
     
     // labels
     @IBOutlet weak var likeLbl: UILabel!
@@ -35,92 +47,16 @@ class postCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        // clear like button title color
+        // clear like button & suitcase button title color
         likeBtn.setTitleColor(UIColor.clear, for: UIControlState())
+        suitcaseBtn.setTitleColor(UIColor.clear, for: UIControlState())
         
         // double tap to like
         let likeTap = UITapGestureRecognizer(target: self, action: #selector(postCell.likeTap))
         likeTap.numberOfTapsRequired = 2
         picImg.isUserInteractionEnabled = true
         picImg.addGestureRecognizer(likeTap)
-        
-        
-        // alignment
-//        let width = UIScreen.main.bounds.width
-        
-        // allow constraints
-//        avaImg.translatesAutoresizingMaskIntoConstraints = false
-//        usernameBtn.translatesAutoresizingMaskIntoConstraints = false
-//        dateLbl.translatesAutoresizingMaskIntoConstraints = false
-//
-//        picImg.translatesAutoresizingMaskIntoConstraints = false
-//
-//        likeBtn.translatesAutoresizingMaskIntoConstraints = false
-//        commentBtn.translatesAutoresizingMaskIntoConstraints = false
-//        moreBtn.translatesAutoresizingMaskIntoConstraints = false
-//
-//        likeLbl.translatesAutoresizingMaskIntoConstraints = false
-//        titleLbl.translatesAutoresizingMaskIntoConstraints = false
-//        uuidLbl.translatesAutoresizingMaskIntoConstraints = false
-        
-//        let pictureWidth = width
-        
-        // constraints
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "V:|-10-[ava(30)]-10-[pic(\(pictureWidth))]-5-[like(30)]",
-//            options: [], metrics: nil, views: ["ava":avaImg, "pic":picImg, "like":likeBtn]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "V:|-10-[username]",
-//            options: [], metrics: nil, views: ["username":usernameBtn]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "V:[pic]-5-[comment(30)]",
-//            options: [], metrics: nil, views: ["pic":picImg, "comment":commentBtn]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "V:|-15-[date]",
-//            options: [], metrics: nil, views: ["date":dateLbl]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "V:[like]-5-[title]-5-|",
-//            options: [], metrics: nil, views: ["like":likeBtn, "title":titleLbl]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "V:[pic]-5-[more(30)]",
-//            options: [], metrics: nil, views: ["pic":picImg, "more":moreBtn]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "V:[pic]-10-[likes]",
-//            options: [], metrics: nil, views: ["pic":picImg, "likes":likeLbl]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "H:|-10-[ava(30)]-10-[username]",
-//            options: [], metrics: nil, views: ["ava":avaImg, "username":usernameBtn]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "H:|-0-[pic]-0-|",
-//            options: [], metrics: nil, views: ["pic":picImg]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "H:|-15-[like(30)]-10-[likes]-20-[comment(30)]",
-//            options: [], metrics: nil, views: ["like":likeBtn, "likes":likeLbl, "comment":commentBtn]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "H:[more(30)]-15-|",
-//            options: [], metrics: nil, views: ["more":moreBtn]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "H:|-15-[title]-15-|",
-//            options: [], metrics: nil, views: ["title":titleLbl]))
-//        
-//        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-//            withVisualFormat: "H:|[date]-10-|",
-//            options: [], metrics: nil, views: ["date":dateLbl]))
-        
-        // round ava
-        avaImg.layer.cornerRadius = avaImg.frame.size.width / 2
-        avaImg.clipsToBounds = true
+
         
     }
     
@@ -180,6 +116,48 @@ class postCell: UITableViewCell {
         
     }
     
+    // clicked suitcase button
+    @IBAction func suitcaseBtn_click(_ sender: UIButton) {
+        
+        // declare title of button
+        let title = sender.title(for: UIControlState())
+        
+        // to add to suitcase
+        if title == "notAdded" {
+            let object = PFObject(className: "suitcase")
+            object["user"] = PFUser.current()?.username
+            object["location"] = locationLbl.text
+            object["category"] = locationBtn.currentTitle
+            object.saveInBackground(block: { (success, error) -> Void in
+                if success {
+                    print("added to suitcase")
+                    self.suitcaseBtn.setTitle("added", for: UIControlState())
+                    self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }
+        // to remove from suitcase
+        else {
+            let query = PFQuery(className: "suitcase")
+            query.whereKey("user", equalTo: PFUser.current()!.username!)
+            query.whereKey("location", equalTo: locationLbl.text!)
+            query.findObjectsInBackground(block: { (objects, error) -> Void in
+                for object in objects! {
+                    object.deleteInBackground(block: { (success, error) -> Void in
+                        if success {
+                            print("removed from suitcase")
+                            self.suitcaseBtn.setTitle("notAdded", for: UIControlState())
+                            self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                }
+            })
+        }
+    }
     
     // clicked like button
     @IBAction func likeBtn_click(_ sender: AnyObject) {

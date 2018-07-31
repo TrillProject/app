@@ -22,6 +22,7 @@ class feedVC: UITableViewController {
     var picArray = [PFFile]()
     var titleArray = [String]()
     var uuidArray = [String]()
+    var categoryArray = [String]()
     
     var followArray = [String]()
     
@@ -35,10 +36,6 @@ class feedVC: UITableViewController {
         
         // title at the top
         self.navigationItem.title = "TRILL"
-        
-        // automatic row height - dynamic cell
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 450
         
         // pull to refresh
         refresher.addTarget(self, action: #selector(feedVC.loadPosts), for: UIControlEvents.valueChanged)
@@ -106,6 +103,7 @@ class feedVC: UITableViewController {
                             self.picArray.removeAll(keepingCapacity: false)
                             self.titleArray.removeAll(keepingCapacity: false)
                             self.uuidArray.removeAll(keepingCapacity: false)
+                            self.categoryArray.removeAll(keepingCapacity: false)
                             
                             // find related objects
                             for object in objects! {
@@ -115,6 +113,12 @@ class feedVC: UITableViewController {
                                 self.picArray.append(object.object(forKey: "pic") as! PFFile)
                                 self.titleArray.append(object.object(forKey: "title") as! String)
                                 self.uuidArray.append(object.object(forKey: "uuid") as! String)
+                                
+                                if object.object(forKey: "category") != nil {
+                                    self.categoryArray.append(object.object(forKey: "category") as! String)
+                                } else {
+                                    self.categoryArray.append("")
+                                }
                             }
                         
                             // reload tableView & end spinning of refresher
@@ -185,6 +189,7 @@ class feedVC: UITableViewController {
                             self.picArray.removeAll(keepingCapacity: false)
                             self.titleArray.removeAll(keepingCapacity: false)
                             self.uuidArray.removeAll(keepingCapacity: false)
+                            self.categoryArray.removeAll(keepingCapacity: false)
                             
                             // find related objects
                             for object in objects! {
@@ -194,6 +199,12 @@ class feedVC: UITableViewController {
                                 self.picArray.append(object.object(forKey: "pic") as! PFFile)
                                 self.titleArray.append(object.object(forKey: "title") as! String)
                                 self.uuidArray.append(object.object(forKey: "uuid") as! String)
+                                
+                                if object.object(forKey: "category") != nil {
+                                    self.categoryArray.append(object.object(forKey: "category") as! String)
+                                } else {
+                                    self.categoryArray.append("")
+                                }
                             }
                             
                             // reload tableView & stop animating indicator
@@ -227,12 +238,27 @@ class feedVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! postCell
         
         // connect objects with our information from arrays
-        cell.usernameBtn.setTitle(usernameArray[(indexPath as NSIndexPath).row], for: UIControlState())
-        cell.usernameBtn.sizeToFit()
+        let infoQuery = PFQuery(className: "_User")
+        let username = usernameArray[(indexPath as NSIndexPath).row]
+        infoQuery.whereKey("username", equalTo: username)
+        infoQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+            if error == nil {
+                if objects!.isEmpty {
+                    self.alert("Not Found", message: "\(username.capitalized) does not exist")
+                }
+                for object in objects! {
+                    if object.object(forKey: "firstname") != nil {
+                        cell.usernameBtn.setTitle((object.object(forKey: "firstname") as? String)?.capitalized, for: UIControlState())
+                    } else {
+                        cell.usernameBtn.setTitle(username, for: UIControlState())
+                    }
+                }
+            }
+        })
+        
         cell.uuidLbl.text = uuidArray[(indexPath as NSIndexPath).row]
         cell.titleLbl.text = titleArray[(indexPath as NSIndexPath).row]
-        cell.titleLbl.sizeToFit()
-        
+
         // place profile picture
         avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
             cell.avaImg.image = UIImage(data: data!)
@@ -244,31 +270,58 @@ class feedVC: UITableViewController {
         }
         
         // calculate post date
-        let from = dateArray[(indexPath as NSIndexPath).row]
-        let now = Date()
-        let components : NSCalendar.Unit = [.second, .minute, .hour, .day, .weekOfMonth]
-        let difference = (Calendar.current as NSCalendar).components(components, from: from!, to: now, options: [])
+//        let from = dateArray[(indexPath as NSIndexPath).row]
+//        let now = Date()
+//        let components : NSCalendar.Unit = [.second, .minute, .hour, .day, .weekOfMonth]
+//        let difference = (Calendar.current as NSCalendar).components(components, from: from!, to: now, options: [])
         
         // logic what to show: seconds, minuts, hours, days or weeks
-        if difference.second! <= 0 {
-            cell.dateLbl.text = "now"
-        }
-        if difference.second! > 0 && difference.minute! == 0 {
-            cell.dateLbl.text = "\(difference.second!)s."
-        }
-        if difference.minute! > 0 && difference.hour! == 0 {
-            cell.dateLbl.text = "\(difference.minute!)m."
-        }
-        if difference.hour! > 0 && difference.day! == 0 {
-            cell.dateLbl.text = "\(difference.hour!)h."
-        }
-        if difference.day! > 0 && difference.weekOfMonth! == 0 {
-            cell.dateLbl.text = "\(difference.day!)d."
-        }
-        if difference.weekOfMonth! > 0 {
-            cell.dateLbl.text = "\(difference.weekOfMonth!)w."
+//        if difference.second! <= 0 {
+//            cell.dateLbl.text = "now"
+//        }
+//        if difference.second! > 0 && difference.minute! == 0 {
+//            cell.dateLbl.text = "\(difference.second!)s."
+//        }
+//        if difference.minute! > 0 && difference.hour! == 0 {
+//            cell.dateLbl.text = "\(difference.minute!)m."
+//        }
+//        if difference.hour! > 0 && difference.day! == 0 {
+//            cell.dateLbl.text = "\(difference.hour!)h."
+//        }
+//        if difference.day! > 0 && difference.weekOfMonth! == 0 {
+//            cell.dateLbl.text = "\(difference.day!)d."
+//        }
+//        if difference.weekOfMonth! > 0 {
+//            cell.dateLbl.text = "\(difference.weekOfMonth!)w."
+//        }
+        
+        // set location button
+        switch categoryArray[(indexPath as NSIndexPath).row] {
+        case "country":
+            cell.locationBtn.setTitle("country", for: UIControlState())
+            cell.locationBtn.setBackgroundImage(UIImage(named: "country.png"), for: UIControlState())
+        case "city":
+            cell.locationBtn.setTitle("city", for: UIControlState())
+            cell.locationBtn.setBackgroundImage(UIImage(named: "city.png"), for: UIControlState())
+        default:
+            cell.locationBtn.setTitle("", for: UIControlState())
+            cell.locationBtn.setBackgroundImage(UIImage(named: "transparent.png"), for: UIControlState())
         }
         
+        
+        // manipulate suitcase button depending on if it is added to user's suitcase
+        let didAdd = PFQuery(className: "suitcase")
+        didAdd.whereKey("user", equalTo: PFUser.current()!.username!)
+        didAdd.whereKey("location", equalTo: cell.locationLbl.text!)
+        didAdd.countObjectsInBackground { (count, error) -> Void in
+            if count == 0 {
+                cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
+                cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
+            } else {
+                cell.suitcaseBtn.setTitle("added", for: UIControlState())
+                cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
+            }
+        }
         
         // manipulate like button depending on did user like it or not
         let didLike = PFQuery(className: "likes")
@@ -289,14 +342,18 @@ class feedVC: UITableViewController {
         let countLikes = PFQuery(className: "likes")
         countLikes.whereKey("to", equalTo: cell.uuidLbl.text!)
         countLikes.countObjectsInBackground { (count, error) -> Void in
-            cell.likeLbl.text = "\(count)"
+            if count == 1 {
+                cell.likeLbl.text = "\(count) like"
+            } else {
+                cell.likeLbl.text = "\(count) likes"
+            }
         }
         
         
         // asign index
         cell.usernameBtn.layer.setValue(indexPath, forKey: "index")
         cell.commentBtn.layer.setValue(indexPath, forKey: "index")
-        cell.moreBtn.layer.setValue(indexPath, forKey: "index")
+//        cell.moreBtn.layer.setValue(indexPath, forKey: "index")
         
         
         // @mention is tapped
@@ -389,6 +446,7 @@ class feedVC: UITableViewController {
             self.picArray.remove(at: (i as NSIndexPath).row)
             self.titleArray.remove(at: (i as NSIndexPath).row)
             self.uuidArray.remove(at: (i as NSIndexPath).row)
+            self.categoryArray.remove(at: (i as NSIndexPath).row)
             
             // STEP 2. Delete post from server
             let postQuery = PFQuery(className: "posts")
@@ -410,7 +468,7 @@ class feedVC: UITableViewController {
                         })
                     }
                 } else {
-                    print(error?.localizedDescription)
+                    print(error!.localizedDescription)
                 }
             })
             

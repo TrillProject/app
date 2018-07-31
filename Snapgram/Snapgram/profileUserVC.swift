@@ -101,7 +101,7 @@ class profileUserVC: UIViewController {
                 // shown wrong user
                 if objects!.isEmpty {
                     // call alert
-                    let alert = UIAlertController(title: "\(guestname.last!.uppercased())", message: "is not existing", preferredStyle: UIAlertControllerStyle.alert)
+                    let alert = UIAlertController(title: "Not Found", message: "\(guestname.last!.capitalized) does not exist", preferredStyle: UIAlertControllerStyle.alert)
                     let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (UIAlertAction) -> Void in
                         self.navigationController?.popViewController(animated: true)
                     })
@@ -158,12 +158,12 @@ class profileUserVC: UIViewController {
                             }
                             self.displayViewForPrivate(private: self.isPrivate, following: self.isFollowing, name : self.firstname)
                         } else {
-                            print(error?.localizedDescription ?? "error")
+                            print(error!.localizedDescription)
                         }
                     })
                 }
             } else {
-                print(error?.localizedDescription ?? "error")
+                print(error!.localizedDescription)
             }
         })
         
@@ -203,32 +203,6 @@ class profileUserVC: UIViewController {
                 self.following.text = "\(count)"
             } else {
                 print(error?.localizedDescription ?? "error")
-            }
-        })
-        
-        let fQuery = PFQuery(className: "follow")
-        fQuery.whereKey("following", equalTo: guestname.last!)
-        fQuery.findObjectsInBackground (block: { (objects, error) -> Void in
-            print("followers")
-            if error == nil {
-                for object in objects! {
-                    print(object.value(forKey: "follower") as! String)
-                }
-            } else {
-                print(error!.localizedDescription)
-            }
-        })
-        
-        let f2Query = PFQuery(className: "follow")
-        f2Query.whereKey("follower", equalTo: guestname.last!)
-        f2Query.findObjectsInBackground (block: { (objects, error) -> Void in
-            print("following")
-            if error == nil {
-                for object in objects! {
-                    print(object.value(forKey: "following") as! String)
-                }
-            } else {
-                print(error!.localizedDescription)
             }
         })
     }

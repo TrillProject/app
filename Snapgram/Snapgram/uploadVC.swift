@@ -166,6 +166,11 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         // send data to server to "posts" class in Parse
         let object = PFObject(className: "posts")
         object["username"] = PFUser.current()!.username
+        if PFUser.current()?.object(forKey: "firstname") != nil {
+            object["firstname"] = PFUser.current()?.object(forKey: "firstname") as? String
+        } else {
+            object["firstname"] = PFUser.current()!.username
+        }
         object["ava"] = PFUser.current()!.value(forKey: "ava") as! PFFile
         
         let uuid = UUID().uuidString

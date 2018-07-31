@@ -20,6 +20,7 @@ class postVC: UITableViewController {
     var picArray = [PFFile]()
     var uuidArray = [String]()
     var titleArray = [String]()
+    var categoryArray = [String]()
     
     
     // default func
@@ -27,7 +28,7 @@ class postVC: UITableViewController {
         super.viewDidLoad()
         
         // title label at the top
-        self.navigationItem.title = "PHOTO"
+        self.navigationItem.title = "Photo"
         
         // new back button
         self.navigationItem.hidesBackButton = true
@@ -40,10 +41,6 @@ class postVC: UITableViewController {
         self.view.addGestureRecognizer(backSwipe)
         
         NotificationCenter.default.addObserver(self, selector: #selector(postVC.refresh), name: NSNotification.Name(rawValue: "liked"), object: nil)
-                
-        // dynamic cell heigth
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 450
         
         // find post
         let postQuery = PFQuery(className: "posts")
@@ -58,6 +55,7 @@ class postVC: UITableViewController {
                 self.picArray.removeAll(keepingCapacity: false)
                 self.uuidArray.removeAll(keepingCapacity: false)
                 self.titleArray.removeAll(keepingCapacity: false)
+                self.categoryArray.removeAll(keepingCapacity: false)
                 
                 // find related objects
                 for object in objects! {
@@ -67,6 +65,12 @@ class postVC: UITableViewController {
                     self.picArray.append(object.value(forKey: "pic") as! PFFile)
                     self.uuidArray.append(object.value(forKey: "uuid") as! String)
                     self.titleArray.append(object.value(forKey: "title") as! String)
+                    
+                    if object.object(forKey: "category") != nil {
+                        self.categoryArray.append(object.object(forKey: "category") as! String)
+                    } else {
+                        self.categoryArray.append("")
+                    }
                 }
                 
                 self.tableView.reloadData()
@@ -95,11 +99,26 @@ class postVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! postCell
         
         // connect objects with our information from arrays
-        cell.usernameBtn.setTitle(usernameArray[(indexPath as NSIndexPath).row], for: UIControlState())
-        cell.usernameBtn.sizeToFit()
+        let infoQuery = PFQuery(className: "_User")
+        let username = usernameArray[(indexPath as NSIndexPath).row]
+        infoQuery.whereKey("username", equalTo: username)
+        infoQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+            if error == nil {
+                if objects!.isEmpty {
+                    self.alert("Not Found", message: "\(username.capitalized) does not exist")
+                }
+                for object in objects! {
+                    if object.object(forKey: "firstname") != nil {
+                        cell.usernameBtn.setTitle((object.object(forKey: "firstname") as? String)?.capitalized, for: UIControlState())
+                    } else {
+                        cell.usernameBtn.setTitle(username, for: UIControlState())
+                    }
+                }
+            }
+        })
+        
         cell.uuidLbl.text = uuidArray[(indexPath as NSIndexPath).row]
         cell.titleLbl.text = titleArray[(indexPath as NSIndexPath).row]
-        cell.titleLbl.sizeToFit()
         
         // place profile picture
         avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
@@ -112,29 +131,56 @@ class postVC: UITableViewController {
         }
         
         // calculate post date
-        let from = dateArray[(indexPath as NSIndexPath).row]
-        let now = Date()
-        let components : NSCalendar.Unit = [.second, .minute, .hour, .day, .weekOfMonth]
-        let difference = (Calendar.current as NSCalendar).components(components, from: from!, to: now, options: [])
+//        let from = dateArray[(indexPath as NSIndexPath).row]
+//        let now = Date()
+//        let components : NSCalendar.Unit = [.second, .minute, .hour, .day, .weekOfMonth]
+//        let difference = (Calendar.current as NSCalendar).components(components, from: from!, to: now, options: [])
         
         // logic what to show: seconds, minuts, hours, days or weeks
-        if difference.second! <= 0 {
-            cell.dateLbl.text = "now"
+//        if difference.second! <= 0 {
+//            cell.dateLbl.text = "now"
+//        }
+//        if difference.second! > 0 && difference.minute! == 0 {
+//            cell.dateLbl.text = "\(difference.second!)s."
+//        }
+//        if difference.minute! > 0 && difference.hour! == 0 {
+//            cell.dateLbl.text = "\(difference.minute!)m."
+//        }
+//        if difference.hour! > 0 && difference.day! == 0 {
+//            cell.dateLbl.text = "\(difference.hour!)h."
+//        }
+//        if difference.day! > 0 && difference.weekOfMonth! == 0 {
+//            cell.dateLbl.text = "\(difference.day!)d."
+//        }
+//        if difference.weekOfMonth! > 0 {
+//            cell.dateLbl.text = "\(difference.weekOfMonth!)w."
+//        }
+        
+        // set location button
+        switch categoryArray[(indexPath as NSIndexPath).row] {
+        case "country":
+            cell.locationBtn.setTitle("country", for: UIControlState())
+            cell.locationBtn.setBackgroundImage(UIImage(named: "country.png"), for: UIControlState())
+        case "city":
+            cell.locationBtn.setTitle("city", for: UIControlState())
+            cell.locationBtn.setBackgroundImage(UIImage(named: "city.png"), for: UIControlState())
+        default:
+            cell.locationBtn.setTitle("", for: UIControlState())
+            cell.locationBtn.setBackgroundImage(UIImage(named: "transparent.png"), for: UIControlState())
         }
-        if difference.second! > 0 && difference.minute! == 0 {
-            cell.dateLbl.text = "\(difference.second!)s."
-        }
-        if difference.minute! > 0 && difference.hour! == 0 {
-            cell.dateLbl.text = "\(difference.minute!)m."
-        }
-        if difference.hour! > 0 && difference.day! == 0 {
-            cell.dateLbl.text = "\(difference.hour!)h."
-        }
-        if difference.day! > 0 && difference.weekOfMonth! == 0 {
-            cell.dateLbl.text = "\(difference.day!)d."
-        }
-        if difference.weekOfMonth! > 0 {
-            cell.dateLbl.text = "\(difference.weekOfMonth!)w."
+        
+        // manipulate suitcase button depending on if it is added to user's suitcase
+        let didAdd = PFQuery(className: "suitcase")
+        didAdd.whereKey("user", equalTo: PFUser.current()!.username!)
+        didAdd.whereKey("location", equalTo: cell.locationLbl.text!)
+        didAdd.countObjectsInBackground { (count, error) -> Void in
+            if count == 0 {
+                cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
+                cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
+            } else {
+                cell.suitcaseBtn.setTitle("added", for: UIControlState())
+                cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
+            }
         }
         
         
@@ -157,14 +203,18 @@ class postVC: UITableViewController {
         let countLikes = PFQuery(className: "likes")
         countLikes.whereKey("to", equalTo: cell.uuidLbl.text!)
         countLikes.countObjectsInBackground { (count, error) -> Void in
-            cell.likeLbl.text = "\(count)"
+            if count == 1 {
+                cell.likeLbl.text = "\(count) like"
+            } else {
+                cell.likeLbl.text = "\(count) likes"
+            }
         }
         
         
         // asign index
         cell.usernameBtn.layer.setValue(indexPath, forKey: "index")
         cell.commentBtn.layer.setValue(indexPath, forKey: "index")
-        cell.moreBtn.layer.setValue(indexPath, forKey: "index")
+//        cell.moreBtn.layer.setValue(indexPath, forKey: "index")
         
         
         // @mention is tapped

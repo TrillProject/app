@@ -54,7 +54,6 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
                 query?.whereKey("username", containedIn: self.followArray)
                 query?.addDescendingOrder("createdAt")
                 query?.findObjectsInBackground(block: { (objects, error) -> Void in
-                    print("FOLLOWERS")
                     if error == nil {
                         
                         // clean up
@@ -63,7 +62,6 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
                         
                         // find related objects in User class of Parse
                         for object in objects! {
-                            print(object.object(forKey: "username") as! String)
                             self.usernameArray.append(object.object(forKey: "username") as! String)
                             if object.object(forKey: "firstname") != nil {
                                 self.firstnameArray.append((object.object(forKey: "firstname") as! String).capitalized)

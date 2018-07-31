@@ -128,18 +128,6 @@ class profileVC: UIViewController {
                     self.following.text = "\(count)"
                 }
             })
-            
-            let followQuery = PFQuery(className: "follow")
-            followQuery.whereKey("following", equalTo: user)
-            followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
-                if error == nil {
-                    for object in objects! {
-                        print(object.value(forKey: "follower") as! String)
-                    }
-                } else {
-                    print(error!.localizedDescription)
-                }
-            })
         } else {
             print("no current user")
         }
