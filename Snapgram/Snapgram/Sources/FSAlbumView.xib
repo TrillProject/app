@@ -82,6 +82,7 @@
                 <outlet property="imageCropView" destination="Mc5-1c-z7q" id="oCj-GQ-fQS"/>
                 <outlet property="imageCropViewConstraintTop" destination="u5j-7G-j99" id="8dd-IK-PW2"/>
                 <outlet property="imageCropViewContainer" destination="90B-0c-ych" id="UNv-Xg-Rcp"/>
+                <outlet property="mainView" destination="9Cu-Zp-X0j" id="Miq-Fd-f0x"/>
             </connections>
         </view>
     </objects>

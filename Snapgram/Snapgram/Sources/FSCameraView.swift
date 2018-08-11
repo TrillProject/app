@@ -15,6 +15,7 @@ import AVFoundation
 
 final class FSCameraView: UIView, UIGestureRecognizerDelegate {
 
+    @IBOutlet weak var cameraBtnView: UIView!
     @IBOutlet weak var previewViewContainer: UIView!
     @IBOutlet weak var shotButton: UIButton!
     @IBOutlet weak var flashButton: UIButton!
@@ -45,6 +46,8 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
             return
         }
         
+        cameraBtnView.addBottomBorderWithColor(color: lightGrey, width: 1.0)
+        
         self.backgroundColor = fusumaBackgroundColor
         
         let bundle = Bundle(for: self.classForCoder)
@@ -52,7 +55,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
         flashOnImage = fusumaFlashOnImage != nil ? fusumaFlashOnImage : UIImage(named: "ic_flash_on", in: bundle, compatibleWith: nil)
         flashOffImage = fusumaFlashOffImage != nil ? fusumaFlashOffImage : UIImage(named: "ic_flash_off", in: bundle, compatibleWith: nil)
         let flipImage = fusumaFlipImage != nil ? fusumaFlipImage : UIImage(named: "ic_loop", in: bundle, compatibleWith: nil)
-        let shotImage = fusumaShotImage != nil ? fusumaShotImage : UIImage(named: "ic_radio_button_checked", in: bundle, compatibleWith: nil)
+        //let shotImage = fusumaShotImage != nil ? fusumaShotImage : UIImage(named: "ic_radio_button_checked", in: bundle, compatibleWith: nil)
         
         shotButton.layer.cornerRadius = shotButton.frame.size.height / 2
         
@@ -63,11 +66,11 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
             
             flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
             flipButton.setImage(flipImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            shotButton.setImage(shotImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            //shotButton.setImage(shotImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
         } else {
             flashButton.setImage(flashOffImage, for: UIControlState())
             flipButton.setImage(flipImage, for: UIControlState())
-            shotButton.setImage(shotImage, for: UIControlState())
+            //shotButton.setImage(shotImage, for: UIControlState())
         }
 
         

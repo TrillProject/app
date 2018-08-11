@@ -9,10 +9,6 @@
 import UIKit
 import Parse
 
-//var user = PFUser.current()!.username!
-//var user = String()
-//var showDetails = String()
-
 class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     // arrays to hold data received from servers
@@ -136,6 +132,7 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
         
         // if user tapped on himself, go profile, else go profileUser
         if cell.usernameLbl.text! == PFUser.current()!.username! {
+            user = PFUser.current()!.username!
             let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
             self.navigationController?.pushViewController(profile, animated: true)
         } else {

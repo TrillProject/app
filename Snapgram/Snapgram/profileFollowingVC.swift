@@ -127,6 +127,7 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
         
         // if user tapped on himself, go profile, else go profileUser
         if cell.usernameLbl.text! == PFUser.current()!.username! {
+            user = PFUser.current()!.username!
             let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
             self.navigationController?.pushViewController(profile, animated: true)
         } else {

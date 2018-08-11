@@ -33,9 +33,9 @@ class postCell: UITableViewCell {
     @IBOutlet weak var suitcaseBtn: UIButton!
     
     // tags
-    @IBOutlet weak var tag1Lbl: UILabel!
-    @IBOutlet weak var tag2Lbl: UILabel!
-    @IBOutlet weak var tag3Lbl: UILabel!
+    @IBOutlet weak var tag1Btn: UIButton!
+    @IBOutlet weak var tag2Btn: UIButton!
+    @IBOutlet weak var tag3Btn: UIButton!
     
     // labels
     @IBOutlet weak var likeLbl: UILabel!

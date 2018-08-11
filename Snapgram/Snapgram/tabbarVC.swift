@@ -103,14 +103,6 @@ class tabbarVC: UITabBarController, UITabBarControllerDelegate {
         view.image = image
         icons.addSubview(view)
         
-        // create label
-        let label = UILabel(frame: CGRect(x: view.frame.size.width / 2, y: 0, width: view.frame.size.width / 2, height: view.frame.size.height))
-        label.font = UIFont(name: "HelveticaNeue-Medium", size: 18)
-        label.text = text
-        label.textAlignment = .center
-        label.textColor = .white
-        view.addSubview(label)
-        
         // update icons view frame
         icons.frame.size.width = icons.frame.size.width + view.frame.size.width - 4
         icons.contentSize.width = icons.contentSize.width + view.frame.size.width - 4

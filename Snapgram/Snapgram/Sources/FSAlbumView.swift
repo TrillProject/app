@@ -16,6 +16,7 @@ import Photos
 
 final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var imageCropView: FSImageCropView!
     @IBOutlet weak var imageCropViewContainer: UIView!
@@ -58,6 +59,8 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
             
             return
         }
+        
+        mainView.addBottomBorder(lightGrey, width: 1.0)
 		
 		self.isHidden = false
         

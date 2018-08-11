@@ -159,14 +159,21 @@ class postVC: UITableViewController {
         // set location button
         switch categoryArray[(indexPath as NSIndexPath).row] {
         case "country":
-            cell.locationBtn.setTitle("country", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "country.png"), for: UIControlState())
+            selectLocationButton(cell, "country")
         case "city":
-            cell.locationBtn.setTitle("city", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "city.png"), for: UIControlState())
+            selectLocationButton(cell, "city")
+        case "restaurant":
+            selectLocationButton(cell, "restaurant")
+        case "nightlife":
+            selectLocationButton(cell, "nightlife")
+        case "arts":
+            selectLocationButton(cell, "arts")
+        case "shop":
+            selectLocationButton(cell, "shop")
+        case "hotel":
+            selectLocationButton(cell, "hotel")
         default:
-            cell.locationBtn.setTitle("", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "transparent.png"), for: UIControlState())
+            selectLocationButton(cell, "transparent")
         }
         
         // manipulate suitcase button depending on if it is added to user's suitcase
@@ -403,6 +410,12 @@ class postVC: UITableViewController {
         
         // show menu
         self.present(menu, animated: true, completion: nil)
+    }
+    
+    // select location button
+    func selectLocationButton(_ cell : postCell, _ name : String) {
+        cell.locationBtn.setTitle(name, for: UIControlState())
+        cell.locationBtn.setBackgroundImage(UIImage(named: name), for: UIControlState())
     }
     
     

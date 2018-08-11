@@ -55,7 +55,7 @@ class feedVC: UITableViewController {
     }
     
     
-    // refreshign function after like to update degit
+    // refreshing function after like to update degit
     func refresh() {
         tableView.reloadData()
     }
@@ -269,45 +269,25 @@ class feedVC: UITableViewController {
             cell.picImg.image = UIImage(data: data!)
         }
         
-        // calculate post date
-//        let from = dateArray[(indexPath as NSIndexPath).row]
-//        let now = Date()
-//        let components : NSCalendar.Unit = [.second, .minute, .hour, .day, .weekOfMonth]
-//        let difference = (Calendar.current as NSCalendar).components(components, from: from!, to: now, options: [])
-        
-        // logic what to show: seconds, minuts, hours, days or weeks
-//        if difference.second! <= 0 {
-//            cell.dateLbl.text = "now"
-//        }
-//        if difference.second! > 0 && difference.minute! == 0 {
-//            cell.dateLbl.text = "\(difference.second!)s."
-//        }
-//        if difference.minute! > 0 && difference.hour! == 0 {
-//            cell.dateLbl.text = "\(difference.minute!)m."
-//        }
-//        if difference.hour! > 0 && difference.day! == 0 {
-//            cell.dateLbl.text = "\(difference.hour!)h."
-//        }
-//        if difference.day! > 0 && difference.weekOfMonth! == 0 {
-//            cell.dateLbl.text = "\(difference.day!)d."
-//        }
-//        if difference.weekOfMonth! > 0 {
-//            cell.dateLbl.text = "\(difference.weekOfMonth!)w."
-//        }
-        
         // set location button
         switch categoryArray[(indexPath as NSIndexPath).row] {
         case "country":
-            cell.locationBtn.setTitle("country", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "country.png"), for: UIControlState())
+            selectLocationButton(cell, "country")
         case "city":
-            cell.locationBtn.setTitle("city", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "city.png"), for: UIControlState())
+            selectLocationButton(cell, "city")
+        case "restaurant":
+            selectLocationButton(cell, "restaurant")
+        case "nightlife":
+            selectLocationButton(cell, "nightlife")
+        case "arts":
+            selectLocationButton(cell, "arts")
+        case "shop":
+            selectLocationButton(cell, "shop")
+        case "hotel":
+            selectLocationButton(cell, "hotel")
         default:
-            cell.locationBtn.setTitle("", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "transparent.png"), for: UIControlState())
+            selectLocationButton(cell, "transparent")
         }
-        
         
         // manipulate suitcase button depending on if it is added to user's suitcase
         let didAdd = PFQuery(className: "suitcase")
@@ -363,10 +343,12 @@ class feedVC: UITableViewController {
             
             // if tapped on @currentUser go home, else go guest
             if mention.lowercased() == PFUser.current()?.username {
+                user = PFUser.current()!.username!
                 let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
                 self.navigationController?.pushViewController(profile, animated: true)
             } else {
                 guestname.append(mention.lowercased())
+                user = mention.lowercased()
                 let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
                 self.navigationController?.pushViewController(profileUser, animated: true)
             }
@@ -396,10 +378,12 @@ class feedVC: UITableViewController {
         
         // if user tapped on himself go home, else go guest
         if cell.usernameBtn.titleLabel?.text == PFUser.current()?.username {
+            user = PFUser.current()!.username!
             let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
             self.navigationController?.pushViewController(profile, animated: true)
         } else {
             guestname.append(cell.usernameBtn.titleLabel!.text!)
+            user = cell.usernameBtn.titleLabel!.text!
             let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
             self.navigationController?.pushViewController(profileUser, animated: true)
         }
@@ -543,6 +527,12 @@ class feedVC: UITableViewController {
         
         // show menu
         self.present(menu, animated: true, completion: nil)
+    }
+    
+    // select location button
+    func selectLocationButton(_ cell : postCell, _ name : String) {
+        cell.locationBtn.setTitle(name, for: UIControlState())
+        cell.locationBtn.setBackgroundImage(UIImage(named: name), for: UIControlState())
     }
     
     

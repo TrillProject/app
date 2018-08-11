@@ -10,14 +10,28 @@ import UIKit
 import Parse
 
 
-class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FusumaDelegate {
+class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FusumaDelegate, UITextViewDelegate {
 
     // UI objects
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var containerView: UIView!
+    
     @IBOutlet weak var picImg: UIImageView!
     @IBOutlet weak var titleTxt: UITextView!
-    @IBOutlet weak var publishBtn: UIButton!
-    @IBOutlet weak var removeBtn: UIButton!
+    @IBOutlet weak var locationLbl: UILabel!
+    @IBOutlet weak var editLocationBtn: UIButton!
+    @IBOutlet weak var gradientImg: UIImageView!
     
+    @IBOutlet weak var countryIcon: UIButton!
+    @IBOutlet weak var cityIcon: UIButton!
+    @IBOutlet weak var restaurantIcon: UIButton!
+    @IBOutlet weak var nightlifeIcon: UIButton!
+    @IBOutlet weak var artsIcon: UIButton!
+    @IBOutlet weak var shopIcon: UIButton!
+    @IBOutlet weak var hotelIcon: UIButton!
+    
+    @IBOutlet var categoryBtns : [UIView]!
+    private var chosenCategory : String!
     
     // default func
     override func viewDidLoad() {
@@ -28,21 +42,19 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         let fusuma = FusumaViewController()
         //        fusumaCropImage = false
         fusuma.delegate = self
-        self.present(fusuma, animated: true, completion: nil)
-        fusuma.closeButton.isHidden = true
+        self.present(fusuma, animated: false, completion: nil)
+        fusuma.closeButton.isHidden = false
         // *** CORE LOAD END *** //
         
-        // disable publish btn
-        publishBtn.isEnabled = false
-        publishBtn.backgroundColor = .lightGray
-        
-        // hide remove button
-        removeBtn.isHidden = true
+        // title at the top
+        self.navigationItem.title = "Post"
         
         // standart UI containt
         picImg.image = UIImage(named: "pbg.jpg")
         
-        // hide kyeboard tap
+        titleTxt.delegate = self
+        
+        // hide keyboard tap
         let hideTap = UITapGestureRecognizer(target: self, action: #selector(uploadVC.hideKeyboardTap))
         hideTap.numberOfTapsRequired = 1
         self.view.isUserInteractionEnabled = true
@@ -53,19 +65,16 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         //picTap.numberOfTapsRequired = 1
         //picImg.isUserInteractionEnabled = true
        // picImg.addGestureRecognizer(picTap)
+        
     }
-    
     
     // preload func
     override func viewWillAppear(_ animated: Bool) {
         // call alignment function
-        alignment()
+        style()
     }
-    
-    
-    
-    
-    // hide kyeboard function
+
+    // hide keyboard function
     func hideKeyboardTap() {
         self.view.endEditing(true)
     }
@@ -121,8 +130,6 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                 // hide objects from background
                 self.view.backgroundColor = .black
                 self.titleTxt.alpha = 0
-                self.publishBtn.alpha = 0
-                self.removeBtn.alpha = 0
             })
             
         // to unzoom
@@ -136,125 +143,167 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                 // unhide objects from background
                 self.view.backgroundColor = .white
                 self.titleTxt.alpha = 1
-                self.publishBtn.alpha = 1
-                self.removeBtn.alpha = 1
             })
         }
         
     }
     
     
-    // alignment
-    func alignment() {
+    // style UI objects
+    func style() {
         
-        let width = self.view.frame.size.width
-        let height = self.view.frame.size.height
+        titleTxt.text = "Write something..."
+        titleTxt.textColor = mediumGrey
         
-        picImg.frame = CGRect(x: 15, y: 15, width: width / 4.5, height: width / 4.5)
-        titleTxt.frame = CGRect(x: picImg.frame.size.width + 25, y: picImg.frame.origin.y, width: width / 1.488, height: picImg.frame.size.height)
-        publishBtn.frame = CGRect(x: 0, y: height-self.tabBarController!.tabBar.frame.size.height , width: width, height: width / 8)
-        removeBtn.frame = CGRect(x: picImg.frame.origin.x, y: picImg.frame.origin.y + picImg.frame.size.height, width: picImg.frame.size.width, height: 20)
+        // tint edit location image
+        let editImage = UIImage(named: "edit")
+        let tintedEditImage = editImage?.withRenderingMode(.alwaysTemplate)
+        editLocationBtn.setBackgroundImage(tintedEditImage, for: .normal)
+        editLocationBtn.tintColor = mediumGrey
+        
+        // tint category icons
+        let countryImg = countryIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        countryIcon.setImage(countryImg, for: .normal)
+        countryIcon.tintColor = lightGrey
+        let cityImg = cityIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        cityIcon.setImage(cityImg, for: .normal)
+        cityIcon.tintColor = lightGrey
+        let restaurantImg = restaurantIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        restaurantIcon.setImage(restaurantImg, for: .normal)
+        restaurantIcon.tintColor = lightGrey
+        let nightlifeImg = nightlifeIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        nightlifeIcon.setImage(nightlifeImg, for: .normal)
+        nightlifeIcon.tintColor = lightGrey
+        let artsImg = artsIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        artsIcon.setImage(artsImg, for: .normal)
+        artsIcon.tintColor = lightGrey
+        let shopImg = shopIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        shopIcon.setImage(shopImg, for: .normal)
+        shopIcon.tintColor = lightGrey
+        let hotelImg = hotelIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        hotelIcon.setImage(hotelImg, for: .normal)
+        hotelIcon.tintColor = lightGrey
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.destination is navVC {
+            let firstVC = segue.destination.childViewControllers[0]
+            if firstVC is postTagsVC {
+            
+                // if category was not selected
+                if chosenCategory == nil {
+                    alert("No Category Selected", message: "Please select a category")
+                } else {
+                    let vc = segue.destination as? postTagsVC
+                    vc?.category = chosenCategory!
+                }
+            }
+        }
     }
     
     
     // clicked publish button
-    @IBAction func publishBtn_clicked(_ sender: AnyObject) {
-        
-        // dissmiss keyboard
-        self.view.endEditing(true)
-        
-        // send data to server to "posts" class in Parse
-        let object = PFObject(className: "posts")
-        object["username"] = PFUser.current()!.username
-        if PFUser.current()?.object(forKey: "firstname") != nil {
-            object["firstname"] = PFUser.current()?.object(forKey: "firstname") as? String
-        } else {
-            object["firstname"] = PFUser.current()!.username
+//    @IBAction func publishBtn_clicked(_ sender: AnyObject) {
+//
+//        // dissmiss keyboard
+//        self.view.endEditing(true)
+//
+//        // send data to server to "posts" class in Parse
+//        let object = PFObject(className: "posts")
+//        object["username"] = PFUser.current()!.username
+//        if PFUser.current()?.object(forKey: "firstname") != nil {
+//            object["firstname"] = PFUser.current()?.object(forKey: "firstname") as? String
+//        } else {
+//            object["firstname"] = PFUser.current()!.username
+//        }
+//        object["ava"] = PFUser.current()!.value(forKey: "ava") as! PFFile
+//
+//        let uuid = UUID().uuidString
+//        object["uuid"] = "\(PFUser.current()!.username!) \(uuid)"
+//
+//        if titleTxt.text.isEmpty {
+//            object["title"] = ""
+//        } else {
+//            object["title"] = titleTxt.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+//        }
+//
+//        // send pic to server after converting to FILE and comprassion
+//        let imageData = UIImageJPEGRepresentation(picImg.image!, 0.5)
+//        let imageFile = PFFile(name: "post.jpg", data: imageData!)
+//        object["pic"] = imageFile
+//
+//
+//        // send #hashtag to server
+//        let words:[String] = titleTxt.text!.components(separatedBy: CharacterSet.whitespacesAndNewlines)
+//
+//        // define taged word
+//        for var word in words {
+//
+//            // save #hasthag in server
+//            if word.hasPrefix("#") {
+//
+//                // cut symbold
+//                word = word.trimmingCharacters(in: CharacterSet.punctuationCharacters)
+//                word = word.trimmingCharacters(in: CharacterSet.symbols)
+//
+//                let hashtagObj = PFObject(className: "hashtags")
+//                hashtagObj["to"] = "\(PFUser.current()!.username!) \(uuid)"
+//                hashtagObj["by"] = PFUser.current()?.username
+//                hashtagObj["hashtag"] = word.lowercased()
+//                hashtagObj["comment"] = titleTxt.text
+//                hashtagObj.saveInBackground(block: { (success, error) -> Void in
+//                    if success {
+//                        print("hashtag \(word) is created")
+//                    } else {
+//                        print(error!.localizedDescription)
+//                    }
+//                })
+//            }
+//        }
+//
+//
+//        // finally save information
+//        object.saveInBackground (block: { (success, error) -> Void in
+//            if error == nil {
+//
+//                // send notification with name "uploaded"
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
+//
+//                // switch to another ViewController at 0 index of tabbar
+//                self.tabBarController!.selectedIndex = 0
+//
+//                // reset everything
+//                self.viewDidLoad()
+//                self.titleTxt.text = ""
+//            }
+//        })
+//
+//    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == mediumGrey {
+            textView.text = ""
+            textView.textColor = darkGrey
         }
-        object["ava"] = PFUser.current()!.value(forKey: "ava") as! PFFile
-        
-        let uuid = UUID().uuidString
-        object["uuid"] = "\(PFUser.current()!.username!) \(uuid)"
-        
-        if titleTxt.text.isEmpty {
-            object["title"] = ""
-        } else {
-            object["title"] = titleTxt.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        }
-        
-        // send pic to server after converting to FILE and comprassion
-        let imageData = UIImageJPEGRepresentation(picImg.image!, 0.5)
-        let imageFile = PFFile(name: "post.jpg", data: imageData!)
-        object["pic"] = imageFile
-        
-        
-        // send #hashtag to server
-        let words:[String] = titleTxt.text!.components(separatedBy: CharacterSet.whitespacesAndNewlines)
-        
-        // define taged word
-        for var word in words {
-            
-            // save #hasthag in server
-            if word.hasPrefix("#") {
-                
-                // cut symbold
-                word = word.trimmingCharacters(in: CharacterSet.punctuationCharacters)
-                word = word.trimmingCharacters(in: CharacterSet.symbols)
-                
-                let hashtagObj = PFObject(className: "hashtags")
-                hashtagObj["to"] = "\(PFUser.current()!.username!) \(uuid)"
-                hashtagObj["by"] = PFUser.current()?.username
-                hashtagObj["hashtag"] = word.lowercased()
-                hashtagObj["comment"] = titleTxt.text
-                hashtagObj.saveInBackground(block: { (success, error) -> Void in
-                    if success {
-                        print("hashtag \(word) is created")
-                    } else {
-                        print(error!.localizedDescription)
-                    }
-                })
-            }
-        }
-        
-        
-        // finally save information
-        object.saveInBackground (block: { (success, error) -> Void in
-            if error == nil {
-                
-                // send notification wiht name "uploaded"
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
-                
-                // switch to another ViewController at 0 index of tabbar
-                self.tabBarController!.selectedIndex = 0
-                
-                // reset everything
-                self.viewDidLoad()
-                self.titleTxt.text = ""
-            }
-        })
-        
     }
     
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Write something..."
+            textView.textColor = mediumGrey
+        }
+    }
     
-    // clicked remove button
-    @IBAction func removeBtn_clicked(_ sender: AnyObject) {
-        
+    @IBAction func backBtn_clicked(_ sender: UIBarButtonItem) {
         self.viewDidLoad()
     }
-    
     
     // MARK: FusumaDelegate Protocol
     func fusumaImageSelected(_ image: UIImage) {
         
         print("Image selected")
         picImg.image = image
-        
-        // enable publish btn
-        publishBtn.isEnabled = true
-        publishBtn.backgroundColor = UIColor(red: 52.0/255.0, green: 169.0/255.0, blue: 255.0/255.0, alpha: 1)
-        
-        // unhide remove button
-        removeBtn.isHidden = false
         
         // implement second tap for zooming image
         let zoomTap = UITapGestureRecognizer(target: self, action: #selector(uploadVC.zoomImg))
@@ -294,11 +343,31 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         self.present(alert, animated: true, completion: nil)
     }
     
+    // select category
+    @IBAction func categoryBtn_clicked(_ sender: UIButton) {
+        sender.tintColor = mainColor
+        for category in categoryBtns {
+            if category != sender {
+                category.tintColor = lightGrey
+            } else {
+                chosenCategory = category.restorationIdentifier
+            }
+        }
+    }
+    
+    // close camera
     func fusumaClosed() {
         // Go to Feed page
-        //self.tabBarController?.selectedIndex = 0
+        self.tabBarController?.selectedIndex = 0
         print("Called when the close button is pressed")
     }
     
+    // alert message function
+    func alert (_ error: String, message : String) {
+        let alert = UIAlertController(title: error, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(ok)
+        self.present(alert, animated: true, completion: nil)
+    }
     
 }
