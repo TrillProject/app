@@ -10,7 +10,7 @@ import UIKit
 
 class tagCell: UICollectionViewCell {
 
-    @IBOutlet weak var tagBtn: UIButton!
+    @IBOutlet weak var tagLbl: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

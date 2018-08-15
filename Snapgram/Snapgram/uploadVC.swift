@@ -20,7 +20,11 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBOutlet weak var titleTxt: UITextView!
     @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var editLocationBtn: UIButton!
+    
+    @IBOutlet weak var ratingContainerView: UIView!
+    @IBOutlet weak var ratingOverlayView: UIView!
     @IBOutlet weak var gradientImg: UIImageView!
+    @IBOutlet weak var ratingWord: UILabel!
     
     @IBOutlet weak var countryIcon: UIButton!
     @IBOutlet weak var cityIcon: UIButton!
@@ -31,7 +35,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBOutlet weak var hotelIcon: UIButton!
     
     @IBOutlet var categoryBtns : [UIView]!
-    private var chosenCategory : String!
+    
+    @IBOutlet weak var addFavoriteView: UIView!
     
     // default func
     override func viewDidLoad() {
@@ -60,6 +65,13 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(hideTap)
         
+        // receive notification from postTagsVC
+        NotificationCenter.default.addObserver(self, selector: #selector(uploadVC.donePosting(_:)), name: NSNotification.Name(rawValue: "uploaded"), object: nil)
+        
+        // rating pan gesture
+        let ratingPan = UIPanGestureRecognizer(target: self, action: #selector(uploadVC.handleRatingPan(_:)))
+        ratingContainerView.addGestureRecognizer(ratingPan)
+        
         // select image tap
        // let picTap = UITapGestureRecognizer(target: self, action: #selector(uploadVC.selectImg))
         //picTap.numberOfTapsRequired = 1
@@ -70,7 +82,6 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     // preload func
     override func viewWillAppear(_ animated: Bool) {
-        // call alignment function
         style()
     }
 
@@ -79,6 +90,129 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         self.view.endEditing(true)
     }
     
+    // add rating to post
+    func handleRatingPan(_ sender : UIPanGestureRecognizer) {
+        
+        let frameWidth = self.ratingContainerView.frame.size.width
+        
+        switch sender.state {
+        case .began:
+            self.ratingWord.text = ""
+            self.gradientImg.isHidden = true
+            UIView.animate(withDuration: 0.3, animations: {
+                self.picImg.alpha = 0.3
+                self.ratingWord.isHidden = false
+                self.addFavoriteView.isHidden = true
+                })
+        case .changed:
+            let location = sender.location(in: self.ratingContainerView).x
+            
+            if location <= frameWidth * 0.1 {
+                self.ratingWord.text = ratingWords[0]
+                if location <= frameWidth * 0.05 {
+                    self.ratingContainerView.backgroundColor = gradientColors[0]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[1]
+                }
+            } else if location > frameWidth * 0.1 && location <= frameWidth * 0.2 {
+                self.ratingWord.text = ratingWords[1]
+                if location <= frameWidth * 0.15 {
+                    self.ratingContainerView.backgroundColor = gradientColors[2]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[3]
+                }
+            } else if location > frameWidth * 0.2 && location <= frameWidth * 0.3 {
+                self.ratingWord.text = ratingWords[2]
+                if location <= frameWidth * 0.25 {
+                    self.ratingContainerView.backgroundColor = gradientColors[4]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[5]
+                }
+            } else if location > frameWidth * 0.3 && location <= frameWidth * 0.4 {
+                self.ratingWord.text = ratingWords[3]
+                if location <= frameWidth * 0.35 {
+                    self.ratingContainerView.backgroundColor = gradientColors[6]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[7]
+                }
+            } else if location > frameWidth * 0.4 && location <= frameWidth * 0.5 {
+                self.ratingWord.text = ratingWords[4]
+                if location <= frameWidth * 0.45 {
+                    self.ratingContainerView.backgroundColor = gradientColors[8]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[9]
+                }
+            } else if location > frameWidth * 0.5 && location <= frameWidth * 0.6 {
+                self.ratingWord.text = ratingWords[5]
+                if location <= frameWidth * 0.55 {
+                    self.ratingContainerView.backgroundColor = gradientColors[10]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[11]
+                }
+            } else if location > frameWidth * 0.6 && location <= frameWidth * 0.7 {
+                self.ratingWord.text = ratingWords[6]
+                if location <= frameWidth * 0.65 {
+                    self.ratingContainerView.backgroundColor = gradientColors[12]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[13]
+                }
+            } else if location > frameWidth * 0.7 && location <= frameWidth * 0.8 {
+                self.ratingWord.text = ratingWords[7]
+                if location <= frameWidth * 0.75 {
+                    self.ratingContainerView.backgroundColor = gradientColors[14]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[15]
+                }
+            } else if location > frameWidth * 0.8 && location <= frameWidth * 0.9 {
+                self.ratingWord.text = ratingWords[8]
+                if location <= frameWidth * 0.85 {
+                    self.ratingContainerView.backgroundColor = gradientColors[16]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[17]
+                }
+            } else if location > frameWidth * 0.9 {
+                self.ratingWord.text = ratingWords[9]
+                if location <= frameWidth * 0.95 {
+                    self.ratingContainerView.backgroundColor = gradientColors[18]
+                } else {
+                    self.ratingContainerView.backgroundColor = gradientColors[19]
+                }
+            }
+            self.ratingOverlayView.frame.origin.x = location
+        case .ended:
+            postRating = ratingOverlayView.frame.origin.x / ratingContainerView.frame.size.width
+            if postRating! > 0.7 && !isPostFavorite {
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.ratingWord.isHidden = true
+                    self.addFavoriteView.isHidden = false
+                })
+            } else {
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.picImg.alpha = 1.0
+                    self.ratingWord.isHidden = true
+                })
+            }
+        default:
+            break
+        }
+    }
+    
+    @IBAction func addFavorite(_ sender: UIButton) {
+        isPostFavorite = true
+        UIView.animate(withDuration: 0.3, animations: {
+            self.picImg.alpha = 1.0
+            self.ratingWord.isHidden = true
+            self.addFavoriteView.isHidden = true
+        })
+    }
+    
+    @IBAction func doNotAddFavorite(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.picImg.alpha = 1.0
+            self.ratingWord.isHidden = true
+            self.addFavoriteView.isHidden = true
+        })
+    }
     
     // func to cal pickerViewController
     //func selectImg() {
@@ -111,49 +245,54 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     
     // zooming in / out function
-    func zoomImg() {
-        
-        // define frame of zoomed image
-        let zoomed = CGRect(x: 0, y: self.view.center.y - self.view.center.x - self.tabBarController!.tabBar.frame.size.height * 1.5, width: self.view.frame.size.width, height: self.view.frame.size.width)
-        
-        // frame of unzoomed (small) image
-        let unzoomed = CGRect(x: 15, y: 15, width: self.view.frame.size.width / 4.5, height: self.view.frame.size.width / 4.5)
-        
-        // if picture is unzoomed, zoom it
-        if picImg.frame == unzoomed {
-            
-            // with animation
-            UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                // resize image frame
-                self.picImg.frame = zoomed
-                
-                // hide objects from background
-                self.view.backgroundColor = .black
-                self.titleTxt.alpha = 0
-            })
-            
-        // to unzoom
-        } else {
-            
-            // with animation
-            UIView.animate(withDuration: 0.3, animations: { () -> Void in
-                // resize image frame
-                self.picImg.frame = unzoomed
-                
-                // unhide objects from background
-                self.view.backgroundColor = .white
-                self.titleTxt.alpha = 1
-            })
-        }
-        
-    }
+//    func zoomImg() {
+//
+//        // define frame of zoomed image
+//        let zoomed = CGRect(x: 0, y: self.view.center.y - self.view.center.x - self.tabBarController!.tabBar.frame.size.height * 1.5, width: self.view.frame.size.width, height: self.view.frame.size.width)
+//
+//        // frame of unzoomed (small) image
+//        let unzoomed = CGRect(x: 15, y: 15, width: self.view.frame.size.width / 4.5, height: self.view.frame.size.width / 4.5)
+//
+//        // if picture is unzoomed, zoom it
+//        if picImg.frame == unzoomed {
+//
+//            // with animation
+//            UIView.animate(withDuration: 0.3, animations: { () -> Void in
+//                // resize image frame
+//                self.picImg.frame = zoomed
+//
+//                // hide objects from background
+//                self.view.backgroundColor = .black
+//                self.titleTxt.alpha = 0
+//            })
+//
+//        // to unzoom
+//        } else {
+//
+//            // with animation
+//            UIView.animate(withDuration: 0.3, animations: { () -> Void in
+//                // resize image frame
+//                self.picImg.frame = unzoomed
+//
+//                // unhide objects from background
+//                self.view.backgroundColor = .white
+//                self.titleTxt.alpha = 1
+//            })
+//        }
+//
+//    }
     
     
     // style UI objects
     func style() {
         
-        titleTxt.text = "Write something..."
-        titleTxt.textColor = mediumGrey
+        if postComment == nil {
+            titleTxt.text! = "Write something..."
+            titleTxt.textColor = mediumGrey
+        } else {
+            titleTxt.text = postComment
+            titleTxt.textColor = darkGrey
+        }
         
         // tint edit location image
         let editImage = UIImage(named: "edit")
@@ -162,27 +301,70 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         editLocationBtn.tintColor = mediumGrey
         
         // tint category icons
-        let countryImg = countryIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        countryIcon.setImage(countryImg, for: .normal)
-        countryIcon.tintColor = lightGrey
-        let cityImg = cityIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        cityIcon.setImage(cityImg, for: .normal)
-        cityIcon.tintColor = lightGrey
-        let restaurantImg = restaurantIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        restaurantIcon.setImage(restaurantImg, for: .normal)
-        restaurantIcon.tintColor = lightGrey
-        let nightlifeImg = nightlifeIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        nightlifeIcon.setImage(nightlifeImg, for: .normal)
-        nightlifeIcon.tintColor = lightGrey
-        let artsImg = artsIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        artsIcon.setImage(artsImg, for: .normal)
-        artsIcon.tintColor = lightGrey
-        let shopImg = shopIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        shopIcon.setImage(shopImg, for: .normal)
-        shopIcon.tintColor = lightGrey
-        let hotelImg = hotelIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        hotelIcon.setImage(hotelImg, for: .normal)
-        hotelIcon.tintColor = lightGrey
+        for categoryBtn in categoryBtns {
+            tintIcons(categoryBtn as! UIButton)
+        }
+        
+        // rating gradient
+        if postRating == nil {
+            gradientImg.isHidden = false
+            ratingContainerView.backgroundColor = .white
+            ratingOverlayView.frame.origin.x = 0
+        } else {
+            gradientImg.isHidden = true
+            ratingOverlayView.frame.origin.x = postRating! * ratingContainerView.frame.size.width
+            if postRating! <= 0.05 {
+                ratingContainerView.backgroundColor = gradientColors[0]
+            } else if postRating! <= 0.1 {
+                ratingContainerView.backgroundColor = gradientColors[1]
+            } else if postRating! <= 0.15 {
+                ratingContainerView.backgroundColor = gradientColors[2]
+            } else if postRating! <= 0.2 {
+                ratingContainerView.backgroundColor = gradientColors[3]
+            } else if postRating! <= 0.25 {
+                ratingContainerView.backgroundColor = gradientColors[4]
+            } else if postRating! <= 0.3 {
+                ratingContainerView.backgroundColor = gradientColors[5]
+            } else if postRating! <= 0.35 {
+                ratingContainerView.backgroundColor = gradientColors[6]
+            } else if postRating! <= 0.4 {
+                ratingContainerView.backgroundColor = gradientColors[7]
+            } else if postRating! <= 0.45 {
+                ratingContainerView.backgroundColor = gradientColors[8]
+            } else if postRating! <= 0.5 {
+                ratingContainerView.backgroundColor = gradientColors[9]
+            } else if postRating! <= 0.55 {
+                ratingContainerView.backgroundColor = gradientColors[10]
+            } else if postRating! <= 0.6 {
+                ratingContainerView.backgroundColor = gradientColors[11]
+            } else if postRating! <= 0.65 {
+                ratingContainerView.backgroundColor = gradientColors[12]
+            } else if postRating! <= 0.7 {
+                ratingContainerView.backgroundColor = gradientColors[13]
+            } else if postRating! <= 0.75 {
+                ratingContainerView.backgroundColor = gradientColors[14]
+            } else if postRating! <= 0.8 {
+                ratingContainerView.backgroundColor = gradientColors[15]
+            } else if postRating! <= 0.85 {
+                ratingContainerView.backgroundColor = gradientColors[16]
+            } else if postRating! <= 0.9 {
+                ratingContainerView.backgroundColor = gradientColors[17]
+            } else if postRating! <= 0.95 {
+                ratingContainerView.backgroundColor = gradientColors[18]
+            } else {
+                ratingContainerView.backgroundColor = gradientColors[19]
+            }
+        }
+    }
+    
+    func tintIcons(_ sender : UIButton) {
+        let img = sender.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
+        sender.setImage(img, for: .normal)
+        if sender.restorationIdentifier != nil && sender.restorationIdentifier == selectedCategory {
+            sender.tintColor = mainColor
+        } else {
+            sender.tintColor = lightGrey
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -190,96 +372,33 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         if segue.destination is navVC {
             let firstVC = segue.destination.childViewControllers[0]
             if firstVC is postTagsVC {
+                
+                // if location is not set
+                if locationLbl.text == nil {
+                    alert("Invalid Location", message: "Please select a valid location")
+                } else {
+                    postLocation = locationLbl.text
+                }
+                
+                // assign comment text
+                if titleTxt.text == nil || titleTxt.text == "" || titleTxt.text == "Write something..." {
+                    postComment = nil
+                } else {
+                    postComment = titleTxt.text
+                }
             
                 // if category was not selected
-                if chosenCategory == nil {
+                if selectedCategory == nil {
                     alert("No Category Selected", message: "Please select a category")
-                } else {
-                    let vc = segue.destination as? postTagsVC
-                    vc?.category = chosenCategory!
+                }
+                
+                // if rating was not added
+                if postRating == nil {
+                    alert("No Rating Supplied", message: "Please add a rating for your experience")
                 }
             }
         }
     }
-    
-    
-    // clicked publish button
-//    @IBAction func publishBtn_clicked(_ sender: AnyObject) {
-//
-//        // dissmiss keyboard
-//        self.view.endEditing(true)
-//
-//        // send data to server to "posts" class in Parse
-//        let object = PFObject(className: "posts")
-//        object["username"] = PFUser.current()!.username
-//        if PFUser.current()?.object(forKey: "firstname") != nil {
-//            object["firstname"] = PFUser.current()?.object(forKey: "firstname") as? String
-//        } else {
-//            object["firstname"] = PFUser.current()!.username
-//        }
-//        object["ava"] = PFUser.current()!.value(forKey: "ava") as! PFFile
-//
-//        let uuid = UUID().uuidString
-//        object["uuid"] = "\(PFUser.current()!.username!) \(uuid)"
-//
-//        if titleTxt.text.isEmpty {
-//            object["title"] = ""
-//        } else {
-//            object["title"] = titleTxt.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-//        }
-//
-//        // send pic to server after converting to FILE and comprassion
-//        let imageData = UIImageJPEGRepresentation(picImg.image!, 0.5)
-//        let imageFile = PFFile(name: "post.jpg", data: imageData!)
-//        object["pic"] = imageFile
-//
-//
-//        // send #hashtag to server
-//        let words:[String] = titleTxt.text!.components(separatedBy: CharacterSet.whitespacesAndNewlines)
-//
-//        // define taged word
-//        for var word in words {
-//
-//            // save #hasthag in server
-//            if word.hasPrefix("#") {
-//
-//                // cut symbold
-//                word = word.trimmingCharacters(in: CharacterSet.punctuationCharacters)
-//                word = word.trimmingCharacters(in: CharacterSet.symbols)
-//
-//                let hashtagObj = PFObject(className: "hashtags")
-//                hashtagObj["to"] = "\(PFUser.current()!.username!) \(uuid)"
-//                hashtagObj["by"] = PFUser.current()?.username
-//                hashtagObj["hashtag"] = word.lowercased()
-//                hashtagObj["comment"] = titleTxt.text
-//                hashtagObj.saveInBackground(block: { (success, error) -> Void in
-//                    if success {
-//                        print("hashtag \(word) is created")
-//                    } else {
-//                        print(error!.localizedDescription)
-//                    }
-//                })
-//            }
-//        }
-//
-//
-//        // finally save information
-//        object.saveInBackground (block: { (success, error) -> Void in
-//            if error == nil {
-//
-//                // send notification with name "uploaded"
-//                NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
-//
-//                // switch to another ViewController at 0 index of tabbar
-//                self.tabBarController!.selectedIndex = 0
-//
-//                // reset everything
-//                self.viewDidLoad()
-//                self.titleTxt.text = ""
-//            }
-//        })
-//
-//    }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == mediumGrey {
@@ -304,12 +423,21 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         
         print("Image selected")
         picImg.image = image
+        selectedImg = image
+        
+        postLocation = nil
+        postComment = nil
+        selectedCategory = nil
+        selectedTags.removeAll()
+        customTags.removeAll()
+        postRating = nil
+        isPostFavorite = false
         
         // implement second tap for zooming image
-        let zoomTap = UITapGestureRecognizer(target: self, action: #selector(uploadVC.zoomImg))
-        zoomTap.numberOfTapsRequired = 1
-        picImg.isUserInteractionEnabled = true
-        picImg.addGestureRecognizer(zoomTap)
+//        let zoomTap = UITapGestureRecognizer(target: self, action: #selector(uploadVC.zoomImg))
+//        zoomTap.numberOfTapsRequired = 1
+//        picImg.isUserInteractionEnabled = true
+//        picImg.addGestureRecognizer(zoomTap)
     }
     
     func fusumaVideoCompleted(withFileURL fileURL: URL) {
@@ -350,7 +478,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             if category != sender {
                 category.tintColor = lightGrey
             } else {
-                chosenCategory = category.restorationIdentifier
+                selectedCategory = category.restorationIdentifier
             }
         }
     }
@@ -360,6 +488,21 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         // Go to Feed page
         self.tabBarController?.selectedIndex = 0
         print("Called when the close button is pressed")
+    }
+    
+    // done posting
+    func donePosting(_ notification:Notification) {
+        self.tabBarController?.selectedIndex = 0
+        selectedImg = nil
+        postLocation = nil
+        postComment = nil
+        selectedCategory = nil
+        selectedTags.removeAll()
+        customTags.removeAll()
+        postRating = nil
+        isPostFavorite = false
+        self.viewDidLoad()
+        print("post added")
     }
     
     // alert message function

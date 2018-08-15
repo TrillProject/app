@@ -266,6 +266,8 @@ public final class FusumaViewController: UIViewController {
     
     @IBAction func closeButtonPressed(_ sender: UIButton) {
         self.dismiss(animated: false, completion: {
+            selectedCategory = nil
+            selectedTags.removeAll()
             self.delegate?.fusumaClosed?()
         })
     }
@@ -273,6 +275,7 @@ public final class FusumaViewController: UIViewController {
     @IBAction func noImgBtnPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: {
             print("Called when no image is selected for post")
+            selectedImg = nil
         })
     }
     

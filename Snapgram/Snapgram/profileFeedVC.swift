@@ -19,6 +19,10 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     var titleArray = [String]()
     var uuidArray = [String]()
     var categoryArray = [String]()
+    var locationArray = [String]()
+    var favoriteArray = [Bool]()
+    var tagsArray = [[String]]()
+    var ratingArray = [CGFloat]()
     
     // page size
     var page = 10
@@ -69,6 +73,10 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 self.titleArray.removeAll(keepingCapacity: false)
                 self.uuidArray.removeAll(keepingCapacity: false)
                 self.categoryArray.removeAll(keepingCapacity: false)
+                self.locationArray.removeAll(keepingCapacity: false)
+                self.favoriteArray.removeAll(keepingCapacity: false)
+                self.tagsArray.removeAll(keepingCapacity: false)
+                self.ratingArray.removeAll(keepingCapacity: false)
                 
                 // find related objects
                 for object in objects! {
@@ -80,6 +88,30 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                         self.categoryArray.append(object.object(forKey: "category") as! String)
                     } else {
                         self.categoryArray.append("")
+                    }
+                    
+                    if object.object(forKey: "location") != nil {
+                        self.locationArray.append(object.object(forKey: "location") as! String)
+                    } else {
+                        self.locationArray.append("")
+                    }
+                    
+                    if object.object(forKey: "favorite") != nil {
+                        self.favoriteArray.append(object.object(forKey: "favorite") as! Bool)
+                    } else {
+                        self.favoriteArray.append(false)
+                    }
+                    
+                    if object.object(forKey: "tags") != nil {
+                        self.tagsArray.append(object.object(forKey: "tags") as! [String])
+                    } else {
+                        self.tagsArray.append([])
+                    }
+                    
+                    if object.object(forKey: "rating") != nil {
+                        self.ratingArray.append(object.object(forKey: "rating") as! CGFloat)
+                    } else {
+                        self.ratingArray.append(0.0)
                     }
                 }
                 
@@ -123,6 +155,10 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                     self.titleArray.removeAll(keepingCapacity: false)
                     self.uuidArray.removeAll(keepingCapacity: false)
                     self.categoryArray.removeAll(keepingCapacity: false)
+                    self.locationArray.removeAll(keepingCapacity: false)
+                    self.favoriteArray.removeAll(keepingCapacity: false)
+                    self.tagsArray.removeAll(keepingCapacity: false)
+                    self.ratingArray.removeAll(keepingCapacity: false)
                     
                     // find related objects
                     for object in objects! {
@@ -134,6 +170,30 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                             self.categoryArray.append(object.object(forKey: "category") as! String)
                         } else {
                             self.categoryArray.append("")
+                        }
+                        
+                        if object.object(forKey: "location") != nil {
+                            self.locationArray.append(object.object(forKey: "location") as! String)
+                        } else {
+                            self.locationArray.append("")
+                        }
+                        
+                        if object.object(forKey: "favorite") != nil {
+                            self.favoriteArray.append(object.object(forKey: "favorite") as! Bool)
+                        } else {
+                            self.favoriteArray.append(false)
+                        }
+                        
+                        if object.object(forKey: "tags") != nil {
+                            self.tagsArray.append(object.object(forKey: "tags") as! [String])
+                        } else {
+                            self.tagsArray.append([])
+                        }
+                        
+                        if object.object(forKey: "rating") != nil {
+                            self.ratingArray.append(object.object(forKey: "rating") as! CGFloat)
+                        } else {
+                            self.ratingArray.append(0.0)
                         }
                     }
                     
@@ -203,17 +263,17 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         }
         
         // set location button
-        switch categoryArray[(indexPath as NSIndexPath).row] {
-        case "country":
-            cell.locationBtn.setTitle("country", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "country.png"), for: UIControlState())
-        case "city":
-            cell.locationBtn.setTitle("city", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "city.png"), for: UIControlState())
-        default:
-            cell.locationBtn.setTitle("", for: UIControlState())
-            cell.locationBtn.setBackgroundImage(UIImage(named: "transparent.png"), for: UIControlState())
+        if favoriteArray[(indexPath as NSIndexPath).row] == true {
+            cell.locationBtn.setImage(UIImage(named: "like2"), for: UIControlState())
+        } else {
+            cell.selectLocationType(categoryArray[(indexPath as NSIndexPath).row])
         }
+        
+        // set location
+        cell.locationLbl.text = locationArray[(indexPath as NSIndexPath).row]
+        
+        // set rating
+        cell.setRating(ratingArray[(indexPath as NSIndexPath).row])
         
         // manipulate suitcase button depending on if it is added to user's suitcase
         let didAdd = PFQuery(className: "suitcase")
@@ -255,7 +315,10 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             }
         }
         
-        // asign index
+        // set tags
+        cell.setTags(tagsArray[(indexPath as NSIndexPath).row])
+        
+        // assign index
         cell.usernameBtn.layer.setValue(indexPath, forKey: "index")
         cell.commentBtn.layer.setValue(indexPath, forKey: "index")
         

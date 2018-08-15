@@ -15,7 +15,6 @@ class postCell: UITableViewCell {
     // header objects
     @IBOutlet weak var avaImg: UIImageView!
     @IBOutlet weak var usernameBtn: UIButton!
-    //@IBOutlet weak var dateLbl: UILabel!
     @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var locationBtn: UIButton!
     
@@ -25,23 +24,25 @@ class postCell: UITableViewCell {
     // review
     @IBOutlet weak var reviewBackground: UIView!
     @IBOutlet weak var reviewOverlay: UIView!
+    @IBOutlet weak var reviewOverlayLeadingSpace: NSLayoutConstraint!
     
     // buttons
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
-    //@IBOutlet weak var moreBtn: UIButton!
     @IBOutlet weak var suitcaseBtn: UIButton!
     
     // tags
+    @IBOutlet weak var tag1View: UIView!
     @IBOutlet weak var tag1Btn: UIButton!
+    @IBOutlet weak var tag2View: UIView!
     @IBOutlet weak var tag2Btn: UIButton!
+    @IBOutlet weak var tag3View: UIView!
     @IBOutlet weak var tag3Btn: UIButton!
     
     // labels
     @IBOutlet weak var likeLbl: UILabel!
     @IBOutlet weak var titleLbl: KILabel!
     @IBOutlet weak var uuidLbl: UILabel!
-    
     
     // default func
     override func awakeFromNib() {
@@ -243,5 +244,98 @@ class postCell: UITableViewCell {
         
     }
     
+    //set location button
+    func selectLocationType(_ categoryType : String) {
+        switch categoryType {
+        case "country":
+            selectLocationButton("country")
+        case "city":
+            selectLocationButton("city")
+        case "restaurant":
+            selectLocationButton("restaurant")
+        case "nightlife":
+            selectLocationButton("nightlife")
+        case "arts":
+            selectLocationButton("arts")
+        case "shop":
+            selectLocationButton("shop")
+        case "hotel":
+            selectLocationButton("hotel")
+        default:
+            selectLocationButton("transparent")
+        }
+    }
     
+    func selectLocationButton(_ name : String) {
+        locationBtn.setImage(UIImage(named: name), for: UIControlState())
+    }
+    
+    // set post rating
+    func setRating(_ rating : CGFloat) {
+        reviewOverlayLeadingSpace.constant = rating * reviewBackground.frame.size.width
+        if rating <= 0.05 {
+            reviewBackground.backgroundColor = gradientColors[0]
+        } else if rating <= 0.1 {
+            reviewBackground.backgroundColor = gradientColors[1]
+        } else if rating <= 0.15 {
+            reviewBackground.backgroundColor = gradientColors[2]
+        } else if rating <= 0.2 {
+            reviewBackground.backgroundColor = gradientColors[3]
+        } else if rating <= 0.25 {
+            reviewBackground.backgroundColor = gradientColors[4]
+        } else if rating <= 0.3 {
+            reviewBackground.backgroundColor = gradientColors[5]
+        } else if rating <= 0.35 {
+            reviewBackground.backgroundColor = gradientColors[6]
+        } else if rating <= 0.4 {
+            reviewBackground.backgroundColor = gradientColors[7]
+        } else if rating <= 0.45 {
+            reviewBackground.backgroundColor = gradientColors[8]
+        } else if rating <= 0.5 {
+            reviewBackground.backgroundColor = gradientColors[9]
+        } else if rating <= 0.55 {
+            reviewBackground.backgroundColor = gradientColors[10]
+        } else if rating <= 0.6 {
+            reviewBackground.backgroundColor = gradientColors[11]
+        } else if rating <= 0.65 {
+            reviewBackground.backgroundColor = gradientColors[12]
+        } else if rating <= 0.7 {
+            reviewBackground.backgroundColor = gradientColors[13]
+        } else if rating <= 0.75 {
+            reviewBackground.backgroundColor = gradientColors[14]
+        } else if rating <= 0.8 {
+            reviewBackground.backgroundColor = gradientColors[15]
+        } else if rating <= 0.85 {
+            reviewBackground.backgroundColor = gradientColors[16]
+        } else if rating <= 0.9 {
+            reviewBackground.backgroundColor = gradientColors[17]
+        } else if rating <= 0.95 {
+            reviewBackground.backgroundColor = gradientColors[18]
+        } else {
+            reviewBackground.backgroundColor = gradientColors[19]
+        }
+    }
+    
+    // set tags
+    func setTags(_ assignedTags : [String]) {
+        let numberOfTags = assignedTags.count
+        if 0 < numberOfTags {
+            tag1Btn.setTitle(assignedTags[0].uppercased(), for: .normal)
+            tag1View.isHidden = false
+        } else {
+            tag1View.isHidden = true
+        }
+        if 1 < numberOfTags {
+            tag2Btn.setTitle(assignedTags[1].uppercased(), for: .normal)
+            tag2View.isHidden = false
+        } else {
+            tag2View.isHidden = true
+        }
+        if 2 < numberOfTags {
+            tag3Btn.setTitle(assignedTags[2].uppercased(), for: .normal)
+            tag3View.isHidden = false
+        } else {
+            tag3View.isHidden = true
+        }
+    }
 }
