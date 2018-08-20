@@ -12,16 +12,33 @@ import Parse
 
 class changePasswordVC: UIViewController {
 
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var currentTxt: UITextField!
     @IBOutlet weak var newTxt: UITextField!
     @IBOutlet weak var repeatTxt: UITextField!
-    @IBOutlet weak var saveBtn: UIButton!
+    
+    @IBOutlet weak var repeatTxtBottomSpace: NSLayoutConstraint!
+    
+    // value to hold keyboard frame size
+    private var keyboard = CGRect()
+    private var keyboardVisible = false
+    private var bottomScrollOffset = CGFloat(0)
     
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Change Password"
+        
+        // check notifications of keyboard - shown or not
+        NotificationCenter.default.addObserver(self, selector: #selector(changePasswordVC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changePasswordVC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        // tap to hide keyboard
+        let hideTap = UITapGestureRecognizer(target: self, action: #selector(changePasswordVC.hideKeyboard))
+        hideTap.numberOfTapsRequired = 1
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(hideTap)
         
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.currentTxt.frame.height))
         currentTxt.leftView = paddingView
@@ -34,11 +51,10 @@ class changePasswordVC: UIViewController {
         let repeatPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.repeatTxt.frame.height))
         repeatTxt.leftView = repeatPaddingView
         repeatTxt.leftViewMode = UITextFieldViewMode.always
-        
-        saveBtn.frame.size.width = self.view.frame.size.width / 3
     }
-
-    @IBAction func saveBtn_clicked(_ sender: UIButton) {
+    
+    @IBAction func saveBtn_clicked(_ sender: UIBarButtonItem) {
+    
         let user = PFUser.current()!
         
         if (currentTxt.text!.isEmpty || newTxt.text!.isEmpty || repeatTxt.text!.isEmpty) {
@@ -68,6 +84,65 @@ class changePasswordVC: UIViewController {
             } else {
                 print(error!.localizedDescription)
             }
+        })
+    }
+    
+    // func to hide keyboard
+    @objc func hideKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    // func when keyboard is shown
+    @objc func keyboardWillShow(_ notification: Notification) {
+        
+        // define keyboard frame size
+        keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
+        
+        // move up with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            if !self.keyboardVisible {
+                self.repeatTxtBottomSpace.constant = self.repeatTxtBottomSpace.constant + self.keyboard.height
+                self.bottomScrollOffset = self.scrollView.contentSize.height + self.keyboard.height - self.scrollView.bounds.size.height
+            }
+            
+            if self.bottomScrollOffset > 0 {
+                if self.currentTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.currentTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.currentTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+                    
+                } else if self.newTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.newTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.newTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+                    
+                } else if self.repeatTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.repeatTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.repeatTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                }
+            } else if self.currentTxt.isFirstResponder || self.newTxt.isFirstResponder || self.repeatTxt.isFirstResponder {
+                self.keyboardVisible = true
+            }
+        })
+    }
+    
+    // func when keyboard is hidden
+    @objc func keyboardWillHide(_ notification: Notification) {
+        
+        self.keyboardVisible = false
+        
+        // move down with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            self.repeatTxtBottomSpace.constant = self.repeatTxtBottomSpace.constant - self.keyboard.height
         })
     }
     

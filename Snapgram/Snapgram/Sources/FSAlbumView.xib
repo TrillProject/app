@@ -24,7 +24,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="ofF-eS-Nvv"/>
                             </constraints>
-                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="4" minimumInteritemSpacing="4" id="jnu-mn-3OB">
+                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="4" id="jnu-mn-3OB">
                                 <size key="itemSize" width="100" height="100"/>
                                 <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>

@@ -43,8 +43,8 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
                     self.followArray.append(object.value(forKey: "following") as! String)
                 }
                 
-                // STEP 3. Basing on followArray information (inside users) show infromation from User class of Parse
-                // find users followeb by user
+                // STEP 3. Based on followArray information (inside users) show information from User class of Parse
+                // find users followed by user
                 let query = PFQuery(className: "_User")
                 query.whereKey("username", containedIn: self.followArray)
                 query.addDescendingOrder("createdAt")

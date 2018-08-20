@@ -11,6 +11,11 @@ import Parse
 
 
 class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FusumaDelegate, UITextViewDelegate {
+    
+    // value to hold keyboard frame size
+    private var keyboard = CGRect()
+    private var keyboardVisible = false
+    private var bottomScrollOffset = CGFloat(0)
 
     // UI objects
     @IBOutlet weak var scrollView: UIScrollView!
@@ -38,6 +43,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     @IBOutlet weak var addFavoriteView: UIView!
     
+    @IBOutlet weak var hotelIconBottomSpace: NSLayoutConstraint!
+    
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +61,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         // title at the top
         self.navigationItem.title = "Post"
         
-        // standart UI containt
+        // standard UI containt
         picImg.image = UIImage(named: "pbg.jpg")
         
         titleTxt.delegate = self
@@ -68,6 +75,10 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         // receive notification from postTagsVC
         NotificationCenter.default.addObserver(self, selector: #selector(uploadVC.donePosting(_:)), name: NSNotification.Name(rawValue: "uploaded"), object: nil)
         
+        // check notifications of keyboard - shown or not
+        NotificationCenter.default.addObserver(self, selector: #selector(uploadVC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(uploadVC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
         // rating pan gesture
         let ratingPan = UIPanGestureRecognizer(target: self, action: #selector(uploadVC.handleRatingPan(_:)))
         ratingContainerView.addGestureRecognizer(ratingPan)
@@ -77,6 +88,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         //picTap.numberOfTapsRequired = 1
         //picImg.isUserInteractionEnabled = true
        // picImg.addGestureRecognizer(picTap)
+        
+        print((self.tabBarController?.tabBar.frame.size.height)!)
         
     }
     
@@ -285,6 +298,12 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     // style UI objects
     func style() {
+        
+        if postLocation == nil {
+            locationLbl.text! = "Location"
+        } else {
+            locationLbl.text! = postLocation!
+        }
         
         if postComment == nil {
             titleTxt.text! = "Write something..."
@@ -503,6 +522,47 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         isPostFavorite = false
         self.viewDidLoad()
         print("post added")
+    }
+    
+    // func to hide keyboard
+    @objc func hideKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    // func when keyboard is shown
+    @objc func keyboardWillShow(_ notification: Notification) {
+        
+        // define keyboard frame size
+        keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
+        
+        // move up with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            
+            if !self.keyboardVisible {
+                self.hotelIconBottomSpace.constant = self.hotelIconBottomSpace.constant + self.keyboard.height - (self.tabBarController?.tabBar.frame.size.height)!
+                self.bottomScrollOffset = self.scrollView.contentSize.height + self.keyboard.height - (self.tabBarController?.tabBar.frame.size.height)! - self.scrollView.bounds.size.height
+
+                if self.titleTxt.isFirstResponder && !self.keyboardVisible {
+                    if self.bottomScrollOffset > self.titleTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.titleTxt.frame.origin.y), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+                }
+            }
+        })
+    }
+    
+    // func when keyboard is hidden
+    @objc func keyboardWillHide(_ notification: Notification) {
+
+        // move down with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            self.hotelIconBottomSpace.constant = self.hotelIconBottomSpace.constant - self.keyboard.height + (self.tabBarController?.tabBar.frame.size.height)!
+        })
+        
+        self.keyboardVisible = false
     }
     
     // alert message function

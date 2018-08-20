@@ -13,6 +13,8 @@ var guestname = [String]()
 
 class profileUserVC: UIViewController {
     
+    @IBOutlet weak var backBtn: UIBarButtonItem!
+    
     @IBOutlet weak var avaImg: UIImageView!
     @IBOutlet weak var coverImg: UIImageView!
     
@@ -391,6 +393,10 @@ class profileUserVC: UIViewController {
                 followingTitle.textColor = lightGrey
             }
         }
+    }
+    
+    @IBAction func backBtn_clicked(_ sender: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
     }
     
 }

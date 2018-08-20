@@ -19,10 +19,14 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
     @IBOutlet weak var lastnameTxt: UITextField!
     @IBOutlet weak var emailTxt: UITextField!
     
+    @IBOutlet weak var emailTxtBottomSpace: NSLayoutConstraint!
+    
     private var currentPicker = 0
     
     // value to hold keyboard frame size
-    var keyboard = CGRect()
+    private var keyboard = CGRect()
+    private var keyboardVisible = false
+    private var bottomScrollOffset = CGFloat(0)
     
     // default func
     override func viewDidLoad() {
@@ -72,16 +76,49 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
         
         // move up with animation
         UIView.animate(withDuration: 0.4, animations: { () -> Void in
-            self.scrollView.contentSize.height = self.view.frame.size.height + self.keyboard.height / 2
+            if !self.keyboardVisible {
+                self.emailTxtBottomSpace.constant = self.emailTxtBottomSpace.constant + self.keyboard.height
+                self.bottomScrollOffset = self.scrollView.contentSize.height + self.keyboard.height - self.scrollView.bounds.size.height
+            }
+            
+            if self.bottomScrollOffset > 0 {
+                if self.firstnameTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.firstnameTxt.frame.origin.y {
+                         self.scrollView.setContentOffset(CGPoint(x: 0, y: self.firstnameTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+                   
+                } else if self.lastnameTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.lastnameTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.lastnameTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+
+                } else if self.emailTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.emailTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.emailTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                }
+            } else if self.firstnameTxt.isFirstResponder || self.lastnameTxt.isFirstResponder || self.emailTxt.isFirstResponder {
+                self.keyboardVisible = true
+            }
         })
     }
     
     // func when keyboard is hidden
     @objc func keyboardWillHide(_ notification: Notification) {
         
+        self.keyboardVisible = false
+        
         // move down with animation
         UIView.animate(withDuration: 0.4, animations: { () -> Void in
-            self.scrollView.contentSize.height = 0
+           self.emailTxtBottomSpace.constant = self.emailTxtBottomSpace.constant - self.keyboard.height
         })
     }
     

@@ -33,20 +33,20 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
     var phAsset: PHAsset!
     
     // Variables for calculating the position
-    enum Direction {
-        case scroll
-        case stop
-        case up
-        case down
-    }
-    let imageCropViewOriginalConstraintTop: CGFloat = 50
-    let imageCropViewMinimalVisibleHeight: CGFloat  = 100
-    var dragDirection = Direction.up
-    var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
-    
-    var cropBottomY: CGFloat  = 0.0
-    var dragStartPos: CGPoint = CGPoint.zero
-    let dragDiff: CGFloat     = 20.0
+//    enum Direction {
+//        case scroll
+//        case stop
+//        case up
+//        case down
+//    }
+//    let imageCropViewOriginalConstraintTop: CGFloat = 50
+//    let imageCropViewMinimalVisibleHeight: CGFloat  = 100
+//    var dragDirection = Direction.up
+//    var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
+//
+//    var cropBottomY: CGFloat  = 0.0
+//    var dragStartPos: CGPoint = CGPoint.zero
+//    let dragDiff: CGFloat     = 20.0
     
     static func instance() -> FSAlbumView {
         
@@ -64,13 +64,15 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
 		
 		self.isHidden = false
         
+        collectionViewConstraintHeight.constant = (collectionView.frame.width - 3) / 4
+        
 //        let panGesture      = UIPanGestureRecognizer(target: self, action: #selector(FSAlbumView.panned(_:)))
 //        panGesture.delegate = self
 //        self.addGestureRecognizer(panGesture)
         
 
-        imageCropViewConstraintTop.constant = 50
-        dragDirection = Direction.up
+//        imageCropViewConstraintTop.constant = 50
+//        dragDirection = Direction.up
         
         
         collectionView.register(UINib(nibName: "FSAlbumViewCell", bundle: Bundle(for: self.classForCoder)), forCellWithReuseIdentifier: "FSAlbumViewCell")
@@ -274,7 +276,7 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
         
         imageCropView.changeScrollable(true)
         
-        imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
+//        imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
         
         UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
             
@@ -282,7 +284,7 @@ final class FSAlbumView: UIView, UICollectionViewDataSource, UICollectionViewDel
             
             }, completion: nil)
         
-        dragDirection = Direction.up
+//        dragDirection = Direction.up
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
     }
     

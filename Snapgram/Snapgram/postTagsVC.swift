@@ -20,7 +20,14 @@ var isPostFavorite = false
 
 let tags = ["lobortis", "nam", "fermentum", "fusce", "dictum", "aman", "eu", "placerat", "suscipt", "neque", "imperdiet", "dabibus", "risus", "laoreet", "urna", "convallius", "quisque", "iaculis", "mattis"]
 
+
 class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
+    // value to hold keyboard frame size
+    var keyboard = CGRect()
+    var keyboardVisible = false
+    
+    @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var tagsCollectionView: UICollectionView! {
         didSet {
@@ -42,6 +49,12 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
     @IBOutlet weak var addTagTxt: UITextField!
     @IBOutlet weak var addBtn: UIButton!
     
+    @IBOutlet weak var tagsCollectionViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var addTagTxtBottomSpace: NSLayoutConstraint!
+    @IBOutlet weak var customTagsCollectionViewBottomSpace: NSLayoutConstraint!
+    
+    @IBOutlet weak var backgroundView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,6 +69,22 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.addTagTxt.frame.height))
         addTagTxt.leftView = paddingView
         addTagTxt.leftViewMode = UITextFieldViewMode.always
+        
+        // check notifications of keyboard - shown or not
+        NotificationCenter.default.addObserver(self, selector: #selector(postTagsVC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(postTagsVC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        // tap to hide keyboard
+        let hideTap = UITapGestureRecognizer(target: self, action: #selector(postTagsVC.hideKeyboard))
+        hideTap.numberOfTapsRequired = 1
+        self.backgroundView.isUserInteractionEnabled = true
+        self.backgroundView.addGestureRecognizer(hideTap)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        tagsCollectionViewHeight.constant = tagsCollectionView.contentSize.height
     }
 
     // cell number
@@ -229,6 +258,37 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
                     
                 })
             }
+        })
+    }
+    
+    // func to hide keyboard
+    @objc func hideKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    // func when keyboard is shown
+    @objc func keyboardWillShow(_ notification: Notification) {
+        
+        // define keyboard frame size
+        keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
+        
+        // move up with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            self.customTagsCollectionViewBottomSpace.constant = self.customTagsCollectionViewBottomSpace.constant + self.keyboard.height
+            if self.addTagTxt.isFirstResponder && !self.keyboardVisible{
+                self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollView.contentSize.height + self.keyboard.height - self.scrollView.bounds.size.height ), animated: true)
+                self.keyboardVisible = true
+            }
+        })
+    }
+    
+    // func when keyboard is hidden
+    @objc func keyboardWillHide(_ notification: Notification) {
+        keyboardVisible = false
+
+        // move down with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            self.customTagsCollectionViewBottomSpace.constant = self.customTagsCollectionViewBottomSpace.constant - self.keyboard.height
         })
     }
     

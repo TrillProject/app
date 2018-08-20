@@ -388,11 +388,6 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         self.navigationController?.pushViewController(comment, animated: true)
     }
     
-    // go to post
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
-    
     // alert action
     func alert (_ title: String, message : String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)

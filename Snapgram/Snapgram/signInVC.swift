@@ -23,6 +23,9 @@ class signInVC: UIViewController {
     @IBOutlet weak var signUpBtn: UIButton!
     @IBOutlet weak var forgotBtn: UIButton!
     
+    // variable to hold keyboard frame
+    var keyboard = CGRect()
+    
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +58,11 @@ class signInVC: UIViewController {
         hideTap.numberOfTapsRequired = 1
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(hideTap)
+    
+        // check notifications of keyboard - shown or not
+        NotificationCenter.default.addObserver(self, selector: #selector(signInVC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(signInVC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
     }
     
     
@@ -62,7 +70,28 @@ class signInVC: UIViewController {
     func hideKeyboard(_ recognizer : UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
-
+    
+    // func when keyboard is shown
+    @objc func keyboardWillShow(_ notification: Notification) {
+        
+        // define keyboard frame size
+        keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
+        
+        // move up with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+//            self.scrollView.contentSize.height = self.view.frame.size.height + self.keyboard.height / 2
+        })
+    }
+    
+    // func when keyboard is hidden
+    @objc func keyboardWillHide(_ notification: Notification) {
+        
+        // move down with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+//            self.scrollView.contentSize.height = 0
+        })
+    }
+    
     
     // clicked sign in button
     @IBAction func signInBtn_click(_ sender: AnyObject) {
