@@ -121,9 +121,7 @@ extension UIView {
         border.frame = CGRect(x: 0, y: 0, width: width, height: self.frame.size.height)
         self.layer.addSublayer(border)
     }
-}
 
-extension UIView {
     var parentViewController: UIViewController? {
         var parentResponder: UIResponder? = self
         while parentResponder != nil {
@@ -133,5 +131,18 @@ extension UIView {
             }
         }
         return nil
+    }
+}
+
+extension UITextField {
+    func setBottomBorder(color: UIColor, height: CGFloat) {
+        self.borderStyle = .none
+        self.layer.backgroundColor = UIColor.white.cgColor
+        
+        self.layer.masksToBounds = false
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOffset = CGSize(width: 0.0, height: height)
+        self.layer.shadowOpacity = 1.0
+        self.layer.shadowRadius = 0.0
     }
 }

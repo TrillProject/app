@@ -118,7 +118,7 @@
         <!--Sign InVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="signInVC" id="BYZ-38-t0r" customClass="signInVC" customModule="Snapgram" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="signInVC" automaticallyAdjustsScrollViewInsets="NO" id="BYZ-38-t0r" customClass="signInVC" customModule="Snapgram" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="nvI-Aw-f0L"/>
                         <viewControllerLayoutGuide type="bottom" id="1G9-DA-eGh"/>
@@ -127,117 +127,217 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UNV-7R-gTz">
-                                <rect key="frame" x="20" y="191" width="280" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
-                                        <color key="value" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PGV-GN-9xz">
-                                <rect key="frame" x="20" y="262" width="70" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="18"/>
-                                <state key="normal" title="LOGIN">
-                                    <color key="titleColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="0.0"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="3"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="signInBtn_click:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ljw-7r-qdf"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U2Q-Fb-4NZ">
-                                <rect key="frame" x="16" y="306" width="127" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="16"/>
-                                <state key="normal" title="Forgot password?">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <segue destination="H9l-1P-LcO" kind="modal" id="gv8-M2-WHi"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TRILL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXP-ix-nL5">
-                                <rect key="frame" x="20" y="74" width="280" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="38"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z6d-WE-SXd">
-                                <rect key="frame" x="230" y="261" width="70" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="18"/>
-                                <state key="normal" title="SIGN UP">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                        <real key="value" value="3"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <segue destination="v3b-9d-2gk" kind="modal" id="Pp8-dh-ANd"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TM9-PK-PJe">
-                                <rect key="frame" x="46" y="597" width="282" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <string key="text">By using Trill you agree to the Terms,
-Cookie Policy, and Privacy Policy.</string>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="14"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4UF-RV-j9M">
-                                <rect key="frame" x="20" y="140" width="280" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="18"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
-                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="20"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="enQ-Pi-Wnz">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a6K-2Y-lXo">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="664"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Gl-yj-Z8r">
+                                        <rect key="frame" x="-200" y="-100" width="775" height="280"/>
+                                        <color key="backgroundColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="280" id="gIM-Mq-VXB"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRILL" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dXP-ix-nL5">
+                                        <rect key="frame" x="0.0" y="90" width="375" height="48"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="40"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z6d-WE-SXd">
+                                        <rect key="frame" x="142" y="584" width="90" height="40"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="90" id="kci-Xl-8YL"/>
+                                            <constraint firstAttribute="height" constant="40" id="npO-7W-2Tl"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="18"/>
+                                        <state key="normal" title="SIGN UP">
+                                            <color key="titleColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <segue destination="v3b-9d-2gk" kind="modal" id="Pp8-dh-ANd"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U2Q-Fb-4NZ">
+                                        <rect key="frame" x="124" y="492" width="127" height="32"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="16"/>
+                                        <state key="normal" title="Forgot password?">
+                                            <color key="titleColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="H9l-1P-LcO" kind="modal" id="gv8-M2-WHi"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PGV-GN-9xz">
+                                        <rect key="frame" x="142.5" y="432" width="90" height="40"/>
+                                        <color key="backgroundColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="90" id="LPz-Ef-IQY"/>
+                                            <constraint firstAttribute="height" constant="40" id="UpU-CZ-yB6"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="18"/>
+                                        <state key="normal" title="LOGIN">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="titleShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="signInBtn_click:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ljw-7r-qdf"/>
+                                        </connections>
+                                    </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="PASSWORD" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UNV-7R-gTz">
+                                        <rect key="frame" x="20" y="362" width="335" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="0.72549019607843135" green="0.67450980392156867" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                                <color key="value" red="0.72549019607843135" green="0.67450980392156867" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="EMAIL" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="4UF-RV-j9M">
+                                        <rect key="frame" x="20" y="292" width="335" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                                <color key="value" red="0.72549019607843135" green="0.67450980392156867" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </textField>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rNt-LL-lmG">
+                                        <rect key="frame" x="140.5" y="220" width="94" height="32"/>
+                                        <subviews>
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P0A-De-5ht">
+                                                <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                                <color key="backgroundColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="32" id="xA7-Qq-g2u"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="7" minY="7" maxX="7" maxY="7"/>
+                                                <state key="normal" image="mail"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="16"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="mailBtn_clicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="RvU-rf-5bC"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gok-cU-A5o">
+                                                <rect key="frame" x="62" y="0.0" width="32" height="32"/>
+                                                <color key="backgroundColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="32" id="Vyl-28-CbA"/>
+                                                </constraints>
+                                                <inset key="imageEdgeInsets" minX="6" minY="6" maxX="6" maxY="6"/>
+                                                <state key="normal" image="fbIcon"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="16"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="facebookBtn_clicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qjU-0E-Bi6"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="gok-cU-A5o" secondAttribute="trailing" id="92g-C5-6X0"/>
+                                            <constraint firstAttribute="bottom" secondItem="P0A-De-5ht" secondAttribute="bottom" id="9yF-xe-NBc"/>
+                                            <constraint firstItem="gok-cU-A5o" firstAttribute="top" secondItem="rNt-LL-lmG" secondAttribute="top" id="Bdh-K4-S2J"/>
+                                            <constraint firstItem="P0A-De-5ht" firstAttribute="leading" secondItem="rNt-LL-lmG" secondAttribute="leading" id="TQq-bj-Xhw"/>
+                                            <constraint firstItem="P0A-De-5ht" firstAttribute="top" secondItem="rNt-LL-lmG" secondAttribute="top" id="ZHc-ZF-Bqe"/>
+                                            <constraint firstItem="gok-cU-A5o" firstAttribute="leading" secondItem="P0A-De-5ht" secondAttribute="trailing" constant="30" id="dLH-aS-Rj7"/>
+                                            <constraint firstAttribute="height" constant="32" id="emC-mK-1C7"/>
+                                            <constraint firstAttribute="bottom" secondItem="gok-cU-A5o" secondAttribute="bottom" id="f3Y-tB-O9U"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="U2Q-Fb-4NZ" firstAttribute="top" secondItem="PGV-GN-9xz" secondAttribute="bottom" constant="20" id="1N6-NX-nyo"/>
+                                    <constraint firstItem="z6d-WE-SXd" firstAttribute="top" secondItem="U2Q-Fb-4NZ" secondAttribute="bottom" constant="60" id="1ny-Ly-bGK"/>
+                                    <constraint firstItem="a6K-2Y-lXo" firstAttribute="leading" secondItem="enQ-Pi-Wnz" secondAttribute="leading" id="8v6-kb-GKb"/>
+                                    <constraint firstItem="4UF-RV-j9M" firstAttribute="leading" secondItem="enQ-Pi-Wnz" secondAttribute="leading" constant="20" id="9Yr-mf-6Kk"/>
+                                    <constraint firstAttribute="trailing" secondItem="dXP-ix-nL5" secondAttribute="trailing" id="9gZ-je-euG"/>
+                                    <constraint firstAttribute="bottom" secondItem="z6d-WE-SXd" secondAttribute="bottom" constant="40" id="EYL-T4-JQW"/>
+                                    <constraint firstItem="PGV-GN-9xz" firstAttribute="top" secondItem="UNV-7R-gTz" secondAttribute="bottom" constant="40" id="GS1-NC-drU"/>
+                                    <constraint firstItem="a6K-2Y-lXo" firstAttribute="width" secondItem="enQ-Pi-Wnz" secondAttribute="width" id="KIj-sS-ll0"/>
+                                    <constraint firstItem="U2Q-Fb-4NZ" firstAttribute="centerX" secondItem="enQ-Pi-Wnz" secondAttribute="centerX" id="OGI-HS-2q3"/>
+                                    <constraint firstItem="a6K-2Y-lXo" firstAttribute="top" secondItem="enQ-Pi-Wnz" secondAttribute="top" id="Qf0-3J-FaT"/>
+                                    <constraint firstAttribute="trailing" secondItem="UNV-7R-gTz" secondAttribute="trailing" constant="20" id="R0x-oc-PsO"/>
+                                    <constraint firstItem="5Gl-yj-Z8r" firstAttribute="top" secondItem="enQ-Pi-Wnz" secondAttribute="top" constant="-100" id="Sa7-Vc-WAd"/>
+                                    <constraint firstItem="UNV-7R-gTz" firstAttribute="top" secondItem="4UF-RV-j9M" secondAttribute="bottom" constant="40" id="XGC-uD-iGW"/>
+                                    <constraint firstItem="UNV-7R-gTz" firstAttribute="leading" secondItem="enQ-Pi-Wnz" secondAttribute="leading" constant="20" id="bbQ-uU-GNO"/>
+                                    <constraint firstAttribute="trailing" secondItem="5Gl-yj-Z8r" secondAttribute="trailing" constant="-200" id="cmg-bK-iS7"/>
+                                    <constraint firstAttribute="trailing" secondItem="a6K-2Y-lXo" secondAttribute="trailing" id="hi1-gF-nNe"/>
+                                    <constraint firstItem="PGV-GN-9xz" firstAttribute="centerX" secondItem="enQ-Pi-Wnz" secondAttribute="centerX" id="k1j-76-UXj"/>
+                                    <constraint firstAttribute="bottom" secondItem="a6K-2Y-lXo" secondAttribute="bottom" id="kbY-fA-vDg"/>
+                                    <constraint firstItem="dXP-ix-nL5" firstAttribute="leading" secondItem="enQ-Pi-Wnz" secondAttribute="leading" id="mRe-Sn-dRm"/>
+                                    <constraint firstItem="dXP-ix-nL5" firstAttribute="top" secondItem="enQ-Pi-Wnz" secondAttribute="top" constant="90" id="n2k-5v-IJ3"/>
+                                    <constraint firstItem="z6d-WE-SXd" firstAttribute="centerX" secondItem="enQ-Pi-Wnz" secondAttribute="centerX" id="nyw-me-iZP"/>
+                                    <constraint firstItem="4UF-RV-j9M" firstAttribute="top" secondItem="rNt-LL-lmG" secondAttribute="bottom" constant="40" id="s0m-G2-PaD"/>
+                                    <constraint firstItem="rNt-LL-lmG" firstAttribute="top" secondItem="5Gl-yj-Z8r" secondAttribute="bottom" constant="40" id="udZ-Le-SQS"/>
+                                    <constraint firstItem="rNt-LL-lmG" firstAttribute="centerX" secondItem="enQ-Pi-Wnz" secondAttribute="centerX" id="v7r-2R-olg"/>
+                                    <constraint firstItem="5Gl-yj-Z8r" firstAttribute="leading" secondItem="enQ-Pi-Wnz" secondAttribute="leading" constant="-200" id="vLh-3e-QAg"/>
+                                    <constraint firstAttribute="trailing" secondItem="4UF-RV-j9M" secondAttribute="trailing" constant="20" id="z4H-c7-2Kg"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="enQ-Pi-Wnz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="I6l-BP-vqn"/>
+                            <constraint firstItem="enQ-Pi-Wnz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Sy0-Jf-wTW"/>
+                            <constraint firstItem="1G9-DA-eGh" firstAttribute="top" secondItem="enQ-Pi-Wnz" secondAttribute="bottom" id="W1A-j1-jKK"/>
+                            <constraint firstAttribute="trailing" secondItem="enQ-Pi-Wnz" secondAttribute="trailing" id="wdH-MU-TJE"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="backgroundShape" destination="5Gl-yj-Z8r" id="SJO-nb-UKN"/>
+                        <outlet property="facebookBtn" destination="gok-cU-A5o" id="epU-F5-Li5"/>
                         <outlet property="forgotBtn" destination="U2Q-Fb-4NZ" id="JtF-iF-c0h"/>
                         <outlet property="label" destination="dXP-ix-nL5" id="KZu-dm-tnr"/>
+                        <outlet property="mailBtn" destination="P0A-De-5ht" id="Bhs-pF-y4w"/>
                         <outlet property="passwordTxt" destination="UNV-7R-gTz" id="bFW-YH-BIQ"/>
+                        <outlet property="scrollView" destination="enQ-Pi-Wnz" id="Cje-WY-od0"/>
                         <outlet property="signInBtn" destination="PGV-GN-9xz" id="DLv-MM-0u6"/>
                         <outlet property="signUpBtn" destination="z6d-WE-SXd" id="DYs-ld-YE9"/>
+                        <outlet property="signUpBtnBottomSpace" destination="EYL-T4-JQW" id="GdJ-um-Qeh"/>
                         <outlet property="usernameTxt" destination="4UF-RV-j9M" id="aTm-jS-ukA"/>
                     </connections>
                 </viewController>
@@ -4375,6 +4475,7 @@ Cookie Policy, and Privacy Policy.</string>
         <image name="country" width="25" height="25"/>
         <image name="dots" width="25" height="25"/>
         <image name="edit" width="25" height="25"/>
+        <image name="fbIcon" width="25" height="25"/>
         <image name="feed" width="25" height="25"/>
         <image name="feed-1" width="25" height="25"/>
         <image name="globe" width="25" height="25"/>
@@ -4383,6 +4484,7 @@ Cookie Policy, and Privacy Policy.</string>
         <image name="hotel" width="25" height="25"/>
         <image name="lock" width="25" height="25"/>
         <image name="logout" width="25" height="25"/>
+        <image name="mail" width="25" height="25"/>
         <image name="messages" width="25" height="25"/>
         <image name="network" width="25" height="25"/>
         <image name="next" width="25" height="25"/>
