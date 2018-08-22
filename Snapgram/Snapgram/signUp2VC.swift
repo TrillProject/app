@@ -16,6 +16,8 @@ class signUp2VC: UIViewController {
     var firstname = ""
     var lastname = ""
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    
     @IBOutlet weak var emailTxt: UITextField!
     @IBOutlet weak var passwordTxt: UITextField!
     @IBOutlet weak var repeatPasswordTxt: UITextField!
@@ -23,34 +25,40 @@ class signUp2VC: UIViewController {
     @IBOutlet weak var backBtn: UIButton!
     @IBOutlet weak var signUpBtn: UIButton!
     
+    @IBOutlet weak var signUpBtnBottomSpace: NSLayoutConstraint!
+    
+    // variable to hold keyboard frame
+    private var keyboard = CGRect()
+    private var keyboardVisible = false
+    private var bottomScrollOffset = CGFloat(0)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // alignment
-        
-        emailTxt.frame = CGRect(x: 20, y: 120, width: self.view.frame.size.width - 40, height: 40)
-        emailTxt.layer.cornerRadius = emailTxt.frame.size.height/2
+
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.emailTxt.frame.height))
         emailTxt.leftView = paddingView
         emailTxt.leftViewMode = UITextFieldViewMode.always
+        emailTxt.setBottomBorder(color: mainColor, height: 2.0)
         
-        passwordTxt.frame = CGRect(x: 20, y: emailTxt.frame.origin.y + 70, width: self.view.frame.size.width - 40, height: 40)
-        passwordTxt.layer.cornerRadius = passwordTxt.frame.size.height/2
         let paddingViewPass = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.passwordTxt.frame.height))
         passwordTxt.leftView = paddingViewPass
         passwordTxt.leftViewMode = UITextFieldViewMode.always
+        passwordTxt.setBottomBorder(color: mainColor, height: 2.0)
         
-        repeatPasswordTxt.frame = CGRect(x: 20, y: passwordTxt.frame.origin.y + 70, width: self.view.frame.size.width - 40, height: 40)
-        repeatPasswordTxt.layer.cornerRadius = repeatPasswordTxt.frame.size.height/2
         let paddingViewRepeat = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.repeatPasswordTxt.frame.height))
         repeatPasswordTxt.leftView = paddingViewRepeat
         repeatPasswordTxt.leftViewMode = UITextFieldViewMode.always
+        repeatPasswordTxt.setBottomBorder(color: mainColor, height: 2.0)
         
-        backBtn.frame = CGRect(x: 20, y: repeatPasswordTxt.frame.origin.y + 70, width: self.view.frame.size.width / 3, height: 40)
-        backBtn.layer.cornerRadius = backBtn.frame.size.height / 2
+        // tap to hide keyboard
+        let hideTap = UITapGestureRecognizer(target: self, action: #selector(signUp2VC.hideKeyboard(_:)))
+        hideTap.numberOfTapsRequired = 1
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(hideTap)
         
-        signUpBtn.frame = CGRect(x: self.view.frame.size.width - self.view.frame.size.width / 3 - 20, y: backBtn.frame.origin.y, width: self.view.frame.size.width / 3, height: 40)
-        signUpBtn.layer.cornerRadius = signUpBtn.frame.size.height / 2
+        // check notifications of keyboard - shown or not
+        NotificationCenter.default.addObserver(self, selector: #selector(signUp2VC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(signUp2VC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
     }
     
@@ -145,6 +153,67 @@ class signUp2VC: UIViewController {
                 self.alert("Error", message: error!.localizedDescription)
             }
         }
+    }
+    
+    // hide keyboard func
+    func hideKeyboard(_ recognizer : UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    // func when keyboard is shown
+    @objc func keyboardWillShow(_ notification: Notification) {
+        
+        // define keyboard frame size
+        keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
+        
+        // move up with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            if !self.keyboardVisible {
+                self.signUpBtnBottomSpace.constant = self.signUpBtnBottomSpace.constant + self.keyboard.height
+                self.bottomScrollOffset = self.scrollView.contentSize.height + self.keyboard.height - self.scrollView.bounds.size.height
+            }
+            
+            if self.bottomScrollOffset > 0 {
+                if self.emailTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.emailTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.emailTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+                    
+                } else if self.passwordTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.passwordTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.passwordTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+                    
+                } else if self.repeatPasswordTxt.isFirstResponder {
+                    if self.bottomScrollOffset > self.repeatPasswordTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.repeatPasswordTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                    self.keyboardVisible = true
+                }
+            } else if self.emailTxt.isFirstResponder || self.passwordTxt.isFirstResponder || self.repeatPasswordTxt.isFirstResponder {
+                self.keyboardVisible = true
+            }
+
+        })
+    }
+    
+    // func when keyboard is hidden
+    @objc func keyboardWillHide(_ notification: Notification) {
+        
+        self.keyboardVisible = false
+        
+        // move down with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            self.signUpBtnBottomSpace.constant = self.signUpBtnBottomSpace.constant - self.keyboard.height
+        })
     }
     
     @IBAction func backBtn_clicked(_ sender: UIButton) {

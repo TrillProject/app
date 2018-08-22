@@ -63,7 +63,7 @@ class signInVC: UIViewController {
         
         facebookBtn.alpha = 0.5
         
-        backgroundShape.cornerRadius = backgroundShape.frame.size.width / 2
+//        backgroundShape.cornerRadius = backgroundShape.frame.size.width / 2
     }
     
     @IBAction func mailBtn_clicked(_ sender: UIButton) {

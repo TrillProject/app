@@ -71,6 +71,7 @@
 		2A65BA05211F64C000DC46EE /* postEditLocationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A65BA04211F64C000DC46EE /* postEditLocationVC.swift */; };
 		2A6742A421066C6D00B13987 /* changePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6742A321066C6D00B13987 /* changePasswordVC.swift */; };
 		2A6FC84620FCEC380023B5DE /* signUp1VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6FC84520FCEC380023B5DE /* signUp1VC.swift */; };
+		2A769C5A212CA79F00A297DE /* signUpOptionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A769C59212CA79F00A297DE /* signUpOptionsVC.swift */; };
 		2AB40AF520F91E5E009903E2 /* SF-Pro-Display-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE320F91E39009903E2 /* SF-Pro-Display-RegularItalic.otf */; };
 		2AB40AF620F91E5E009903E2 /* SF-Pro-Display-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE420F91E3A009903E2 /* SF-Pro-Display-Black.otf */; };
 		2AB40AF720F91E5E009903E2 /* SF-Pro-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE520F91E3D009903E2 /* SF-Pro-Display-Heavy.otf */; };
@@ -169,6 +170,7 @@
 		2A65BA04211F64C000DC46EE /* postEditLocationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = postEditLocationVC.swift; sourceTree = "<group>"; };
 		2A6742A321066C6D00B13987 /* changePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changePasswordVC.swift; sourceTree = "<group>"; };
 		2A6FC84520FCEC380023B5DE /* signUp1VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUp1VC.swift; sourceTree = "<group>"; };
+		2A769C59212CA79F00A297DE /* signUpOptionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUpOptionsVC.swift; sourceTree = "<group>"; };
 		2AB40AE320F91E39009903E2 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-RegularItalic.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
 		2AB40AE420F91E3A009903E2 /* SF-Pro-Display-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Black.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-Black.otf"; sourceTree = "<group>"; };
 		2AB40AE520F91E3D009903E2 /* SF-Pro-Display-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Heavy.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-Heavy.otf"; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				1F7901E31DEC6B2200D921C8 /* Main.storyboard */,
 				1F7901AA1DEC679500D921C8 /* AppDelegate.swift */,
 				1F7901E51DEC6BDA00D921C8 /* signInVC.swift */,
+				2A769C59212CA79F00A297DE /* signUpOptionsVC.swift */,
 				2A6FC84520FCEC380023B5DE /* signUp1VC.swift */,
 				2A25147120FBE13D0079F3DE /* signUp2VC.swift */,
 				1F7901E71DEC6BDA00D921C8 /* resetPasswordVC.swift */,
@@ -485,6 +488,7 @@
 				1F7902091DEC6BDA00D921C8 /* postCell.swift in Sources */,
 				2AF0994A2101313E007555CE /* settingsVC.swift in Sources */,
 				2AC4DB4A21001A7700040525 /* profileFollowersVC.swift in Sources */,
+				2A769C5A212CA79F00A297DE /* signUpOptionsVC.swift in Sources */,
 				1F79020A1DEC6BDA00D921C8 /* followersVC.swift in Sources */,
 				1F7901FB1DEC6BDA00D921C8 /* signInVC.swift in Sources */,
 				1F79020C1DEC6BDA00D921C8 /* commentVC.swift in Sources */,
