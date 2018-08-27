@@ -148,12 +148,13 @@ class postVC: UITableViewController {
             }
         })
         
+        cell.usernameLbl.text = username
         cell.uuidLbl.text = uuidArray[(indexPath as NSIndexPath).row]
         cell.titleLbl.text = titleArray[(indexPath as NSIndexPath).row]
         
         // place profile picture
         avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
-            cell.avaImg.image = UIImage(data: data!)
+            cell.avaImg.setBackgroundImage(UIImage(data: data!), for: .normal)
         }
         
         // place post picture
@@ -219,9 +220,9 @@ class postVC: UITableViewController {
         cell.setTags(tagsArray[(indexPath as NSIndexPath).row])
         
         // asign index
+        cell.avaImg.layer.setValue(indexPath, forKey: "index")
         cell.usernameBtn.layer.setValue(indexPath, forKey: "index")
         cell.commentBtn.layer.setValue(indexPath, forKey: "index")
-//        cell.moreBtn.layer.setValue(indexPath, forKey: "index")
         
         
         // @mention is tapped
@@ -263,11 +264,12 @@ class postVC: UITableViewController {
         let cell = tableView.cellForRow(at: i) as! postCell
         
         // if user tapped on himself go home, else go guest
-        if cell.usernameBtn.titleLabel?.text == PFUser.current()?.username {
+        if cell.usernameLbl.text == PFUser.current()?.username {
             let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
             self.navigationController?.pushViewController(profile, animated: true)
         } else {
-            guestname.append(cell.usernameBtn.titleLabel!.text!)
+            guestname.append(cell.usernameLbl.text!)
+            user = cell.usernameLbl.text!
             let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
             self.navigationController?.pushViewController(profileUser, animated: true)
         }
@@ -286,7 +288,7 @@ class postVC: UITableViewController {
         
         // send related data to global variables
         commentuuid.append(cell.uuidLbl.text!)
-        commentowner.append(cell.usernameBtn.titleLabel!.text!)
+        commentowner.append(cell.usernameLbl.text!)
         
         // go to comments. present vc
         let comment = self.storyboard?.instantiateViewController(withIdentifier: "commentVC") as! commentVC

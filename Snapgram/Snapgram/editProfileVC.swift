@@ -238,6 +238,8 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
     @IBAction func save_clicked(_ sender: UIBarButtonItem) {
         
         let oldUsername = PFUser.current()!.username!
+        let oldFirstname = PFUser.current()?.object(forKey: "firstname") as! String
+        let oldLastname = PFUser.current()?.object(forKey: "lastname") as! String
         
         // if fields are empty
         if (firstnameTxt.text!.isEmpty || lastnameTxt.text!.isEmpty || emailTxt.text!.isEmpty) {
@@ -277,7 +279,9 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
                 
                 // update follower and news objects if username changed
                 let newUsername = PFUser.current()!.username!
-                if oldUsername != newUsername {
+                let newFirstname = PFUser.current()?.object(forKey: "firstname") as! String
+                let newLastname = PFUser.current()?.object(forKey: "lastname") as! String
+                if oldUsername != newUsername || oldFirstname != newFirstname || oldLastname != newLastname {
                     let followQuery = PFQuery(className: "follow")
                     followQuery.whereKey("follower", equalTo: oldUsername)
                     followQuery.findObjectsInBackground(block: { (objects, error) -> Void in
@@ -293,6 +297,8 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
                                             if error == nil {
                                                 for newsObject in newsObjects! {
                                                     newsObject["by"] = newUsername
+                                                    newsObject["firstname"] = newFirstname
+                                                    newsObject["lastname"] = newLastname
                                                     newsObject.saveInBackground(block: { (success, error) -> Void in
                                                         if !success {
                                                              print(error!.localizedDescription)
@@ -327,6 +333,8 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
                                             if error == nil {
                                                 for newsObject in newsObjects! {
                                                     newsObject["to"] = newUsername
+                                                    newsObject["firstname"] = newFirstname
+                                                    newsObject["lastname"] = newLastname
                                                     newsObject.saveInBackground(block: { (success, error) -> Void in
                                                         if !success {
                                                             print(error!.localizedDescription)

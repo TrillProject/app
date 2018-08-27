@@ -12,7 +12,7 @@ import UIKit
 class commentCell: UITableViewCell {
 
     // UI objects
-    @IBOutlet weak var avaImg: UIImageView!
+    @IBOutlet weak var avaImg: UIButton!
     @IBOutlet weak var usernameBtn: UIButton!
     @IBOutlet weak var commentLbl: KILabel!
     @IBOutlet weak var dateLbl: UILabel!
@@ -24,9 +24,6 @@ class commentCell: UITableViewCell {
         super.awakeFromNib()
         
         usernameBtn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0.01, bottom: 0.01, right: 0)
-        
-        // round ava
-        avaImg.layer.cornerRadius = avaImg.frame.size.width / 2
     }
 
 }

@@ -150,7 +150,9 @@ class commentVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITa
         // move UI down
         UIView.animate(withDuration: 0.4, animations: { () -> Void in
             self.commentContainerBottomSpace.constant = self.commentContainerBottomSpace.constant - self.keyboard.height
-            self.tableView.scrollToRow(at: IndexPath(row: self.commentArray.count - 1, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
+            if self.commentArray.count > 0 {
+                self.tableView.scrollToRow(at: IndexPath(row: self.commentArray.count - 1, section: 0), at: UITableViewScrollPosition.bottom, animated: false)
+            }
         })
     }
     
@@ -474,28 +476,6 @@ class commentVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITa
         // STEP 4. Send notification as @mention
         var mentionCreated = Bool()
         
-//        for var word in words {
-//
-//            // check @mentions for user
-//            if word.hasPrefix("@") {
-//
-//                // cut symbols
-//                word = word.trimmingCharacters(in: CharacterSet.punctuationCharacters)
-//                word = word.trimmingCharacters(in: CharacterSet.symbols)
-//
-//                let newsObj = PFObject(className: "news")
-//                newsObj["by"] = PFUser.current()?.username
-//                newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
-//                newsObj["to"] = word
-//                newsObj["owner"] = commentowner.last
-//                newsObj["uuid"] = commentuuid.last
-//                newsObj["type"] = "mention"
-//                newsObj["checked"] = "no"
-//                newsObj.saveEventually()
-//                mentionCreated = true
-//            }
-//        }
-        
         for word in mentions {
             let newsObj = PFObject(className: "news")
             newsObj["by"] = PFUser.current()?.username
@@ -505,6 +485,9 @@ class commentVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITa
             newsObj["uuid"] = commentuuid.last
             newsObj["type"] = "mention"
             newsObj["checked"] = "no"
+            newsObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
+            newsObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
+            newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
             newsObj.saveEventually()
             mentionCreated = true
         }
@@ -519,6 +502,9 @@ class commentVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITa
             newsObj["uuid"] = commentuuid.last
             newsObj["type"] = "comment"
             newsObj["checked"] = "no"
+            newsObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
+            newsObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
+            newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
             newsObj.saveEventually()
         }
         
@@ -607,7 +593,7 @@ class commentVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITa
             cell.commentLbl.text = commentArray[(indexPath as NSIndexPath).row]
             cell.commentLbl.sizeToFit()
             avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
-                cell.avaImg.image = UIImage(data: data!)
+                cell.avaImg.setBackgroundImage(UIImage(data: data!), for: .normal)
             }
             
             // calculate date
@@ -671,6 +657,7 @@ class commentVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITa
             
             
             // assign indexes of buttons
+            cell.avaImg.layer.setValue(indexPath, forKey: "index")
             cell.usernameBtn.layer.setValue(indexPath, forKey: "index")
             
             return cell

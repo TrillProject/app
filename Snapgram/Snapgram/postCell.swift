@@ -13,7 +13,7 @@ import Parse
 class postCell: UITableViewCell {
 
     // header objects
-    @IBOutlet weak var avaImg: UIImageView!
+    @IBOutlet weak var avaImg: UIButton!
     @IBOutlet weak var usernameBtn: UIButton!
     @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var locationBtn: UIButton!
@@ -44,6 +44,10 @@ class postCell: UITableViewCell {
     @IBOutlet weak var titleLbl: KILabel!
     @IBOutlet weak var uuidLbl: UILabel!
     
+    @IBOutlet weak var usernameLbl: UILabel!
+    
+    @IBOutlet weak var locationImgWidth: NSLayoutConstraint!
+    
     // default func
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -57,8 +61,6 @@ class postCell: UITableViewCell {
         likeTap.numberOfTapsRequired = 2
         picImg.isUserInteractionEnabled = true
         picImg.addGestureRecognizer(likeTap)
-
-        
     }
     
     
@@ -98,15 +100,19 @@ class postCell: UITableViewCell {
                     
                     
                     // send notification as like
-                    if self.usernameBtn.titleLabel?.text != PFUser.current()?.username {
+                    if self.usernameLbl.text != PFUser.current()?.username {
                         let newsObj = PFObject(className: "news")
                         newsObj["by"] = PFUser.current()?.username
                         newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
-                        newsObj["to"] = self.usernameBtn.titleLabel!.text
-                        newsObj["owner"] = self.usernameBtn.titleLabel!.text
+                        newsObj["to"] = self.usernameLbl.text
+                        newsObj["owner"] = self.usernameLbl.text
                         newsObj["uuid"] = self.uuidLbl.text
                         newsObj["type"] = "like"
                         newsObj["checked"] = "no"
+                        newsObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
+                        newsObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
+                        newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
+                        
                         newsObj.saveEventually()
                     }
                     
@@ -182,18 +188,20 @@ class postCell: UITableViewCell {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
                     
                     // send notification as like
-                    if self.usernameBtn.titleLabel?.text != PFUser.current()?.username {
+                    if self.usernameLbl.text != PFUser.current()?.username {
                         let newsObj = PFObject(className: "news")
                         newsObj["by"] = PFUser.current()?.username
                         newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
-                        newsObj["to"] = self.usernameBtn.titleLabel!.text
-                        newsObj["owner"] = self.usernameBtn.titleLabel!.text
+                        newsObj["to"] = self.usernameLbl.text
+                        newsObj["owner"] = self.usernameLbl.text
                         newsObj["uuid"] = self.uuidLbl.text
                         newsObj["type"] = "like"
                         newsObj["checked"] = "no"
+                        newsObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
+                        newsObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
+                        newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
                         newsObj.saveEventually()
                     }
-                    
                 }
             })
             
@@ -223,7 +231,7 @@ class postCell: UITableViewCell {
                             // delete like notification
                             let newsQuery = PFQuery(className: "news")
                             newsQuery.whereKey("by", equalTo: PFUser.current()!.username!)
-                            newsQuery.whereKey("to", equalTo: self.usernameBtn.titleLabel!.text!)
+                            newsQuery.whereKey("to", equalTo: self.usernameLbl.text!)
                             newsQuery.whereKey("uuid", equalTo: self.uuidLbl.text!)
                             newsQuery.whereKey("type", equalTo: "like")
                             newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
@@ -267,6 +275,11 @@ class postCell: UITableViewCell {
     }
     
     func selectLocationButton(_ name : String) {
+        if name == "arts" {
+            locationImgWidth.constant = 29
+        } else {
+            locationImgWidth.constant = 22
+        }
         locationBtn.setImage(UIImage(named: name), for: UIControlState())
     }
     

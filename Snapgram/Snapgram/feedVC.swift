@@ -59,13 +59,13 @@ class feedVC: UITableViewController {
     }
     
     
-    // refreshing function after like to update degit
+    // refreshing function after like
     func refresh() {
         tableView.reloadData()
     }
     
     
-    // reloading func with posts  after received notification
+    // reloading func with posts after received notification
     func uploaded(_ notification:Notification) {
         loadPosts()
     }
@@ -78,6 +78,7 @@ class feedVC: UITableViewController {
         let followQuery = PFQuery(className: "follow")
         if PFUser.current() != nil {
             followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+            followQuery.whereKey("accepted", equalTo: true)
             followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
                 if error == nil {
                 
@@ -192,6 +193,7 @@ class feedVC: UITableViewController {
             // STEP 1. Find posts realted to people who we are following
             let followQuery = PFQuery(className: "follow")
             followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+            followQuery.whereKey("accepted", equalTo: true)
             followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
                 if error == nil {
                     
@@ -316,12 +318,13 @@ class feedVC: UITableViewController {
             }
         })
         
+        cell.usernameLbl.text = username
         cell.uuidLbl.text = uuidArray[(indexPath as NSIndexPath).row]
         cell.titleLbl.text = titleArray[(indexPath as NSIndexPath).row]
 
         // place profile picture
         avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
-            cell.avaImg.image = UIImage(data: data!)
+            cell.avaImg.setBackgroundImage(UIImage(data: data!), for: .normal) 
         }
         
         // place post picture
@@ -331,7 +334,8 @@ class feedVC: UITableViewController {
         
         // set location button
         if favoriteArray[(indexPath as NSIndexPath).row] == true {
-            cell.locationBtn.setImage(UIImage(named: "like2"), for: UIControlState())
+            cell.locationImgWidth.constant = 22
+            cell.locationBtn.setImage(UIImage(named: "like2"), for: .normal)
         } else {
             cell.selectLocationType(categoryArray[(indexPath as NSIndexPath).row])
         }
@@ -386,9 +390,9 @@ class feedVC: UITableViewController {
         cell.setTags(tagsArray[(indexPath as NSIndexPath).row])
 
         // assign index
+        cell.avaImg.layer.setValue(indexPath, forKey: "index")
         cell.usernameBtn.layer.setValue(indexPath, forKey: "index")
         cell.commentBtn.layer.setValue(indexPath, forKey: "index")
-//        cell.moreBtn.layer.setValue(indexPath, forKey: "index")
         
         
         // @mention is tapped
@@ -432,13 +436,13 @@ class feedVC: UITableViewController {
         let cell = tableView.cellForRow(at: i) as! postCell
         
         // if user tapped on himself go home, else go guest
-        if cell.usernameBtn.titleLabel?.text == PFUser.current()?.username {
+        if cell.usernameLbl.text == PFUser.current()?.username {
             user = PFUser.current()!.username!
             let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
             self.navigationController?.pushViewController(profile, animated: true)
         } else {
-            guestname.append(cell.usernameBtn.titleLabel!.text!)
-            user = cell.usernameBtn.titleLabel!.text!
+            guestname.append(cell.usernameLbl.text!)
+            user = cell.usernameLbl.text!
             let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
             self.navigationController?.pushViewController(profileUser, animated: true)
         }
@@ -457,7 +461,7 @@ class feedVC: UITableViewController {
         
         // send related data to global variables
         commentuuid.append(cell.uuidLbl.text!)
-        commentowner.append(cell.usernameBtn.titleLabel!.text!)
+        commentowner.append(cell.usernameLbl.text!)
         
         // go to comments. present vc
         let comment = self.storyboard?.instantiateViewController(withIdentifier: "commentVC") as! commentVC

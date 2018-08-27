@@ -40,11 +40,15 @@ class profileUserVC: UIViewController {
     
     private var isPrivate = false
     private var isFollowing = false
+    private var pendingRequest = false
     private var firstname = String()
     
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // receive notification from notificationsVC
+        NotificationCenter.default.addObserver(self, selector: #selector(profileUserVC.followingChanged(_:)), name: NSNotification.Name(rawValue: "followingChanged"), object: nil)
         
         //alignment
         let width = UIScreen.main.bounds.width
@@ -146,19 +150,68 @@ class profileUserVC: UIViewController {
                     if object.object(forKey: "private") != nil,  (object.object(forKey: "private") as? Bool) == true {
                         self.isPrivate = true
                     } else {
+                        self.isPrivate = false
                     }
                     
                     // check if following
-                    let followingQuery = PFQuery(className: "follow")
-                    followingQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
-                    followingQuery.whereKey("following", equalTo: guestname.last!)
-                    followingQuery.countObjectsInBackground (block: { (count, error) -> Void in
+                    self.checkIfFollowing()
+                }
+            } else {
+                print(error!.localizedDescription)
+            }
+        })
+        
+        // STEP 2. Count statistics
+        // count followers
+        let userFollowers = PFQuery(className: "follow")
+        userFollowers.whereKey("following", equalTo: guestname.last!)
+        userFollowers.whereKey("accepted", equalTo: true)
+        userFollowers.countObjectsInBackground (block: { (count, error) -> Void in
+            if error == nil {
+                self.followers.text = "\(count)"
+            } else {
+                print(error!.localizedDescription)
+            }
+        })
+        
+        // count followings
+        let userFollowings = PFQuery(className: "follow")
+        userFollowings.whereKey("follower", equalTo: guestname.last!)
+        userFollowings.whereKey("accepted", equalTo: true)
+        userFollowings.countObjectsInBackground (block: { (count, error) -> Void in
+            if error == nil {
+                self.following.text = "\(count)"
+            } else {
+                print(error!.localizedDescription)
+            }
+        })
+    }
+    
+    func checkIfFollowing() {
+        let followingQuery = PFQuery(className: "follow")
+        followingQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+        followingQuery.whereKey("following", equalTo: guestname.last!)
+        followingQuery.countObjectsInBackground (block: { (count, error) -> Void in
+            if error == nil {
+                if count == 0 {
+                    self.followBtn.tintColor = lightGrey
+                    self.pendingRequest = false
+                    self.displayViewForPrivate(private: self.isPrivate, following: self.isFollowing, name: self.firstname, pending: self.pendingRequest)
+                } else {
+                    followingQuery.findObjectsInBackground(block: { (objects, error) -> Void in
                         if error == nil {
-                            if count == 0 {
-                            } else {
-                                self.isFollowing = true
+                            for object in objects! {
+                                if object.object(forKey: "accepted") as! Bool == true {
+                                    self.followBtn.tintColor = mainColor
+                                    self.isFollowing = true
+                                    self.pendingRequest = false
+                                } else {
+                                    self.followBtn.tintColor = mainFadedColor
+                                    self.isFollowing = false
+                                    self.pendingRequest = true
+                                }
+                                self.displayViewForPrivate(private: self.isPrivate, following: self.isFollowing, name: self.firstname, pending: self.pendingRequest)
                             }
-                            self.displayViewForPrivate(private: self.isPrivate, following: self.isFollowing, name : self.firstname)
                         } else {
                             print(error!.localizedDescription)
                         }
@@ -168,49 +221,13 @@ class profileUserVC: UIViewController {
                 print(error!.localizedDescription)
             }
         })
-        
-        // STEP 2. Show does current user follow guest or do not
-        let followQuery = PFQuery(className: "follow")
-        followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
-        followQuery.whereKey("following", equalTo: guestname.last!)
-        followQuery.countObjectsInBackground (block: { (count, error) -> Void in
-            if error == nil {
-                if count == 0 {
-                    self.followBtn.tintColor = lightGrey
-                } else {
-                    self.followBtn.tintColor = mainColor
-                }
-            } else {
-                print(error?.localizedDescription ?? "error")
-            }
-        })
-        
-        // STEP 3. Count statistics
-        // count followers
-        let userFollowers = PFQuery(className: "follow")
-        userFollowers.whereKey("following", equalTo: guestname.last!)
-        userFollowers.countObjectsInBackground (block: { (count, error) -> Void in
-            if error == nil {
-                self.followers.text = "\(count)"
-            } else {
-                print(error?.localizedDescription ?? "error")
-            }
-        })
-        
-        // count followings
-        let userFollowings = PFQuery(className: "follow")
-        userFollowings.whereKey("follower", equalTo: guestname.last!)
-        userFollowings.countObjectsInBackground (block: { (count, error) -> Void in
-            if error == nil {
-                self.following.text = "\(count)"
-            } else {
-                print(error?.localizedDescription ?? "error")
-            }
-        })
     }
     
     // clicked follow button
     @IBAction func clicked_followBtn(_ sender: UIButton) {
+        
+        // send notification to refresh notificationsVC
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "followingUserChanged"), object: nil)
         
         // to follow
         if self.followBtn.tintColor == lightGrey {
@@ -219,44 +236,67 @@ class profileUserVC: UIViewController {
             object["following"] = guestname.last!
             if !self.isPrivate {
                 // to follow if profile is not private
-                object["requested"] = false
                 object["accepted"] = true
             } else {
                 // to request to follow if profile is private
-                object["requested"] = true
                 object["accepted"] = false
             }
             object.saveInBackground(block: { (success, error) -> Void in
                 if success {
                     if !self.isPrivate {
                         self.followBtn.tintColor = mainColor
+                        
+                        // send notification to update feed
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
+                        
+                        // send follow notification
+                        let newsObj = PFObject(className: "news")
+                        newsObj["by"] = PFUser.current()?.username
+                        if PFUser.current()?.object(forKey: "ava") != nil {
+                            newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
+                        } else {
+                            let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                            let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                            newsObj["ava"] = avaFile!
+                        }
+                        newsObj["to"] = guestname.last
+                        newsObj["owner"] = ""
+                        newsObj["uuid"] = ""
+                        newsObj["type"] = "follow"
+                        newsObj["checked"] = "no"
+                        newsObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
+                        newsObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
+                        newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
+                        newsObj.saveEventually()
+                        
                     } else {
                         self.followBtn.tintColor = mainFadedColor
-                    }
+                        self.privateLbl.text = "Follow request sent."
                         
-                    // send follow notification
-                    let newsObj = PFObject(className: "news")
-                    newsObj["by"] = PFUser.current()?.username
-                    if PFUser.current()?.object(forKey: "ava") != nil {
-                        newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
-                    } else {
-                        let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
-                        let avaFile = PFFile(name: "ava.jpg", data: avaData!)
-                        newsObj["ava"] = avaFile!
+                        // send request notification
+                        let requestObj = PFObject(className: "request")
+                        requestObj["by"] = PFUser.current()?.username
+                        if PFUser.current()?.object(forKey: "ava") != nil {
+                            requestObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
+                        } else {
+                            let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                            let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                            requestObj["ava"] = avaFile!
+                        }
+                        requestObj["to"] = guestname.last
+                        requestObj["checked"] = "no"
+                        requestObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
+                        requestObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
+                        
+                        requestObj.saveEventually()
                     }
-                    newsObj["to"] = guestname.last
-                    newsObj["owner"] = ""
-                    newsObj["uuid"] = ""
-                    newsObj["type"] = "follow"
-                    newsObj["checked"] = "no"
-                    newsObj.saveEventually()
                 } else {
-                    print(error?.localizedDescription ?? "error")
+                    print(error!.localizedDescription)
                 }
             })
             
         // unfollow
-        } else {
+        } else if self.followBtn.tintColor == mainColor {
             let query = PFQuery(className: "follow")
             query.whereKey("follower", equalTo: PFUser.current()!.username!)
             query.whereKey("following", equalTo: guestname.last!)
@@ -268,7 +308,7 @@ class profileUserVC: UIViewController {
                             if success {
                                 self.followBtn.tintColor = lightGrey
                                 
-                                // delete follow notification
+                                // delete follow notifications
                                 let newsQuery = PFQuery(className: "news")
                                 newsQuery.whereKey("by", equalTo: PFUser.current()!.username!)
                                 newsQuery.whereKey("to", equalTo: guestname.last!)
@@ -281,23 +321,85 @@ class profileUserVC: UIViewController {
                                     }
                                 })
                                 
+                                let followAcceptedQuery = PFQuery(className: "news")
+                                followAcceptedQuery.whereKey("by", equalTo: guestname.last!)
+                                followAcceptedQuery.whereKey("to", equalTo: PFUser.current()!.username!)
+                                followAcceptedQuery.whereKey("type", equalTo: "follow accepted")
+                                followAcceptedQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                                    if error == nil {
+                                        for object in objects! {
+                                            object.deleteEventually()
+                                        }
+                                    }
+                                })
+                                
                             } else {
-                                print(error?.localizedDescription ?? "error")
+                                print(error!.localizedDescription)
                             }
                         })
                     }
+                    
+                    // send notification to update feed
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
                 } else {
-                    print(error?.localizedDescription ?? "error")
+                    print(error!.localizedDescription)
                 }
             })
+            
+        // delete follow request notification
+        } else if self.followBtn.tintColor == mainFadedColor {
+            
+            // delete follow request
+            let requestQuery = PFQuery(className: "request")
+            requestQuery.whereKey("by", equalTo: PFUser.current()!.username!)
+            requestQuery.whereKey("to", equalTo: guestname.last!)
+            requestQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                if error == nil {
+                    self.followBtn.tintColor = lightGrey
+                    for object in objects! {
+                        object.deleteEventually()
+                    }
+                }
+            })
+            
+            // delete follow relationship
+            let followerQuery = PFQuery(className: "follow")
+            followerQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+            followerQuery.whereKey("following", equalTo: guestname.last!)
+            followerQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                if error == nil {
+                    for object in objects! {
+                        object.deleteEventually()
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+            
+            // update view
+            privateLbl.text = "\(firstname)'s profile is private.\nSend a request to follow."
         }
     }
     
     // display view for private profile
-    func displayViewForPrivate(private isPrivate : Bool, following isFollowing : Bool, name firstname : String) {
-        if isPrivate, isFollowing == false {
+    func displayViewForPrivate(private isPrivate : Bool, following isFollowing : Bool, name firstname : String, pending pendingRequest : Bool) {
+        if isPrivate && !isFollowing && !pendingRequest {
             lockImg.isHidden = false
             privateLbl.text = "\(firstname)'s profile is private.\nSend a request to follow."
+            privateLbl.isHidden = false
+            feedView.isHidden = true
+            globeView.isHidden = true
+            followersView.isHidden = true
+            followingView.isHidden = true
+            feedImg.tintColor = darkGrey
+            globeImg.tintColor = lightGrey
+            followers.textColor = lightGrey
+            followersTitle.textColor = lightGrey
+            following.textColor = lightGrey
+            followingTitle.textColor = lightGrey
+        } else if isPrivate && !isFollowing && pendingRequest {
+            lockImg.isHidden = false
+            privateLbl.text = "Follow request sent."
             privateLbl.isHidden = false
             feedView.isHidden = true
             globeView.isHidden = true
@@ -393,6 +495,11 @@ class profileUserVC: UIViewController {
                 followingTitle.textColor = lightGrey
             }
         }
+    }
+    
+    // change following button color after received notification
+    func followingChanged(_ notification:Notification) {
+        checkIfFollowing()
     }
     
     @IBAction func backBtn_clicked(_ sender: UIBarButtonItem) {

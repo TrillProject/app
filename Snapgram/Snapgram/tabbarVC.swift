@@ -12,8 +12,9 @@ import Parse
 
 // global variables of icons
 var icons = UIScrollView()
-var corner = UIImageView()
 var dot = UIView()
+var hasNotifications = false
+var hasRequests = false
 
 // custom tabbar button
 let tabBarPostButton = UIButton()
@@ -40,51 +41,55 @@ class tabbarVC: UITabBarController, UITabBarControllerDelegate {
         icons.frame = CGRect(x: self.view.frame.size.width / 5 * 3 + 10, y: self.view.frame.size.height - self.tabBar.frame.size.height * 2 - 3, width: 50, height: 35)
         self.view.addSubview(icons)
         
-        // create corner
-        corner.frame = CGRect(x: icons.frame.origin.x, y: icons.frame.origin.y + icons.frame.size.height, width: 20, height: 14)
-        corner.center.x = icons.center.x
-        corner.image = UIImage(named: "corner.png")
-        corner.isHidden = true
-        self.view.addSubview(corner)
-        
-        // create dot
-        dot.frame = CGRect(x: self.view.frame.size.width / 5 * 3, y: self.view.frame.size.height - 5, width: 7, height: 7)
+        // create notification dot
+        dot.frame = CGRect(x: self.view.frame.size.width / 5 * 3, y: self.view.frame.size.height - 6, width: 9, height: 9)
         dot.center.x = self.view.frame.size.width / 5 * 3 + (self.view.frame.size.width / 5) / 2
-        dot.backgroundColor = UIColor(red: 251/255, green: 103/255, blue: 29/255, alpha: 1)
+        dot.backgroundColor = redColor
         dot.layer.cornerRadius = dot.frame.size.width / 2
         dot.isHidden = true
         self.view.addSubview(dot)
         
+        checkNotifications()
         
-        // call function of all type of notifications
-        query(["like"], image: UIImage(named: "likeIcon.png")!)
-        query(["follow"], image: UIImage(named: "followIcon.png")!)
-        query(["mention", "comment"], image: UIImage(named: "commentIcon.png")!)
-        
-        
-        // hide icons objects
-        UIView.animate(withDuration: 1, delay: 8, options: [], animations: { () -> Void in
-            icons.alpha = 0
-            corner.alpha = 0
-            dot.alpha = 0
-        }, completion: nil)
+        // receive notification from notificationsVC
+        NotificationCenter.default.addObserver(self, selector: #selector(tabbarVC.hideDot(_:)), name: NSNotification.Name(rawValue: "checkedNotifications"), object: nil)
         
     }
     
-    
-    // multiple query
-    func query (_ type:[String], image:UIImage) {
-        
+    // check if there are any notifications or requests
+    func checkNotifications() {
         let query = PFQuery(className: "news")
+        let requestQuery = PFQuery(className: "request")
         if PFUser.current() != nil {
             query.whereKey("to", equalTo: PFUser.current()!.username!)
-            //query.whereKey("checked", equalTo: "no")
-            query.whereKey("type", containedIn: type)
+            query.whereKey("checked", equalTo: "no")
             query.countObjectsInBackground (block: { (count, error) -> Void in
                 if error == nil {
                     if count > 0 {
-                        self.placeIcon(image, text: "\(count)")
+                        hasNotifications = true
+                    } else {
+                        hasNotifications = false
                     }
+                    
+                    requestQuery.whereKey("to", equalTo: PFUser.current()!.username!)
+                    requestQuery.whereKey("checked", equalTo: "no")
+                    requestQuery.countObjectsInBackground (block: { (count, error) -> Void in
+                        if error == nil {
+                            if count > 0 {
+                                hasRequests = true
+                            } else {
+                                hasRequests = false
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                        
+                        if hasNotifications || hasRequests {
+                            dot.isHidden = false
+                        } else {
+                            dot.isHidden = true
+                        }
+                    })
                 } else {
                     print(error!.localizedDescription)
                 }
@@ -94,23 +99,12 @@ class tabbarVC: UITabBarController, UITabBarControllerDelegate {
         }
     }
     
-    
-    // multiple icons
-    func placeIcon (_ image:UIImage, text:String) {
-        
-        // create separate icon
-        let view = UIImageView(frame: CGRect(x: icons.contentSize.width, y: 0, width: 50, height: 35))
-        view.image = image
-        icons.addSubview(view)
-        
-        // update icons view frame
-        icons.frame.size.width = icons.frame.size.width + view.frame.size.width - 4
-        icons.contentSize.width = icons.contentSize.width + view.frame.size.width - 4
-        icons.center.x = self.view.frame.size.width / 5 * 4 - (self.view.frame.size.width / 5) / 4
-        
-        // unhide elements
-        corner.isHidden = false
-        dot.isHidden = false
+    func hideDot(_ notification:Notification) {
+        if hasNotifications || hasRequests {
+            dot.isHidden = false
+        } else {
+            dot.isHidden = true
+        }
     }
     
     

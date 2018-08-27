@@ -114,6 +114,7 @@ class profileVC: UIViewController {
             // count total followers
             let userFollowers = PFQuery(className: "follow")
             userFollowers.whereKey("following", equalTo: PFUser.current()!.username!)
+            userFollowers.whereKey("accepted", equalTo: true)
             userFollowers.countObjectsInBackground (block: { (count, error) -> Void in
                 if error == nil {
                     self.followers.text = "\(count)"
@@ -123,6 +124,7 @@ class profileVC: UIViewController {
             // count total followings
             let userFollowings = PFQuery(className: "follow")
             userFollowings.whereKey("follower", equalTo: PFUser.current()!.username!)
+            userFollowings.whereKey("accepted", equalTo: true)
             userFollowings.countObjectsInBackground (block: { (count, error) -> Void in
                 if error == nil {
                     self.following.text = "\(count)"

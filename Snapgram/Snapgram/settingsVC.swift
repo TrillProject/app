@@ -83,19 +83,7 @@ class settingsVC: UITableViewController {
                             for object in objects! {
                                 object.deleteInBackground(block: { (success, error) -> Void in
                                     if success {
-                                        // delete notifications
-                                        let newsQuery = PFQuery(className: "news")
-                                        newsQuery.whereKey("by", equalTo: username)
-                                        newsQuery.whereKey("to", equalTo: object.object(forKey: "following")!)
-                                        newsQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
-                                            if error == nil {
-                                                for newsobject in newsObjects! {
-                                                    newsobject.deleteEventually()
-                                                }
-                                            } else {
-                                                print(error!.localizedDescription)
-                                            }
-                                        })
+                                        print("deleted following relationships")
                                     } else {
                                         print(error!.localizedDescription)
                                     }
@@ -105,6 +93,7 @@ class settingsVC: UITableViewController {
                             print(error!.localizedDescription)
                         }
                     })
+                    
                     // delete follower relationships associated with user
                     let queryFollower = PFQuery(className: "follow")
                     queryFollower.whereKey("following", equalTo: username)
@@ -113,19 +102,7 @@ class settingsVC: UITableViewController {
                             for object in objects! {
                                 object.deleteInBackground(block: { (success, error) -> Void in
                                     if success {
-                                        // delete notifications
-                                        let newsQuery = PFQuery(className: "news")
-                                        newsQuery.whereKey("by", equalTo: object.object(forKey: "follower")!)
-                                        newsQuery.whereKey("to", equalTo: username)
-                                        newsQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
-                                            if error == nil {
-                                                for newsObject in newsObjects! {
-                                                    newsObject.deleteEventually()
-                                                }
-                                            } else {
-                                                print(error!.localizedDescription)
-                                            }
-                                        })
+                                        print("deleted follower relationships")
                                     } else {
                                         print(error!.localizedDescription)
                                     }
@@ -135,9 +112,127 @@ class settingsVC: UITableViewController {
                             print(error!.localizedDescription)
                         }
                     })
+                    
+                    // delete notifications by user
+                    let newsByQuery = PFQuery(className: "news")
+                    newsByQuery.whereKey("by", equalTo: username)
+                    newsByQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
+                        if error == nil {
+                            for newsObject in newsObjects! {
+                                newsObject.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete notifications to user
+                    let newsToQuery = PFQuery(className: "news")
+                    newsToQuery.whereKey("to", equalTo: username)
+                    newsToQuery.findObjectsInBackground(block: { (newsObjects, error) -> Void in
+                        if error == nil {
+                            for newsObject in newsObjects! {
+                                newsObject.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete requests by user
+                    let requestByQuery = PFQuery(className: "request")
+                    requestByQuery.whereKey("by", equalTo: username)
+                    requestByQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete requests to user
+                    let requestToQuery = PFQuery(className: "request")
+                    requestToQuery.whereKey("to", equalTo: username)
+                    requestToQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete comments by user
+                    let commentQuery = PFQuery(className: "comments")
+                    commentQuery.whereKey("username", equalTo: username)
+                    commentQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete posts by user
+                    let postQuery = PFQuery(className: "posts")
+                    postQuery.whereKey("username", equalTo: username)
+                    postQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete tags by user
+                    let tagQuery = PFQuery(className: "postTags")
+                    tagQuery.whereKey("by", equalTo: username)
+                    tagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete user favorites
+                    let favoriteQuery = PFQuery(className: "postFavorites")
+                    favoriteQuery.whereKey("by", equalTo: username)
+                    favoriteQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                    // delete hashtags by user
+                    let hashtagQuery = PFQuery(className: "hashtags")
+                    hashtagQuery.whereKey("by", equalTo: username)
+                    hashtagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
                     self.logout()
                 } else {
-                    print(error ?? "Account deletion failed")
+                    print(error!)
                 }
             })
         })
@@ -161,10 +256,38 @@ class settingsVC: UITableViewController {
             user["private"] = true
         } else {
             user["private"] = false
+            
+            // accept and delete all follow requests
+            let requestQuery = PFQuery(className: "request")
+            requestQuery.whereKey("to", equalTo: PFUser.current()!.username!)
+            requestQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                if error == nil {
+                    for object in objects! {
+                        let followQuery = PFQuery(className: "follow")
+                        followQuery.whereKey("following", equalTo: PFUser.current()!.username!)
+                        followQuery.whereKey("follower", equalTo: object.object(forKey: "by")!)
+                        followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+                            if error == nil {
+                                for followObject in objects! {
+                                    followObject["accepted"] = true
+                                    followObject.saveEventually()
+                                }
+                                object.deleteEventually()
+                            } else {
+                                print(error!.localizedDescription)
+                            }
+                        })
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
         }
         user.saveInBackground (block: { (success, error) -> Void in
             if success{
-               print("account privacy changed successfully")
+                // send notification to refresh notificationsVC
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "privacyChanged"), object: nil)
+                print("account privacy changed successfully")
             } else {
                 print(error!.localizedDescription)
             }

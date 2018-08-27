@@ -32,6 +32,7 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
         // find followers of user
         let followQuery = PFQuery(className: "follow")
         followQuery.whereKey("following", equalTo: user)
+        followQuery.whereKey("accepted", equalTo: true)
         followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
             if error == nil {
                 
