@@ -47,7 +47,7 @@ class profileUserVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // receive notification from notificationsVC
+        // receive notification from notificationVC
         NotificationCenter.default.addObserver(self, selector: #selector(profileUserVC.followingChanged(_:)), name: NSNotification.Name(rawValue: "followingChanged"), object: nil)
         
         //alignment

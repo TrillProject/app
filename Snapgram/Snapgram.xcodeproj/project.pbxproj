@@ -72,6 +72,7 @@
 		2A6742A421066C6D00B13987 /* changePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6742A321066C6D00B13987 /* changePasswordVC.swift */; };
 		2A6FC84620FCEC380023B5DE /* signUp1VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6FC84520FCEC380023B5DE /* signUp1VC.swift */; };
 		2A769C5A212CA79F00A297DE /* signUpOptionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A769C59212CA79F00A297DE /* signUpOptionsVC.swift */; };
+		2A8033002134561200A444F1 /* findFriendsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8032FF2134561200A444F1 /* findFriendsVC.swift */; };
 		2AB40AF520F91E5E009903E2 /* SF-Pro-Display-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE320F91E39009903E2 /* SF-Pro-Display-RegularItalic.otf */; };
 		2AB40AF620F91E5E009903E2 /* SF-Pro-Display-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE420F91E3A009903E2 /* SF-Pro-Display-Black.otf */; };
 		2AB40AF720F91E5E009903E2 /* SF-Pro-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE520F91E3D009903E2 /* SF-Pro-Display-Heavy.otf */; };
@@ -172,6 +173,7 @@
 		2A6742A321066C6D00B13987 /* changePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = changePasswordVC.swift; sourceTree = "<group>"; };
 		2A6FC84520FCEC380023B5DE /* signUp1VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUp1VC.swift; sourceTree = "<group>"; };
 		2A769C59212CA79F00A297DE /* signUpOptionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUpOptionsVC.swift; sourceTree = "<group>"; };
+		2A8032FF2134561200A444F1 /* findFriendsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = findFriendsVC.swift; sourceTree = "<group>"; };
 		2AB40AE320F91E39009903E2 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-RegularItalic.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
 		2AB40AE420F91E3A009903E2 /* SF-Pro-Display-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Black.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-Black.otf"; sourceTree = "<group>"; };
 		2AB40AE520F91E3D009903E2 /* SF-Pro-Display-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Heavy.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-Heavy.otf"; sourceTree = "<group>"; };
@@ -283,6 +285,7 @@
 				2A2FABA3212DE5EF00BBFF18 /* notificationsVC.swift */,
 				2ADF6B43212F1B710076B1B7 /* notificationCell.swift */,
 				2A4A74E02131CB2000B50D55 /* requestsCell.swift */,
+				2A8032FF2134561200A444F1 /* findFriendsVC.swift */,
 				1F7901EF1DEC6BDA00D921C8 /* guestVC.swift */,
 				1F7901F01DEC6BDA00D921C8 /* headerView.swift */,
 				1F7901F11DEC6BDA00D921C8 /* pictureCell.swift */,
@@ -495,6 +498,7 @@
 				2A2FABA4212DE5EF00BBFF18 /* notificationsVC.swift in Sources */,
 				1F7901FB1DEC6BDA00D921C8 /* signInVC.swift in Sources */,
 				1F79020C1DEC6BDA00D921C8 /* commentVC.swift in Sources */,
+				2A8033002134561200A444F1 /* findFriendsVC.swift in Sources */,
 				1F79020D1DEC6BDA00D921C8 /* commentCell.swift in Sources */,
 				2A1935FA211E20B0006EC81A /* tagCell.swift in Sources */,
 				2A3088602121F0B200C79809 /* constants.swift in Sources */,

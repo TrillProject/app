@@ -15,7 +15,6 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     @IBOutlet weak var notificationsBtn: UIButton!
     @IBOutlet weak var requestsView: UIView!
     @IBOutlet weak var requestsBtn: UIButton!
-    @IBOutlet weak var notificationsNotPrivateBtn: UIButton!
     
     @IBOutlet weak var notificationsTableView: UITableView! {
         didSet {
@@ -32,6 +31,8 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     @IBOutlet weak var findFriendsIcon: UIButton!
+    
+    @IBOutlet weak var notificationsHeaderHeight: NSLayoutConstraint!
     
     // arrays to hold data from server
     var usernameArray = [String]()
@@ -92,12 +93,12 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     func showView() {
         if PFUser.current()?.object(forKey: "private") as! Bool {
             // profile of current user is private
-            notificationsNotPrivateBtn.isHidden = true
+            notificationsHeaderHeight.constant = 50.0
             notificationsBtn.isHidden = false
             requestsBtn.isHidden = false
         } else {
             // profile of current user is not private
-            notificationsNotPrivateBtn.isHidden = false
+            notificationsHeaderHeight.constant = 0.0
             notificationsBtn.isHidden = true
             requestsBtn.isHidden = true
         }
@@ -511,9 +512,6 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         // call cell to call further cell data
         let cell = notificationsTableView.cellForRow(at: i) as! notificationCell
         
-        // send notification to update profileUserVC
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "followingChanged"), object: nil)
-        
         if sender.tintColor == mainColor {
             // unfollow
             let query = PFQuery(className: "follow")
@@ -526,6 +524,9 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                         object.deleteInBackground(block: { (success, error) -> Void in
                             if success {
                                 sender.tintColor = lightGrey
+                                
+                                // send notification to update profileUserVC
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "followingChanged"), object: nil)
                                 
                                 // delete follow notifications
                                 let newsQuery = PFQuery(className: "news")
@@ -581,6 +582,10 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             }
             object.saveInBackground(block: { (success, error) -> Void in
                 if success {
+                    
+                    // send notification to update profileUserVC
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "followingChanged"), object: nil)
+                    
                     if self.privateArray[(i as NSIndexPath).row] == false {
                         sender.tintColor = mainColor
                         
@@ -640,6 +645,10 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             requestQuery.findObjectsInBackground(block: { (objects, error) -> Void in
                 if error == nil {
                     sender.tintColor = lightGrey
+                    
+                    // send notification to update profileUserVC
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "followingChanged"), object: nil)
+                    
                     for object in objects! {
                         object.deleteEventually()
                     }
