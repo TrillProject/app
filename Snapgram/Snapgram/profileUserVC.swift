@@ -13,6 +13,8 @@ var guestname = [String]()
 
 class profileUserVC: UIViewController {
     
+    @IBOutlet weak var usernameHiddenLbl: UILabel!
+    
     @IBOutlet weak var backBtn: UIBarButtonItem!
     
     @IBOutlet weak var avaImg: UIImageView!
@@ -28,13 +30,12 @@ class profileUserVC: UIViewController {
     @IBOutlet weak var followersTitle: UILabel!
     @IBOutlet weak var followingTitle: UILabel!
     
-    @IBOutlet weak var navBorder: UIView!
-    
     @IBOutlet weak var feedView: UIView!
     @IBOutlet weak var globeView: UIView!
     @IBOutlet weak var followersView: UIView!
     @IBOutlet weak var followingView: UIView!
     
+    @IBOutlet weak var privateView: UIView!
     @IBOutlet weak var lockImg: UIImageView!
     @IBOutlet weak var privateLbl: UILabel!
     
@@ -47,45 +48,11 @@ class profileUserVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = ""
+        usernameHiddenLbl.text = guestname.last!
+        
         // receive notification from notificationVC
         NotificationCenter.default.addObserver(self, selector: #selector(profileUserVC.followingChanged(_:)), name: NSNotification.Name(rawValue: "followingChanged"), object: nil)
-        
-        //alignment
-        let width = UIScreen.main.bounds.width
-        let spacingVertical = CGFloat(20)
-        let avaSize = CGFloat(100)
-        let iconsY = avaSize + (spacingVertical * 2.75)
-        let iconSize = CGFloat(26)
-        let iconSpacing = (width - CGFloat(40 + iconSize * 5)) / 4
-        let lockSize = CGFloat(60)
-        
-        avaImg.frame = CGRect(x: (width / 2) - (avaSize / 2), y: spacingVertical, width: avaSize, height: avaSize)
-        coverImg.frame = CGRect(x: 0, y: 0, width: width, height: avaImg.frame.size.height + (spacingVertical * 2))
-        
-        feedImg.frame = CGRect(x: 20, y: iconsY, width: iconSize, height: iconSize)
-        globeImg.frame = CGRect(x: feedImg.frame.origin.x + iconSpacing + iconSize, y: iconsY, width: iconSize, height: iconSize)
-        followers.frame = CGRect(x: globeImg.frame.origin.x + iconSpacing + iconSize, y: iconsY - 8, width: iconSize, height: iconSize)
-        following.frame = CGRect(x: followers.frame.origin.x + iconSpacing + iconSize, y: iconsY - 8, width: iconSize, height: iconSize)
-        followersTitle.center = CGPoint(x: followers.center.x, y: followers.center.y + 17)
-        followingTitle.center = CGPoint(x: following.center.x, y: following.center.y + 17)
-        followBtn.frame = CGRect(x: width - (iconSize + 20), y: iconsY, width: iconSize, height: iconSize)
-        
-        navBorder.frame = CGRect(x: 0, y: avaSize + iconSize + spacingVertical * 3.5, width: width, height: 1)
-        navBorder.backgroundColor = borderColor
-        
-        lockImg.frame = CGRect(x: 50, y: navBorder.frame.origin.y + 150, width: lockSize, height: lockSize)
-        privateLbl.frame = CGRect(x: lockSize + lockImg.frame.origin.x + 30, y: lockImg.frame.origin.y, width: width - 130 - lockSize, height: lockSize)
-        
-        segmentControl.frame = CGRect(x: CGFloat(0), y: iconsY, width: width - (iconSize + 20), height: iconSize)
-        segmentControl.tintColor = UIColor.clear
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 0)
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 1)
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 2)
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 3)
-        
-        // round ava
-        avaImg.layer.cornerRadius = avaImg.frame.size.width / 2
-        avaImg.clipsToBounds = true
         
         // icon colors
         feedImg.image = feedImg.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
@@ -100,14 +67,14 @@ class profileUserVC: UIViewController {
         
         // STEP 1. Load data of guest
         let infoQuery = PFQuery(className: "_User")
-        infoQuery.whereKey("username", equalTo: guestname.last!)
+        infoQuery.whereKey("username", equalTo:  usernameHiddenLbl.text!)
         infoQuery.findObjectsInBackground (block: { (objects, error) -> Void in
             if error == nil {
                 
                 // shown wrong user
                 if objects!.isEmpty {
                     // call alert
-                    let alert = UIAlertController(title: "Not Found", message: "\(guestname.last!.capitalized) does not exist", preferredStyle: UIAlertControllerStyle.alert)
+                    let alert = UIAlertController(title: "Not Found", message: "\(self.usernameHiddenLbl.text!.capitalized) does not exist", preferredStyle: UIAlertControllerStyle.alert)
                     let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { (UIAlertAction) -> Void in
                         self.navigationController?.popViewController(animated: true)
                     })
@@ -122,8 +89,8 @@ class profileUserVC: UIViewController {
                         self.navigationItem.title = (object.object(forKey: "firstname") as? String)?.capitalized
                         self.firstname = ((object.object(forKey: "firstname") as? String)?.capitalized)!
                     } else {
-                        self.navigationItem.title = guestname.last!
-                        self.firstname = guestname.last!
+                        self.navigationItem.title = self.usernameHiddenLbl.text!
+                        self.firstname = self.usernameHiddenLbl.text!
                     }
                     
                     // get profile picture
@@ -164,7 +131,7 @@ class profileUserVC: UIViewController {
         // STEP 2. Count statistics
         // count followers
         let userFollowers = PFQuery(className: "follow")
-        userFollowers.whereKey("following", equalTo: guestname.last!)
+        userFollowers.whereKey("following", equalTo: usernameHiddenLbl.text!)
         userFollowers.whereKey("accepted", equalTo: true)
         userFollowers.countObjectsInBackground (block: { (count, error) -> Void in
             if error == nil {
@@ -176,7 +143,7 @@ class profileUserVC: UIViewController {
         
         // count followings
         let userFollowings = PFQuery(className: "follow")
-        userFollowings.whereKey("follower", equalTo: guestname.last!)
+        userFollowings.whereKey("follower", equalTo: usernameHiddenLbl.text!)
         userFollowings.whereKey("accepted", equalTo: true)
         userFollowings.countObjectsInBackground (block: { (count, error) -> Void in
             if error == nil {
@@ -190,7 +157,7 @@ class profileUserVC: UIViewController {
     func checkIfFollowing() {
         let followingQuery = PFQuery(className: "follow")
         followingQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
-        followingQuery.whereKey("following", equalTo: guestname.last!)
+        followingQuery.whereKey("following", equalTo: usernameHiddenLbl.text!)
         followingQuery.countObjectsInBackground (block: { (count, error) -> Void in
             if error == nil {
                 if count == 0 {
@@ -233,7 +200,7 @@ class profileUserVC: UIViewController {
         if self.followBtn.tintColor == lightGrey {
             let object = PFObject(className: "follow")
             object["follower"] = PFUser.current()?.username
-            object["following"] = guestname.last!
+            object["following"] = usernameHiddenLbl.text!
             if !self.isPrivate {
                 // to follow if profile is not private
                 object["accepted"] = true
@@ -259,7 +226,7 @@ class profileUserVC: UIViewController {
                             let avaFile = PFFile(name: "ava.jpg", data: avaData!)
                             newsObj["ava"] = avaFile!
                         }
-                        newsObj["to"] = guestname.last
+                        newsObj["to"] = self.usernameHiddenLbl.text!
                         newsObj["owner"] = ""
                         newsObj["uuid"] = ""
                         newsObj["type"] = "follow"
@@ -283,7 +250,7 @@ class profileUserVC: UIViewController {
                             let avaFile = PFFile(name: "ava.jpg", data: avaData!)
                             requestObj["ava"] = avaFile!
                         }
-                        requestObj["to"] = guestname.last
+                        requestObj["to"] = self.usernameHiddenLbl.text!
                         requestObj["checked"] = "no"
                         requestObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
                         requestObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
@@ -299,7 +266,7 @@ class profileUserVC: UIViewController {
         } else if self.followBtn.tintColor == mainColor {
             let query = PFQuery(className: "follow")
             query.whereKey("follower", equalTo: PFUser.current()!.username!)
-            query.whereKey("following", equalTo: guestname.last!)
+            query.whereKey("following", equalTo: usernameHiddenLbl.text!)
             query.findObjectsInBackground(block: { (objects, error) -> Void in
                 if error == nil {
                     
@@ -311,7 +278,7 @@ class profileUserVC: UIViewController {
                                 // delete follow notifications
                                 let newsQuery = PFQuery(className: "news")
                                 newsQuery.whereKey("by", equalTo: PFUser.current()!.username!)
-                                newsQuery.whereKey("to", equalTo: guestname.last!)
+                                newsQuery.whereKey("to", equalTo: self.usernameHiddenLbl.text!)
                                 newsQuery.whereKey("type", equalTo: "follow")
                                 newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
                                     if error == nil {
@@ -322,7 +289,7 @@ class profileUserVC: UIViewController {
                                 })
                                 
                                 let followAcceptedQuery = PFQuery(className: "news")
-                                followAcceptedQuery.whereKey("by", equalTo: guestname.last!)
+                                followAcceptedQuery.whereKey("by", equalTo: self.usernameHiddenLbl.text!)
                                 followAcceptedQuery.whereKey("to", equalTo: PFUser.current()!.username!)
                                 followAcceptedQuery.whereKey("type", equalTo: "follow accepted")
                                 followAcceptedQuery.findObjectsInBackground(block: { (objects, error) -> Void in
@@ -352,7 +319,7 @@ class profileUserVC: UIViewController {
             // delete follow request
             let requestQuery = PFQuery(className: "request")
             requestQuery.whereKey("by", equalTo: PFUser.current()!.username!)
-            requestQuery.whereKey("to", equalTo: guestname.last!)
+            requestQuery.whereKey("to", equalTo: usernameHiddenLbl.text!)
             requestQuery.findObjectsInBackground(block: { (objects, error) -> Void in
                 if error == nil {
                     self.followBtn.tintColor = lightGrey
@@ -365,7 +332,7 @@ class profileUserVC: UIViewController {
             // delete follow relationship
             let followerQuery = PFQuery(className: "follow")
             followerQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
-            followerQuery.whereKey("following", equalTo: guestname.last!)
+            followerQuery.whereKey("following", equalTo: usernameHiddenLbl.text!)
             followerQuery.findObjectsInBackground(block: { (objects, error) -> Void in
                 if error == nil {
                     for object in objects! {
@@ -384,9 +351,10 @@ class profileUserVC: UIViewController {
     // display view for private profile
     func displayViewForPrivate(private isPrivate : Bool, following isFollowing : Bool, name firstname : String, pending pendingRequest : Bool) {
         if isPrivate && !isFollowing && !pendingRequest {
-            lockImg.isHidden = false
+//            lockImg.isHidden = false
             privateLbl.text = "\(firstname)'s profile is private.\nSend a request to follow."
-            privateLbl.isHidden = false
+//            privateLbl.isHidden = false
+            privateView.isHidden = false
             feedView.isHidden = true
             globeView.isHidden = true
             followersView.isHidden = true
@@ -398,9 +366,10 @@ class profileUserVC: UIViewController {
             following.textColor = lightGrey
             followingTitle.textColor = lightGrey
         } else if isPrivate && !isFollowing && pendingRequest {
-            lockImg.isHidden = false
+//            lockImg.isHidden = false
             privateLbl.text = "Follow request sent."
-            privateLbl.isHidden = false
+//            privateLbl.isHidden = false
+            privateView.isHidden = false
             feedView.isHidden = true
             globeView.isHidden = true
             followersView.isHidden = true
@@ -412,8 +381,9 @@ class profileUserVC: UIViewController {
             following.textColor = lightGrey
             followingTitle.textColor = lightGrey
         } else if isFollowing || !isPrivate {
-            lockImg.isHidden = true
-            privateLbl.isHidden = true
+//            lockImg.isHidden = true
+//            privateLbl.isHidden = true
+            privateView.isHidden = true
             feedView.isHidden = false
             globeView.isHidden = true
             followersView.isHidden = true

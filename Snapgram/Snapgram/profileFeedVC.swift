@@ -11,6 +11,9 @@ import Parse
 
 class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+
+    @IBOutlet weak var usernameHiddenLbl: UILabel!
+    
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     var refresher = UIRefreshControl()
     
@@ -29,6 +32,8 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        usernameHiddenLbl.text = user
         
         // pull to refresh
         refresher.addTarget(self, action: #selector(feedVC.loadPosts), for: UIControlEvents.valueChanged)
@@ -62,7 +67,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     func loadPosts() {
         
         let query = PFQuery(className: "posts")
-        query.whereKey("username", equalTo: user)
+        query.whereKey("username", equalTo: usernameHiddenLbl.text!)
         query.limit = self.page
         query.addDescendingOrder("createdAt")
         query.findObjectsInBackground(block: { (objects, error) -> Void in
@@ -144,7 +149,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             page = page + 10
             
             let query = PFQuery(className: "posts")
-            query.whereKey("username", equalTo: user)
+            query.whereKey("username", equalTo: usernameHiddenLbl.text!)
             query.limit = self.page
             query.addDescendingOrder("createdAt")
             query.findObjectsInBackground(block: { (objects, error) -> Void in
@@ -229,17 +234,17 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         
         // connect objects with our information
         let infoQuery = PFQuery(className: "_User")
-        infoQuery.whereKey("username", equalTo: user)
+        infoQuery.whereKey("username", equalTo: usernameHiddenLbl.text!)
         infoQuery.findObjectsInBackground (block: { (objects, error) -> Void in
             if error == nil {
                 if objects!.isEmpty {
-                    self.alert("Not Found", message: "\(user.capitalized) does not exist")
+                    self.alert("Not Found", message: "\(self.usernameHiddenLbl.text!.capitalized) does not exist")
                 }
                 for object in objects! {
                     if object.object(forKey: "firstname") != nil {
                         cell.usernameBtn.setTitle((object.object(forKey: "firstname") as? String)?.capitalized, for: UIControlState())
                     } else {
-                        cell.usernameBtn.setTitle(user, for: UIControlState())
+                        cell.usernameBtn.setTitle(self.usernameHiddenLbl.text!, for: UIControlState())
                     }
                     
                     if object.object(forKey: "ava") != nil {
@@ -254,7 +259,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             }
         })
         
-        cell.usernameLbl.text = user
+        cell.usernameLbl.text = usernameHiddenLbl.text!
         cell.uuidLbl.text = uuidArray[(indexPath as NSIndexPath).row]
         cell.titleLbl.text = titleArray[(indexPath as NSIndexPath).row]
         
@@ -278,7 +283,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         
         // manipulate suitcase button depending on if it is added to user's suitcase
         let didAdd = PFQuery(className: "suitcase")
-        didAdd.whereKey("user", equalTo: user)
+        didAdd.whereKey("user", equalTo: usernameHiddenLbl.text!)
         didAdd.whereKey("location", equalTo: cell.locationLbl.text!)
         didAdd.countObjectsInBackground { (count, error) -> Void in
             if count == 0 {
@@ -292,7 +297,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         
         // manipulate like button depending on did user like it or not
         let didLike = PFQuery(className: "likes")
-        didLike.whereKey("by", equalTo: user)
+        didLike.whereKey("by", equalTo: usernameHiddenLbl.text!)
         didLike.whereKey("to", equalTo: cell.uuidLbl.text!)
         didLike.countObjectsInBackground { (count, error) -> Void in
             // if no any likes are found, else found likes

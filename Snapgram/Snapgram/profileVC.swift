@@ -27,8 +27,6 @@ class profileVC: UIViewController {
     @IBOutlet weak var followersTitle: UILabel!
     @IBOutlet weak var followingTitle: UILabel!
     
-    @IBOutlet weak var navBorder: UIView!
-    
     @IBOutlet weak var feedView: UIView!
     @IBOutlet weak var globeView: UIView!
     @IBOutlet weak var followersView: UIView!
@@ -43,39 +41,6 @@ class profileVC: UIViewController {
         
         // receive notification from editProfileVC
         NotificationCenter.default.addObserver(self, selector: #selector(profileVC.reload(_:)), name: NSNotification.Name(rawValue: "reload"), object: nil)
-        
-        //alignment
-        let width = UIScreen.main.bounds.width
-        let spacingVertical = CGFloat(20)
-        let avaSize = CGFloat(100)
-        let iconsY = avaSize + (spacingVertical * 2.75)
-        let iconSize = CGFloat(26)
-        let iconSpacing = (width - CGFloat(40 + iconSize * 5)) / 4
-        
-        avaImg.frame = CGRect(x: (width / 2) - (avaSize / 2), y: spacingVertical, width: avaSize, height: avaSize)
-        coverImg.frame = CGRect(x: 0, y: 0, width: width, height: avaImg.frame.size.height + (spacingVertical * 2))
-        
-        feedImg.frame = CGRect(x: 20, y: iconsY, width: iconSize, height: iconSize)
-        globeImg.frame = CGRect(x: feedImg.frame.origin.x + iconSpacing + iconSize, y: iconsY, width: iconSize, height: iconSize)
-        followers.frame = CGRect(x: globeImg.frame.origin.x + iconSpacing + iconSize, y: iconsY - 8, width: iconSize, height: iconSize)
-        following.frame = CGRect(x: followers.frame.origin.x + iconSpacing + iconSize, y: iconsY - 8, width: iconSize, height: iconSize)
-        followersTitle.center = CGPoint(x: followers.center.x, y: followers.center.y + 17)
-        followingTitle.center = CGPoint(x: following.center.x, y: following.center.y + 17)
-        editBtn.frame = CGRect(x: width - (iconSize + 20), y: iconsY, width: iconSize, height: iconSize)
-        
-        navBorder.frame = CGRect(x: 0, y: avaSize + iconSize + spacingVertical * 3.5, width: width, height: 1)
-        navBorder.backgroundColor = borderColor
-        
-        segmentControl.frame = CGRect(x: CGFloat(0), y: iconsY, width: width - (iconSize + 20), height: iconSize)
-        segmentControl.tintColor = UIColor.clear
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 0)
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 1)
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 2)
-        segmentControl.setWidth(iconSpacing + iconSize, forSegmentAt: 3)
-        
-        // round ava
-        avaImg.layer.cornerRadius = avaImg.frame.size.width / 2
-        avaImg.clipsToBounds = true
         
         // icon colors
         feedImg.image = feedImg.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)

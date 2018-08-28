@@ -11,6 +11,8 @@ import Parse
 
 class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
+    @IBOutlet weak var usernameHiddenLbl: UILabel!
+    
     // arrays to hold data received from servers
     var usernameArray = [String]()
     var firstnameArray = [String]()
@@ -22,6 +24,8 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        usernameHiddenLbl.text = user
+        
         loadFollowings()
     }
     
@@ -30,7 +34,7 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
         
         // STEP 1. Find people followed by User
         let followQuery = PFQuery(className: "follow")
-        followQuery.whereKey("follower", equalTo: user)
+        followQuery.whereKey("follower", equalTo: usernameHiddenLbl.text!)
         followQuery.whereKey("accepted", equalTo: true)
         followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
             if error == nil {
@@ -53,6 +57,7 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
                     if error == nil {
                         
                         // clean up
+                         self.usernameArray.removeAll(keepingCapacity: false)
                         self.firstnameArray.removeAll(keepingCapacity: false)
                         self.avaArray.removeAll(keepingCapacity: false)
                         
@@ -96,12 +101,6 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
         return firstnameArray.count
     }
     
-    // cell size
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = CGSize(width: self.view.frame.size.width / 3, height: (self.view.frame.size.width / 3) + 10)
-        return size
-    }
-    
     // cell config
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -113,21 +112,28 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
         cell.nameLbl.text = firstnameArray[(indexPath as NSIndexPath).row]
         avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
             if error == nil {
-                cell.avaImg.image = UIImage(data: data!)
+                cell.avaImg.setBackgroundImage(UIImage(data: data!), for: .normal)
             } else {
                 print(error!.localizedDescription)
             }
         }
+        
+        cell.avaImg.layer.setValue(indexPath, forKey: "index")
+        
         return cell
     }
     
-    // go to follower or following profile
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    
+    @IBAction func avaImg_clicked(_ sender: UIButton) {
         
-        let cell = followersCollectionView.cellForItem(at: indexPath) as! followerCell
+        // call index of button
+        let i = sender.layer.value(forKey: "index") as! IndexPath
         
-        // if user tapped on himself, go profile, else go profileUser
-        if cell.usernameLbl.text! == PFUser.current()!.username! {
+        // call cell to call further cell data
+        let cell = followersCollectionView.cellForItem(at: i) as! followerCell
+        
+        // if user tapped on himself go home, else go guest
+        if cell.usernameLbl.text == PFUser.current()?.username {
             user = PFUser.current()!.username!
             let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
             self.navigationController?.pushViewController(profile, animated: true)
@@ -138,4 +144,5 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
             self.navigationController?.pushViewController(profileUser, animated: true)
         }
     }
+    
 }
