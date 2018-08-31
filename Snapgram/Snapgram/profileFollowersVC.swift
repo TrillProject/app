@@ -13,6 +13,8 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
     
     @IBOutlet weak var usernameHiddenLbl: UILabel!
     
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    
     // arrays to hold data received from servers
     var usernameArray = [String]()
     var firstnameArray = [String]()
@@ -25,6 +27,8 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
         super.viewDidLoad()
         
         usernameHiddenLbl.text = user
+        
+//        flowLayout.estimatedItemSize = CGSize(width: 130.0, height: 150.0)
         
         loadFollowers()
     }
@@ -103,6 +107,21 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return firstnameArray.count
     }
+    
+    // cell size
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        //check orientation for cell size
+        if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
+            // portrait
+            return CGSize(width: UIScreen.main.bounds.width / 3, height: (UIScreen.main.bounds.width / 3) + 20)
+            
+        } else {
+            // landscape
+            return CGSize(width: UIScreen.main.bounds.height / 3, height: (UIScreen.main.bounds.height / 3) + 20)
+        }
+    }
+    
     
     // cell config
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
