@@ -11,6 +11,7 @@ import Parse
 
 var selectedImg : UIImage?
 var postLocation : String?
+var postAddress : String?
 var postComment : String?
 var selectedCategory : String?
 var selectedTags = [String]()
@@ -79,6 +80,9 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         hideTap.numberOfTapsRequired = 1
         self.backgroundView.isUserInteractionEnabled = true
         self.backgroundView.addGestureRecognizer(hideTap)
+        
+        // to connect with apple/google maps
+        postAddress = "Address"
     }
     
     override func viewDidLayoutSubviews() {
@@ -181,6 +185,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         let objTags = selectedTags + customTags
         
         object["location"] = postLocation
+        object["address"] = postAddress
         object["category"] = selectedCategory
         object["tags"] = objTags
         object["rating"] = postRating

@@ -193,18 +193,18 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         // define cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! followersCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! userCell
 
-        // hide follow button
-        cell.followBtn.isHidden = true
-        
-        // connect cell's objects with received infromation from server
-        cell.usernameLbl.text = usernameArray[(indexPath as NSIndexPath).row]
-        avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
-            if error == nil {
-                cell.avaImg.image = UIImage(data: data!)
-            }
-        }
+//        // hide follow button
+//        cell.followBtn.isHidden = true
+//
+//        // connect cell's objects with received infromation from server
+//        cell.usernameLbl.text = usernameArray[(indexPath as NSIndexPath).row]
+//        avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
+//            if error == nil {
+//                cell.avaImg.image = UIImage(data: data!)
+//            }
+//        }
 
         return cell
     }
@@ -214,19 +214,19 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // calling cell again to call cell data
-        let cell = tableView.cellForRow(at: indexPath) as! followersCell
+        let cell = tableView.cellForRow(at: indexPath) as! userCell
         
         // if user tapped on his name go home, else go guest
-        if cell.usernameLbl.text! == PFUser.current()?.username {
-            user = PFUser.current()!.username!
-            let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
-            self.navigationController?.pushViewController(profile, animated: true)
-        } else {
-            guestname.append(cell.usernameLbl.text!)
-            user = cell.usernameLbl.text!
-            let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
-            self.navigationController?.pushViewController(profileUser, animated: true)
-        }
+//        if cell.usernameLbl.text! == PFUser.current()?.username {
+//            user = PFUser.current()!.username!
+//            let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
+//            self.navigationController?.pushViewController(profile, animated: true)
+//        } else {
+//            guestname.append(cell.usernameLbl.text!)
+//            user = cell.usernameLbl.text!
+//            let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
+//            self.navigationController?.pushViewController(profileUser, animated: true)
+//        }
     }
     
     

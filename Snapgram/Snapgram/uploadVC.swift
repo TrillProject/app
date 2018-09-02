@@ -16,6 +16,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     private var keyboard = CGRect()
     private var keyboardVisible = false
     private var bottomScrollOffset = CGFloat(0)
+    
+    var address = ""
 
     // UI objects
     @IBOutlet weak var scrollView: UIScrollView!
@@ -88,8 +90,6 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         //picTap.numberOfTapsRequired = 1
         //picImg.isUserInteractionEnabled = true
        // picImg.addGestureRecognizer(picTap)
-        
-        print((self.tabBarController?.tabBar.frame.size.height)!)
         
     }
     
@@ -332,47 +332,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         } else {
             gradientImg.isHidden = true
             ratingOverlayView.frame.origin.x = postRating! * ratingContainerView.frame.size.width
-            if postRating! <= 0.05 {
-                ratingContainerView.backgroundColor = gradientColors[0]
-            } else if postRating! <= 0.1 {
-                ratingContainerView.backgroundColor = gradientColors[1]
-            } else if postRating! <= 0.15 {
-                ratingContainerView.backgroundColor = gradientColors[2]
-            } else if postRating! <= 0.2 {
-                ratingContainerView.backgroundColor = gradientColors[3]
-            } else if postRating! <= 0.25 {
-                ratingContainerView.backgroundColor = gradientColors[4]
-            } else if postRating! <= 0.3 {
-                ratingContainerView.backgroundColor = gradientColors[5]
-            } else if postRating! <= 0.35 {
-                ratingContainerView.backgroundColor = gradientColors[6]
-            } else if postRating! <= 0.4 {
-                ratingContainerView.backgroundColor = gradientColors[7]
-            } else if postRating! <= 0.45 {
-                ratingContainerView.backgroundColor = gradientColors[8]
-            } else if postRating! <= 0.5 {
-                ratingContainerView.backgroundColor = gradientColors[9]
-            } else if postRating! <= 0.55 {
-                ratingContainerView.backgroundColor = gradientColors[10]
-            } else if postRating! <= 0.6 {
-                ratingContainerView.backgroundColor = gradientColors[11]
-            } else if postRating! <= 0.65 {
-                ratingContainerView.backgroundColor = gradientColors[12]
-            } else if postRating! <= 0.7 {
-                ratingContainerView.backgroundColor = gradientColors[13]
-            } else if postRating! <= 0.75 {
-                ratingContainerView.backgroundColor = gradientColors[14]
-            } else if postRating! <= 0.8 {
-                ratingContainerView.backgroundColor = gradientColors[15]
-            } else if postRating! <= 0.85 {
-                ratingContainerView.backgroundColor = gradientColors[16]
-            } else if postRating! <= 0.9 {
-                ratingContainerView.backgroundColor = gradientColors[17]
-            } else if postRating! <= 0.95 {
-                ratingContainerView.backgroundColor = gradientColors[18]
-            } else {
-                ratingContainerView.backgroundColor = gradientColors[19]
-            }
+            Review.colorReview(postRating!, ratingContainerView)
         }
     }
     

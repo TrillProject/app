@@ -351,9 +351,7 @@ class profileUserVC: UIViewController {
     // display view for private profile
     func displayViewForPrivate(private isPrivate : Bool, following isFollowing : Bool, name firstname : String, pending pendingRequest : Bool) {
         if isPrivate && !isFollowing && !pendingRequest {
-//            lockImg.isHidden = false
             privateLbl.text = "\(firstname)'s profile is private.\nSend a request to follow."
-//            privateLbl.isHidden = false
             privateView.isHidden = false
             feedView.isHidden = true
             globeView.isHidden = true
@@ -366,9 +364,7 @@ class profileUserVC: UIViewController {
             following.textColor = lightGrey
             followingTitle.textColor = lightGrey
         } else if isPrivate && !isFollowing && pendingRequest {
-//            lockImg.isHidden = false
             privateLbl.text = "Follow request sent."
-//            privateLbl.isHidden = false
             privateView.isHidden = false
             feedView.isHidden = true
             globeView.isHidden = true
@@ -381,8 +377,6 @@ class profileUserVC: UIViewController {
             following.textColor = lightGrey
             followingTitle.textColor = lightGrey
         } else if isFollowing || !isPrivate {
-//            lockImg.isHidden = true
-//            privateLbl.isHidden = true
             privateView.isHidden = true
             feedView.isHidden = false
             globeView.isHidden = true

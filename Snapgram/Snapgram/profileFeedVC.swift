@@ -23,6 +23,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     var uuidArray = [String]()
     var categoryArray = [String]()
     var locationArray = [String]()
+    var addressArray = [String]()
     var favoriteArray = [Bool]()
     var tagsArray = [[String]]()
     var ratingArray = [CGFloat]()
@@ -79,6 +80,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 self.uuidArray.removeAll(keepingCapacity: false)
                 self.categoryArray.removeAll(keepingCapacity: false)
                 self.locationArray.removeAll(keepingCapacity: false)
+                self.addressArray.removeAll(keepingCapacity: false)
                 self.favoriteArray.removeAll(keepingCapacity: false)
                 self.tagsArray.removeAll(keepingCapacity: false)
                 self.ratingArray.removeAll(keepingCapacity: false)
@@ -99,6 +101,12 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                         self.locationArray.append(object.object(forKey: "location") as! String)
                     } else {
                         self.locationArray.append("")
+                    }
+                    
+                    if object.object(forKey: "address") != nil {
+                        self.addressArray.append(object.object(forKey: "address") as! String)
+                    } else {
+                        self.addressArray.append("")
                     }
                     
                     if object.object(forKey: "favorite") != nil {
@@ -161,6 +169,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                     self.uuidArray.removeAll(keepingCapacity: false)
                     self.categoryArray.removeAll(keepingCapacity: false)
                     self.locationArray.removeAll(keepingCapacity: false)
+                    self.addressArray.removeAll(keepingCapacity: false)
                     self.favoriteArray.removeAll(keepingCapacity: false)
                     self.tagsArray.removeAll(keepingCapacity: false)
                     self.ratingArray.removeAll(keepingCapacity: false)
@@ -181,6 +190,12 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                             self.locationArray.append(object.object(forKey: "location") as! String)
                         } else {
                             self.locationArray.append("")
+                        }
+                        
+                        if object.object(forKey: "address") != nil {
+                            self.addressArray.append(object.object(forKey: "address") as! String)
+                        } else {
+                            self.addressArray.append("")
                         }
                         
                         if object.object(forKey: "favorite") != nil {
@@ -276,7 +291,10 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         }
         
         // set location
-        cell.locationLbl.text = locationArray[(indexPath as NSIndexPath).row]
+        cell.locationTitleBtn.setTitle(locationArray[(indexPath as NSIndexPath).row], for: .normal)
+        
+        // set address
+        cell.addressLbl.text = addressArray[(indexPath as NSIndexPath).row]
         
         // set rating
         cell.setRating(ratingArray[(indexPath as NSIndexPath).row])
@@ -284,7 +302,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         // manipulate suitcase button depending on if it is added to user's suitcase
         let didAdd = PFQuery(className: "suitcase")
         didAdd.whereKey("user", equalTo: usernameHiddenLbl.text!)
-        didAdd.whereKey("location", equalTo: cell.locationLbl.text!)
+        didAdd.whereKey("location", equalTo: cell.locationTitleBtn.currentTitle!)
         didAdd.countObjectsInBackground { (count, error) -> Void in
             if count == 0 {
                 cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
@@ -326,6 +344,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         
         // assign index
         cell.commentBtn.layer.setValue(indexPath, forKey: "index")
+        cell.locationTitleBtn.layer.setValue(indexPath, forKey: "index")
         
         // @mention is tapped
         cell.titleLbl.userHandleLinkTapHandler = { label, handle, rang in
@@ -371,6 +390,22 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         // go to comments. present vc
         let comment = self.storyboard?.instantiateViewController(withIdentifier: "commentVC") as! commentVC
         self.navigationController?.pushViewController(comment, animated: true)
+    }
+    
+    
+    @IBAction func locationTitleBtn_clicked(_ sender: UIButton) {
+        
+        let i = sender.layer.value(forKey: "index") as! IndexPath
+        
+        let cell = feedTableView.cellForRow(at: i) as! postCell
+        
+        placeTitle = cell.locationTitleBtn.currentTitle!
+        placeAddress = cell.addressLbl.text!
+        placeCategory = categoryArray[(i as NSIndexPath).row]
+        placeUser = cell.usernameLbl.text!
+        
+        let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
+        self.navigationController?.pushViewController(place, animated: true)
     }
     
     // alert action

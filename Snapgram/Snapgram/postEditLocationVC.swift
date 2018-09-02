@@ -55,12 +55,9 @@ class postEditLocationVC: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.cellForRow(at: indexPath) as! locationCell
         
         postLocation = cell.locationTitle.text!
+        postAddress = cell.addressLbl.text!
         
         self.dismiss(animated: true, completion: nil)
-        
-//        let upload = self.storyboard?.instantiateViewController(withIdentifier: "uploadVC") as! uploadVC
-//        self.navigationController?.pushViewController(upload, animated: true)
-        
     }
     
     @IBAction func backBtn_clicked(_ sender: UIBarButtonItem) {

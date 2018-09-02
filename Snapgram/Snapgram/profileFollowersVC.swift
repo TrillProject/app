@@ -28,8 +28,6 @@ class profileFollowersVC: UIViewController, UICollectionViewDataSource, UICollec
         
         usernameHiddenLbl.text = user
         
-//        flowLayout.estimatedItemSize = CGSize(width: 130.0, height: 150.0)
-        
         loadFollowers()
     }
     

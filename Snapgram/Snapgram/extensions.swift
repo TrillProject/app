@@ -146,3 +146,11 @@ extension UITextField {
         self.layer.shadowRadius = 0.0
     }
 }
+
+extension Date {
+    func asString(style: DateFormatter.Style) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = style
+        return dateFormatter.string(from: self)
+    }
+}

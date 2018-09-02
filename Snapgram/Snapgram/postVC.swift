@@ -22,6 +22,7 @@ class postVC: UITableViewController {
     var titleArray = [String]()
     var categoryArray = [String]()
     var locationArray = [String]()
+    var addressArray = [String]()
     var favoriteArray = [Bool]()
     var tagsArray = [[String]]()
     var ratingArray = [CGFloat]()
@@ -60,6 +61,7 @@ class postVC: UITableViewController {
                 self.titleArray.removeAll(keepingCapacity: false)
                 self.categoryArray.removeAll(keepingCapacity: false)
                 self.locationArray.removeAll(keepingCapacity: false)
+                self.addressArray.removeAll(keepingCapacity: false)
                 self.favoriteArray.removeAll(keepingCapacity: false)
                 self.tagsArray.removeAll(keepingCapacity: false)
                 self.ratingArray.removeAll(keepingCapacity: false)
@@ -83,6 +85,12 @@ class postVC: UITableViewController {
                         self.locationArray.append(object.object(forKey: "location") as! String)
                     } else {
                         self.locationArray.append("")
+                    }
+                    
+                    if object.object(forKey: "address") != nil {
+                        self.addressArray.append(object.object(forKey: "address") as! String)
+                    } else {
+                        self.addressArray.append("")
                     }
                     
                     if object.object(forKey: "favorite") != nil {
@@ -170,7 +178,10 @@ class postVC: UITableViewController {
         }
         
         // set location
-        cell.locationLbl.text = locationArray[(indexPath as NSIndexPath).row]
+        cell.locationTitleBtn.setTitle(locationArray[(indexPath as NSIndexPath).row], for: .normal)
+        
+        // set address
+        cell.addressLbl.text = addressArray[(indexPath as NSIndexPath).row]
         
         // set rating
         cell.setRating(ratingArray[(indexPath as NSIndexPath).row])
@@ -178,7 +189,7 @@ class postVC: UITableViewController {
         // manipulate suitcase button depending on if it is added to user's suitcase
         let didAdd = PFQuery(className: "suitcase")
         didAdd.whereKey("user", equalTo: PFUser.current()!.username!)
-        didAdd.whereKey("location", equalTo: cell.locationLbl.text!)
+        didAdd.whereKey("location", equalTo: cell.locationTitleBtn.currentTitle!)
         didAdd.countObjectsInBackground { (count, error) -> Void in
             if count == 0 {
                 cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
@@ -232,12 +243,15 @@ class postVC: UITableViewController {
             
             // if tapped on @currentUser go home, else go guest
             if mention.lowercased() == PFUser.current()?.username {
-                let home = self.storyboard?.instantiateViewController(withIdentifier: "homeVC") as! homeVC
-                self.navigationController?.pushViewController(home, animated: true)
+                user = PFUser.current()!.username!
+                let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
+                self.navigationController?.pushViewController(profile, animated: true)
             } else {
                 guestname.append(mention.lowercased())
-                let guest = self.storyboard?.instantiateViewController(withIdentifier: "guestVC") as! guestVC
-                self.navigationController?.pushViewController(guest, animated: true)
+                user = mention.lowercased()
+                let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
+                self.navigationController?.pushViewController(profileUser, animated: true)
+                
             }
         }
         
@@ -265,6 +279,7 @@ class postVC: UITableViewController {
         
         // if user tapped on himself go home, else go guest
         if cell.usernameLbl.text == PFUser.current()?.username {
+            user = PFUser.current()!.username!
             let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
             self.navigationController?.pushViewController(profile, animated: true)
         } else {
@@ -414,6 +429,20 @@ class postVC: UITableViewController {
 //        self.present(menu, animated: true, completion: nil)
 //    }
     
+    @IBAction func locationTitleBtn_clicked(_ sender: UIButton) {
+        
+        let i = sender.layer.value(forKey: "index") as! IndexPath
+        
+        let cell = tableView.cellForRow(at: i) as! postCell
+        
+        placeTitle = cell.locationTitleBtn.currentTitle!
+        placeAddress = cell.addressLbl.text!
+        placeCategory = categoryArray[(i as NSIndexPath).row]
+        placeUser = cell.usernameLbl.text!
+        
+        let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
+        self.navigationController?.pushViewController(place, animated: true)
+    }
     
     // alert action
     func alert (_ title: String, message : String) {

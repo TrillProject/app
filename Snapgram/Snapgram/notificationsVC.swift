@@ -91,7 +91,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func showView() {
-        if PFUser.current()?.object(forKey: "private") as! Bool {
+        if PFUser.current()?.object(forKey: "private") != nil,  PFUser.current()?.object(forKey: "private") as! Bool {
             // profile of current user is private
             notificationsHeaderHeight.constant = 50.0
             notificationsBtn.isHidden = false
@@ -170,7 +170,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     // get requests
     func getRequests() {
-        if PFUser.current()?.object(forKey: "private") as! Bool {
+        if PFUser.current()?.object(forKey: "private") != nil, PFUser.current()?.object(forKey: "private") as! Bool {
             let requestQuery = PFQuery(className: "request")
             requestQuery.whereKey("to", equalTo: PFUser.current()!.username!)
             requestQuery.limit = 30

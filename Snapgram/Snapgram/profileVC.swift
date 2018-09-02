@@ -37,7 +37,7 @@ class profileVC: UIViewController {
         super.viewDidLoad()
         
         // title at the top
-        self.navigationItem.title = (PFUser.current()?.object(forKey: "firstname") as? String)?.capitalized
+        self.navigationItem.title = (PFUser.current()?.object(forKey: "firstname") as! String).capitalized
         
         // receive notification from editProfileVC
         NotificationCenter.default.addObserver(self, selector: #selector(profileVC.reload(_:)), name: NSNotification.Name(rawValue: "reload"), object: nil)
