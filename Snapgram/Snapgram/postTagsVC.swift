@@ -82,7 +82,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         self.backgroundView.addGestureRecognizer(hideTap)
         
         // to connect with apple/google maps
-        postAddress = "Address"
+        postAddress = "122 North 5th Street, Brooklyn, NY 11211"
     }
     
     override func viewDidLayoutSubviews() {
@@ -249,7 +249,6 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
                 }
             }
         }
-        
         
         // finally save information
         object.saveInBackground (block: { (success, error) -> Void in

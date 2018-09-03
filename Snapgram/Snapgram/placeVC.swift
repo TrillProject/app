@@ -12,7 +12,7 @@ import Parse
 var placeTitle : String?
 var placeAddress : String?
 var placeCategory : String?
-var placeUser : String?
+var didSelectSelf : Bool?
 
 class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
 
@@ -40,7 +40,7 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     @IBOutlet weak var reviewOverlayLeadingSpace: NSLayoutConstraint!
     @IBOutlet weak var collectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var tableViewTopSpace: NSLayoutConstraint!
-    
+    @IBOutlet weak var locationIconWidth: NSLayoutConstraint!
     
     // arrays to hold data received from servers
     var placeImgArray = [PFFile]()
@@ -61,7 +61,7 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         addressBtn.setTitle(placeAddress!, for: .normal)
         
-        PostCategory.selectImgType(placeCategory!, locationIcon)
+        PostCategory.selectImgType(placeCategory!, locationIcon, locationIconWidth)
         
         loadReviews()
     }
@@ -131,7 +131,7 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                                 self.uuidArray.append(object.object(forKey: "uuid") as! String)
                             }
                             
-                            if self.usernameArray.count == 0 && placeUser! == PFUser.current()!.username! {
+                            if self.usernameArray.count == 0 && didSelectSelf! {
                                 
                                 // clean up
                                 self.placeImgArray.removeAll(keepingCapacity: false)

@@ -336,6 +336,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         }
     }
     
+    // tint category icons
     func tintIcons(_ sender : UIButton) {
         let img = sender.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
         sender.setImage(img, for: .normal)

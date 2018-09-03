@@ -198,7 +198,7 @@ class feedVC: UITableViewController {
             // increase page size to load +10 posts
             page = page + 10
             
-            // STEP 1. Find posts realted to people who we are following
+            // STEP 1. Find posts related to people who we are following
             let followQuery = PFQuery(className: "follow")
             followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
             followQuery.whereKey("accepted", equalTo: true)
@@ -352,7 +352,7 @@ class feedVC: UITableViewController {
             cell.locationImgWidth.constant = 22
             cell.locationBtn.setImage(UIImage(named: "like2"), for: .normal)
         } else {
-            cell.selectLocationType(categoryArray[(indexPath as NSIndexPath).row])
+            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth)
         }
         
         // set location
@@ -368,6 +368,7 @@ class feedVC: UITableViewController {
         let didAdd = PFQuery(className: "suitcase")
         didAdd.whereKey("user", equalTo: PFUser.current()!.username!)
         didAdd.whereKey("location", equalTo: cell.locationTitleBtn.currentTitle!)
+        didAdd.whereKey("address", equalTo: cell.addressLbl.text!)
         didAdd.countObjectsInBackground { (count, error) -> Void in
             if count == 0 {
                 cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
@@ -616,7 +617,7 @@ class feedVC: UITableViewController {
         placeTitle = cell.locationTitleBtn.currentTitle!
         placeAddress = cell.addressLbl.text!
         placeCategory = categoryArray[(i as NSIndexPath).row]
-        placeUser = cell.usernameLbl.text!
+        didSelectSelf = (cell.usernameLbl.text! == PFUser.current()!.username! ? true : false)
         
         let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
         self.navigationController?.pushViewController(place, animated: true)

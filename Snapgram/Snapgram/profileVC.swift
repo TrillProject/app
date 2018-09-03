@@ -188,4 +188,8 @@ class profileVC: UIViewController {
         }
     }
     
+    @IBAction func suitcaseBtn_clicked(_ sender: UIBarButtonItem) {
+        let suitcase = self.storyboard?.instantiateViewController(withIdentifier: "suitcaseVC") as! suitcaseVC
+        self.navigationController?.pushViewController(suitcase, animated: true)
+    }
 }

@@ -178,6 +178,19 @@ class settingsVC: UITableViewController {
                         }
                     })
                     
+                    // delete suitcase objects of user
+                    let suitcaseQuery = PFQuery(className: "suitcase")
+                    suitcaseQuery.whereKey("user", equalTo: username)
+                    suitcaseQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            for object in objects! {
+                                object.deleteEventually()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
                     // delete posts by user
                     let postQuery = PFQuery(className: "posts")
                     postQuery.whereKey("username", equalTo: username)

@@ -132,13 +132,18 @@ class postCell: UITableViewCell {
         
         // to add to suitcase
         if title == "notAdded" {
+            
             let object = PFObject(className: "suitcase")
             object["user"] = PFUser.current()?.username
-            object["location"] = locationTitleBtn.currentTitle!
-            object["category"] = locationBtn.currentTitle
+            object["location"] = self.locationTitleBtn.currentTitle!
+            object["address"] = self.addressLbl.text!
             object.saveInBackground(block: { (success, error) -> Void in
                 if success {
                     print("added to suitcase")
+                    
+                    // send notification if we liked to refresh TableView
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
+                    
                     self.suitcaseBtn.setTitle("added", for: UIControlState())
                     self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
                 } else {
@@ -146,16 +151,22 @@ class postCell: UITableViewCell {
                 }
             })
         }
+            
         // to remove from suitcase
         else {
             let query = PFQuery(className: "suitcase")
             query.whereKey("user", equalTo: PFUser.current()!.username!)
             query.whereKey("location", equalTo: locationTitleBtn.currentTitle!)
+            query.whereKey("address", equalTo: addressLbl.text!)
             query.findObjectsInBackground(block: { (objects, error) -> Void in
                 for object in objects! {
                     object.deleteInBackground(block: { (success, error) -> Void in
                         if success {
                             print("removed from suitcase")
+                            
+                            // send notification if we liked to refresh TableView
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
+                            
                             self.suitcaseBtn.setTitle("notAdded", for: UIControlState())
                             self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
                         } else {
@@ -251,37 +262,6 @@ class postCell: UITableViewCell {
             
         }
         
-    }
-    
-    //set location button
-    func selectLocationType(_ categoryType : String) {
-        switch categoryType {
-        case "country":
-            selectLocationButton("country")
-        case "city":
-            selectLocationButton("city")
-        case "restaurant":
-            selectLocationButton("restaurant")
-        case "nightlife":
-            selectLocationButton("nightlife")
-        case "arts":
-            selectLocationButton("arts")
-        case "shop":
-            selectLocationButton("shop")
-        case "hotel":
-            selectLocationButton("hotel")
-        default:
-            selectLocationButton("transparent")
-        }
-    }
-    
-    func selectLocationButton(_ name : String) {
-        if name == "arts" {
-            locationImgWidth.constant = 29
-        } else {
-            locationImgWidth.constant = 22
-        }
-        locationBtn.setImage(UIImage(named: name), for: UIControlState())
     }
     
     // set post rating

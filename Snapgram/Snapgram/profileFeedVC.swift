@@ -286,8 +286,9 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         // set location button
         if favoriteArray[(indexPath as NSIndexPath).row] == true {
             cell.locationBtn.setImage(UIImage(named: "like2"), for: UIControlState())
+            cell.locationImgWidth.constant = 22
         } else {
-            cell.selectLocationType(categoryArray[(indexPath as NSIndexPath).row])
+            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth)
         }
         
         // set location
@@ -303,6 +304,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         let didAdd = PFQuery(className: "suitcase")
         didAdd.whereKey("user", equalTo: usernameHiddenLbl.text!)
         didAdd.whereKey("location", equalTo: cell.locationTitleBtn.currentTitle!)
+        didAdd.whereKey("addess", equalTo: cell.addressLbl.text!)
         didAdd.countObjectsInBackground { (count, error) -> Void in
             if count == 0 {
                 cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
@@ -402,7 +404,7 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         placeTitle = cell.locationTitleBtn.currentTitle!
         placeAddress = cell.addressLbl.text!
         placeCategory = categoryArray[(i as NSIndexPath).row]
-        placeUser = cell.usernameLbl.text!
+        didSelectSelf = (cell.usernameLbl.text! == PFUser.current()!.username! ? true : false)
         
         let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
         self.navigationController?.pushViewController(place, animated: true)
