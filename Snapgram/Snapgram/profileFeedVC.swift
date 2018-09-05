@@ -301,17 +301,25 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         cell.setRating(ratingArray[(indexPath as NSIndexPath).row])
         
         // manipulate suitcase button depending on if it is added to user's suitcase
-        let didAdd = PFQuery(className: "suitcase")
-        didAdd.whereKey("user", equalTo: usernameHiddenLbl.text!)
-        didAdd.whereKey("location", equalTo: cell.locationTitleBtn.currentTitle!)
-        didAdd.whereKey("addess", equalTo: cell.addressLbl.text!)
-        didAdd.countObjectsInBackground { (count, error) -> Void in
-            if count == 0 {
-                cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
-                cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
-            } else {
-                cell.suitcaseBtn.setTitle("added", for: UIControlState())
-                cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
+        if usernameHiddenLbl.text! == PFUser.current()!.username! {
+            cell.suitcaseBtn.setTitle("currentUser", for: UIControlState())
+            cell.suitcaseBtnWidth.constant = 0
+            cell.suitcaseBtnLeadingSpace.constant = 0
+        } else {
+            cell.suitcaseBtnWidth.constant = 24
+            cell.suitcaseBtnLeadingSpace.constant = 20
+            let didAdd = PFQuery(className: "suitcase")
+            didAdd.whereKey("user", equalTo: usernameHiddenLbl.text!)
+            didAdd.whereKey("location", equalTo: cell.locationTitleBtn.currentTitle!)
+            didAdd.whereKey("addess", equalTo: cell.addressLbl.text!)
+            didAdd.countObjectsInBackground { (count, error) -> Void in
+                if count == 0 {
+                    cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
+                    cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
+                } else {
+                    cell.suitcaseBtn.setTitle("added", for: UIControlState())
+                    cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
+                }
             }
         }
         
@@ -347,6 +355,12 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         // assign index
         cell.commentBtn.layer.setValue(indexPath, forKey: "index")
         cell.locationTitleBtn.layer.setValue(indexPath, forKey: "index")
+        cell.picImg.tag = indexPath.row
+        
+        // add tap gesture for post
+        let postTap = UITapGestureRecognizer(target: self, action: #selector(feedVC.postTap))
+        postTap.numberOfTapsRequired = 1
+        cell.picImg.addGestureRecognizer(postTap)
         
         // @mention is tapped
         cell.titleLbl.userHandleLinkTapHandler = { label, handle, rang in
@@ -395,6 +409,104 @@ class profileFeedVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     }
     
     
+    // actions on post tap
+    func postTap(gesture: UITapGestureRecognizer) {
+        
+        // get index of cell
+        let index = gesture.view!.tag
+        let uuid = self.uuidArray[index]
+        let isFavorite = self.favoriteArray[index]
+        let username = usernameHiddenLbl.text!
+        
+        // DELETE action
+        let delete = UIAlertAction(title: "Delete", style: .destructive) { (UIAlertAction) -> Void in
+            
+            // STEP 1. Delete row from tableView
+            self.picArray.remove(at: index)
+            self.titleArray.remove(at: index)
+            self.uuidArray.remove(at: index)
+            self.categoryArray.remove(at: index)
+            self.locationArray.remove(at: index)
+            self.addressArray.remove(at: index)
+            self.favoriteArray.remove(at: index)
+            self.tagsArray.remove(at: index)
+            self.ratingArray.remove(at: index)
+            
+            // STEP 2. Delete post from server
+            let postQuery = PFQuery(className: "posts")
+            postQuery.whereKey("uuid", equalTo: uuid)
+            postQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                if error == nil {
+                    for object in objects! {
+                        object.deleteInBackground(block: { (success, error) -> Void in
+                            if success {
+                                
+                                // send notification to rootViewController to update shown posts
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
+                                
+                                // push back
+                                self.navigationController?.popViewController(animated: true)
+                            } else {
+                                print(error!.localizedDescription)
+                            }
+                        })
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+            
+            // STEP 3. Delete associated post data
+            postCell.deletePostData(uuid, isFavorite)
+        }
+        
+        // EDIT ACTION
+        let edit = UIAlertAction(title: "Edit", style: .default) { (UIAlertAction) -> Void in
+            
+            // TO DO
+        }
+        
+        // COMPLAIN ACTION
+        let complain = UIAlertAction(title: "Complain", style: .default) { (UIAlertAction) -> Void in
+            
+            // send complain to server
+            let complainObj = PFObject(className: "complain")
+            complainObj["by"] = PFUser.current()?.username
+            complainObj["to"] = uuid
+            complainObj["owner"] = username
+            complainObj.saveInBackground(block: { (success, error) -> Void in
+                if success {
+                    self.alert("Complaint has been made successfully", message: "Thank You! We will consider your complaint")
+                } else {
+                    self.alert("ERROR", message: error!.localizedDescription)
+                }
+            })
+        }
+        
+        // CANCEL ACTION
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        
+        // create menu controller
+        let menu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        
+        // if post belongs to user, he can delete post, else he can't
+        if username == PFUser.current()?.username {
+            menu.addAction(edit)
+            menu.addAction(delete)
+            menu.addAction(cancel)
+        } else {
+            menu.addAction(complain)
+            menu.addAction(cancel)
+        }
+        
+        // show menu
+        self.present(menu, animated: true, completion: nil)
+    }
+    
+    
+    // clicked location
     @IBAction func locationTitleBtn_clicked(_ sender: UIButton) {
         
         let i = sender.layer.value(forKey: "index") as! IndexPath

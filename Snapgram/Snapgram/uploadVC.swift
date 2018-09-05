@@ -300,7 +300,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func style() {
         
         if postLocation == nil {
-            locationLbl.text! = "Location"
+            locationLbl.text! = "Il Pacino"
         } else {
             locationLbl.text! = postLocation!
         }

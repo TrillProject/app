@@ -54,37 +54,41 @@ class changePasswordVC: UIViewController {
     }
     
     @IBAction func saveBtn_clicked(_ sender: UIBarButtonItem) {
-    
-        let user = PFUser.current()!
         
         if (currentTxt.text!.isEmpty || newTxt.text!.isEmpty || repeatTxt.text!.isEmpty) {
             alert("Fields Empty", message: "Please fill out all fields")
             
         }
         
-        if user.password != currentTxt.text {
-            alert("Incorrect Current Password", message: "the password you entered is incorrect")
-            return
-        }
-        
-        if newTxt.text != repeatTxt.text {
-            alert("Passwords Don't Match", message: "Please check that the new password you entered matches in both fields")
-            return
-        }
-        
-        // send data to server
-        user.password = currentTxt.text
-        
-        user.saveInBackground (block: { (success, error) -> Void in
-            if success{
+        PFUser.logInWithUsername(inBackground: PFUser.current()!.email!, password: currentTxt.text!) { (user, error) in
+            if error == nil {
                 
-                // send notification to settingsVC to be reloaded
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "reload"), object: nil)
+                if self.newTxt.text != self.repeatTxt.text {
+                    self.alert("Passwords Don't Match", message: "Please check that the new password you entered matches in both fields")
+                    return
+                }
+                
+                // send data to server
+                user!.password = self.newTxt.text
+                
+                user!.saveInBackground (block: { (success, error) -> Void in
+                    if success{
+                        
+                        print("password changed successfully")
+                        
+                        self.view.endEditing(true)
+                        self.dismiss(animated: true, completion: nil)
+                        
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                })
                 
             } else {
-                print(error!.localizedDescription)
+                self.alert("Incorrect Current Password", message: "the password you entered is incorrect")
+                return
             }
-        })
+        }
     }
     
     // func to hide keyboard

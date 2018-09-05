@@ -595,7 +595,7 @@
                                         <rect key="frame" x="20" y="230" width="335" height="30"/>
                                         <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <userDefinedRuntimeAttributes>
@@ -608,7 +608,7 @@
                                         <rect key="frame" x="20" y="305" width="335" height="30"/>
                                         <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                         <userDefinedRuntimeAttributes>
@@ -621,7 +621,7 @@
                                         <rect key="frame" x="20" y="380" width="335" height="30"/>
                                         <color key="backgroundColor" white="1" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="textColor" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="18"/>
                                         <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                         <userDefinedRuntimeAttributes>
@@ -2041,7 +2041,7 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pbg" translatesAutoresizingMaskIntoConstraints="NO" id="f6F-tl-fO5">
+                                        <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pbg" translatesAutoresizingMaskIntoConstraints="NO" id="f6F-tl-fO5">
                                             <rect key="frame" x="0.0" y="68" width="200" height="200"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="f6F-tl-fO5" secondAttribute="height" multiplier="1:1" id="RCm-Z1-UQT"/>
@@ -2115,7 +2115,7 @@
                                                 <constraint firstAttribute="height" constant="24" id="bLr-us-S7J"/>
                                                 <constraint firstAttribute="width" constant="24" id="rWM-6r-zyr"/>
                                             </constraints>
-                                            <state key="normal" backgroundImage="suitcase4"/>
+                                            <state key="normal" backgroundImage="suitcase"/>
                                             <connections>
                                                 <action selector="suitcaseBtn_click:" destination="vG4-xl-xEw" eventType="touchUpInside" id="Txr-K9-YsI"/>
                                             </connections>
@@ -2285,6 +2285,8 @@
                                     <outlet property="reviewOverlay" destination="bK3-1Y-DoP" id="Zya-l1-JLw"/>
                                     <outlet property="reviewOverlayLeadingSpace" destination="GjO-Ay-Gae" id="YAh-nC-DNO"/>
                                     <outlet property="suitcaseBtn" destination="DWl-kI-H90" id="0ut-8B-Cl8"/>
+                                    <outlet property="suitcaseBtnLeadingSpace" destination="guP-Dg-tde" id="3u4-gD-SBz"/>
+                                    <outlet property="suitcaseBtnWidth" destination="rWM-6r-zyr" id="Ke4-Jj-f2n"/>
                                     <outlet property="tag1Btn" destination="qHI-OH-RQm" id="fvs-4a-3Wz"/>
                                     <outlet property="tag1View" destination="bUf-gc-M7y" id="wsm-fq-a1P"/>
                                     <outlet property="tag2Btn" destination="R8i-ji-36B" id="9Mx-X7-zP6"/>
@@ -2355,7 +2357,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pbg" translatesAutoresizingMaskIntoConstraints="NO" id="I8i-fH-KkR">
+                                        <imageView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pbg" translatesAutoresizingMaskIntoConstraints="NO" id="I8i-fH-KkR">
                                             <rect key="frame" x="0.0" y="65" width="200" height="200"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="I8i-fH-KkR" secondAttribute="height" multiplier="1:1" id="s6K-L3-Msa"/>
@@ -2599,6 +2601,8 @@
                                     <outlet property="reviewOverlay" destination="s2O-CQ-N4F" id="gKz-35-Xly"/>
                                     <outlet property="reviewOverlayLeadingSpace" destination="50G-Dt-8Bu" id="XKM-Vz-fk3"/>
                                     <outlet property="suitcaseBtn" destination="D9h-fp-Uuw" id="HZd-bb-TCV"/>
+                                    <outlet property="suitcaseBtnLeadingSpace" destination="R7D-T1-CBw" id="HX4-N4-gwd"/>
+                                    <outlet property="suitcaseBtnWidth" destination="OrC-cp-pfb" id="JEp-Tq-SCr"/>
                                     <outlet property="tag1Btn" destination="SVV-al-1sB" id="nqe-up-X7h"/>
                                     <outlet property="tag1View" destination="JDC-vf-WZ4" id="2PV-HJ-qIO"/>
                                     <outlet property="tag2Btn" destination="wil-g2-kbA" id="VFD-ds-kyL"/>
@@ -2908,6 +2912,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="KvV-Wp-Piu"/>
                                 </constraints>
+                                <color key="tintColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -2967,7 +2972,7 @@
                                     <action selector="categoryBtn_clicked:" destination="ZGf-QI-BYq" eventType="touchUpInside" id="aQj-Tg-cOb"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="149" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="maC-OT-gB9">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="149" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="maC-OT-gB9">
                                 <rect key="frame" x="0.0" y="194" width="375" height="473"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -3024,7 +3029,7 @@
                                                 <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fyX-m6-17P">
                                                     <rect key="frame" x="96" y="0.0" width="220" height="30"/>
                                                     <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="15"/>
-                                                    <state key="normal" title="Location">
+                                                    <state key="normal" title="Il Pacino">
                                                         <color key="titleColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
@@ -3898,7 +3903,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Requests Cell" id="K5u-J0-EDT" customClass="requestsCell" customModule="Snapgram" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="Requests Cell" id="K5u-J0-EDT" customClass="requestsCell" customModule="Snapgram" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="K5u-J0-EDT" id="b0h-3V-wmB">
@@ -4011,7 +4016,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Notification Cell" id="krO-Qt-OEB" customClass="notificationCell" customModule="Snapgram" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="Notification Cell" id="krO-Qt-OEB" customClass="notificationCell" customModule="Snapgram" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="1" width="375" height="75"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="krO-Qt-OEB" id="wR4-HS-2dG">
@@ -4631,7 +4636,7 @@
                                                     </constraints>
                                                     <state key="normal" image="city"/>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="39G-nC-5Hh">
+                                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="39G-nC-5Hh">
                                                     <rect key="frame" x="0.0" y="65" width="375" height="375"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="39G-nC-5Hh" secondAttribute="height" multiplier="1:1" id="VaG-hM-hlh"/>
@@ -4847,6 +4852,8 @@
                                             <outlet property="reviewOverlay" destination="okh-b9-j5t" id="3gH-6v-PMM"/>
                                             <outlet property="reviewOverlayLeadingSpace" destination="o3P-jm-T1h" id="DVA-eu-gTD"/>
                                             <outlet property="suitcaseBtn" destination="ydt-ua-R3D" id="4LE-ay-wJw"/>
+                                            <outlet property="suitcaseBtnLeadingSpace" destination="D47-gt-Qyd" id="X7O-5A-i4Q"/>
+                                            <outlet property="suitcaseBtnWidth" destination="ZEY-hi-CSY" id="ERd-32-wpC"/>
                                             <outlet property="tag1Btn" destination="OwQ-Yh-wZ3" id="wGi-bb-pnh"/>
                                             <outlet property="tag1View" destination="Q4f-Qy-uba" id="CE8-fz-QNL"/>
                                             <outlet property="tag2Btn" destination="nXb-CT-kbr" id="NF7-6U-OLE"/>
@@ -4953,7 +4960,7 @@
                                                         <color key="titleColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                 </button>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LAf-jO-5RK">
+                                                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LAf-jO-5RK">
                                                     <rect key="frame" x="0.0" y="65" width="375" height="375"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="LAf-jO-5RK" secondAttribute="height" multiplier="1:1" id="4qc-Nm-qbn"/>
@@ -5176,6 +5183,8 @@
                                             <outlet property="reviewOverlay" destination="jcV-fH-0TA" id="Vm2-5S-o83"/>
                                             <outlet property="reviewOverlayLeadingSpace" destination="ORe-pM-T1n" id="HYZ-W5-71D"/>
                                             <outlet property="suitcaseBtn" destination="jCv-0S-bs2" id="SxU-lw-Kf4"/>
+                                            <outlet property="suitcaseBtnLeadingSpace" destination="1fI-yb-mUg" id="0xp-IP-qY6"/>
+                                            <outlet property="suitcaseBtnWidth" destination="E83-8V-ODr" id="Cz2-jt-Gao"/>
                                             <outlet property="tag1Btn" destination="sOJ-cs-OOV" id="9dP-hL-5tc"/>
                                             <outlet property="tag1View" destination="NzP-7l-Caf" id="k5k-wg-P9b"/>
                                             <outlet property="tag2Btn" destination="Czx-o5-Jiy" id="hbQ-eA-cQR"/>
@@ -5941,7 +5950,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Place Review Cell" id="6cb-Wc-1ax" customClass="placeReviewCell" customModule="Snapgram" customModuleProvider="target">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="Place Review Cell" id="6cb-Wc-1ax" customClass="placeReviewCell" customModule="Snapgram" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="1" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6cb-Wc-1ax" id="QYO-BF-fIa">

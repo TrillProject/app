@@ -31,6 +31,8 @@ class postCell: UITableViewCell {
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
     @IBOutlet weak var suitcaseBtn: UIButton!
+    @IBOutlet weak var suitcaseBtnWidth: NSLayoutConstraint!
+    @IBOutlet weak var suitcaseBtnLeadingSpace: NSLayoutConstraint!
     
     // tags
     @IBOutlet weak var tag1View: UIView!
@@ -56,71 +58,6 @@ class postCell: UITableViewCell {
         // clear like button & suitcase button title color
         likeBtn.setTitleColor(UIColor.clear, for: UIControlState())
         suitcaseBtn.setTitleColor(UIColor.clear, for: UIControlState())
-        
-        // double tap to like
-        let likeTap = UITapGestureRecognizer(target: self, action: #selector(postCell.likeTap))
-        likeTap.numberOfTapsRequired = 2
-        picImg.isUserInteractionEnabled = true
-        picImg.addGestureRecognizer(likeTap)
-    }
-    
-    
-    // double tap to like
-    func likeTap() {
-        
-        // create large like gray heart
-        let likePic = UIImageView(image: UIImage(named: "unlike.png"))
-        likePic.frame.size.width = picImg.frame.size.width / 1.5
-        likePic.frame.size.height = picImg.frame.size.width / 1.5
-        likePic.center = picImg.center
-        likePic.alpha = 0.8
-        self.addSubview(likePic)
-        
-        // hide likePic with animation and transform to be smaller
-        UIView.animate(withDuration: 0.4, animations: { () -> Void in
-            likePic.alpha = 0
-            likePic.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        }) 
-        
-        // declare title of button
-        let title = likeBtn.title(for: UIControlState())
-        
-        if title == "unlike" {
-            
-            let object = PFObject(className: "likes")
-            object["by"] = PFUser.current()?.username
-            object["to"] = uuidLbl.text
-            object.saveInBackground(block: { (success, error) -> Void in
-                if success {
-                    print("liked")
-                    self.likeBtn.setTitle("like", for: UIControlState())
-                    self.likeBtn.setBackgroundImage(UIImage(named: "like.png"), for: UIControlState())
-                    
-                    // send notification if we liked to refresh TableView
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
-                    
-                    
-                    // send notification as like
-                    if self.usernameLbl.text != PFUser.current()?.username {
-                        let newsObj = PFObject(className: "news")
-                        newsObj["by"] = PFUser.current()?.username
-                        newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
-                        newsObj["to"] = self.usernameLbl.text
-                        newsObj["owner"] = self.usernameLbl.text
-                        newsObj["uuid"] = self.uuidLbl.text
-                        newsObj["type"] = "like"
-                        newsObj["checked"] = "no"
-                        newsObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
-                        newsObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
-                        newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
-                        
-                        newsObj.saveEventually()
-                    }
-                    
-                }
-            })
-            
-        }
         
     }
     
@@ -291,5 +228,77 @@ class postCell: UITableViewCell {
         } else {
             tag3View.isHidden = true
         }
+    }
+    
+    // DELETE post action
+    class func deletePostData(_ uuid : String, _ isFavorite : Bool) {
+        
+        // STEP 1. Delete likes of post from server
+        let likeQuery = PFQuery(className: "likes")
+        likeQuery.whereKey("to", equalTo: uuid)
+        likeQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 2. Delete comments of post from server
+        let commentQuery = PFQuery(className: "comments")
+        commentQuery.whereKey("to", equalTo: uuid)
+        commentQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 3. Delete hashtags of post from server
+        let hashtagQuery = PFQuery(className: "hashtags")
+        hashtagQuery.whereKey("to", equalTo: uuid)
+        hashtagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 4. Delete tags to post from server
+        let tagQuery = PFQuery(className: "postTags")
+        tagQuery.whereKey("to", equalTo: uuid)
+        tagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 5. Delete post favorites from server
+        if isFavorite {
+            let favoriteQuery = PFQuery(className: "postFavorites")
+            favoriteQuery.whereKey("to", equalTo: uuid)
+            favoriteQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                if error == nil {
+                    for object in objects! {
+                        object.deleteEventually()
+                    }
+                }
+            })
+        }
+        
+        // STEP 6. Delete news related to post from server
+        let newsQuery = PFQuery(className: "news")
+        newsQuery.whereKey("uuid", equalTo: uuid)
+        newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
     }
 }

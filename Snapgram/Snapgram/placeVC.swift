@@ -308,10 +308,6 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     // table cell selected - go to post
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let cell = tableView.cellForRow(at: indexPath) as! placeReviewCell
-        cell.contentView.backgroundColor = .white
-        cell.setRating(ratingArray[(indexPath as NSIndexPath).row])
-        
         postuuid.append(uuidArray[(indexPath as NSIndexPath).row])
         let post = self.storyboard?.instantiateViewController(withIdentifier: "postVC") as! postVC
         self.navigationController?.pushViewController(post, animated: true)
