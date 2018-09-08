@@ -637,7 +637,7 @@ class feedVC: UITableViewController {
     }
     
     @IBAction func clicked_search(_ sender: UIBarButtonItem) {
-        let users = self.storyboard?.instantiateViewController(withIdentifier: "usersVC") as! usersVC
-        self.navigationController?.pushViewController(users, animated: true)
+        let search = self.storyboard?.instantiateViewController(withIdentifier: "searchVC") as! searchVC
+        self.navigationController?.pushViewController(search, animated: true)
     }
 }

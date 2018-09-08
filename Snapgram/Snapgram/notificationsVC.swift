@@ -45,6 +45,11 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     var lastnameArray = [String]()
     var sectionDateArray = [Date?]()
     var privateArray = [Bool]()
+    // 0 = not following, 1 = pending, 2 = following
+    var followTypeArray = [Int]()
+    
+    var acceptedArray = [String]()
+    var pendingArray = [String]()
     
     var requestUsernameArray = [String]()
     var requestAvaArray = [PFFile]()
@@ -64,11 +69,9 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         notificationsTableView.tableFooterView = UIView()
         notificationsTableView.separatorInset = UIEdgeInsets.zero
-        notificationsTableView.isHidden = false
         
         requestsTableView.tableFooterView = UIView()
         requestsTableView.separatorInset = UIEdgeInsets.zero
-        requestsTableView.isHidden = true
         
         let img = findFriendsIcon.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
         findFriendsIcon.setImage(img, for: .normal)
@@ -111,58 +114,94 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     // get notifications
     func getNotifications() {
-        let query = PFQuery(className: "news")
-        query.whereKey("to", equalTo: PFUser.current()!.username!)
-        query.limit = 30
-        query.addDescendingOrder("createdAt")
-        query.findObjectsInBackground (block: { (objects, error) -> Void in
+        
+        // STEP 1. Get all people current user follows and check if they are accepted or pending
+        let followingQuery = PFQuery(className: "follow")
+        followingQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+        followingQuery.findObjectsInBackground (block: { (objects, error) -> Void in
             if error == nil {
                 
                 // clean up
-                self.usernameArray.removeAll(keepingCapacity: false)
-                self.avaArray.removeAll(keepingCapacity: false)
-                self.typeArray.removeAll(keepingCapacity: false)
-                self.dateArray.removeAll(keepingCapacity: false)
-                self.uuidArray.removeAll(keepingCapacity: false)
-                self.ownerArray.removeAll(keepingCapacity: false)
-                self.firstnameArray.removeAll(keepingCapacity: false)
-                self.lastnameArray.removeAll(keepingCapacity: false)
-                self.privateArray.removeAll(keepingCapacity: false)
+                self.acceptedArray.removeAll(keepingCapacity: false)
+                self.pendingArray.removeAll(keepingCapacity: false)
                 
-                // found related objects
                 for object in objects! {
-                    self.usernameArray.append(object.object(forKey: "by") as! String)
-                    self.avaArray.append(object.object(forKey: "ava") as! PFFile)
-                    self.typeArray.append(object.object(forKey: "type") as! String)
-                    self.dateArray.append(object.createdAt)
-                    self.uuidArray.append(object.object(forKey: "uuid") as! String)
-                    self.ownerArray.append(object.object(forKey: "owner") as! String)
                     
-                    if object.object(forKey: "firstname") != nil {
-                        self.firstnameArray.append(object.object(forKey: "firstname") as! String)
+                    if object.object(forKey: "accepted") as! Bool {
+                        self.acceptedArray.append(object.object(forKey: "following") as! String)
                     } else {
-                        self.firstnameArray.append(object.object(forKey: "by") as! String)
+                        self.pendingArray.append(object.object(forKey: "following") as! String)
                     }
-                    
-                    if object.object(forKey: "lastname") != nil {
-                        self.lastnameArray.append(object.object(forKey: "lastname") as! String)
-                    } else {
-                        self.lastnameArray.append("")
-                    }
-                    
-                    if object.object(forKey: "private") != nil {
-                        self.privateArray.append(object.object(forKey: "private") as! Bool)
-                    } else {
-                        self.privateArray.append(false)
-                    }
-                    
-                    // save notifications as checked
-                    object["checked"] = "yes"
-                    object.saveEventually()
                 }
-                
-                // reload tableView to show received data
-                self.notificationsTableView.reloadData()
+        
+                // STEP 2. Get notifications
+                let query = PFQuery(className: "news")
+                query.whereKey("to", equalTo: PFUser.current()!.username!)
+                query.limit = 30
+                query.addDescendingOrder("createdAt")
+                query.findObjectsInBackground (block: { (objects, error) -> Void in
+                    if error == nil {
+                        
+                        // clean up
+                        self.usernameArray.removeAll(keepingCapacity: false)
+                        self.avaArray.removeAll(keepingCapacity: false)
+                        self.typeArray.removeAll(keepingCapacity: false)
+                        self.dateArray.removeAll(keepingCapacity: false)
+                        self.uuidArray.removeAll(keepingCapacity: false)
+                        self.ownerArray.removeAll(keepingCapacity: false)
+                        self.firstnameArray.removeAll(keepingCapacity: false)
+                        self.lastnameArray.removeAll(keepingCapacity: false)
+                        self.privateArray.removeAll(keepingCapacity: false)
+                        self.followTypeArray.removeAll(keepingCapacity: false)
+                        
+                        // found related objects
+                        for object in objects! {
+                            self.usernameArray.append(object.object(forKey: "by") as! String)
+                            self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                            self.typeArray.append(object.object(forKey: "type") as! String)
+                            self.dateArray.append(object.createdAt)
+                            self.uuidArray.append(object.object(forKey: "uuid") as! String)
+                            self.ownerArray.append(object.object(forKey: "owner") as! String)
+                            
+                            if object.object(forKey: "firstname") != nil {
+                                self.firstnameArray.append(object.object(forKey: "firstname") as! String)
+                            } else {
+                                self.firstnameArray.append(object.object(forKey: "by") as! String)
+                            }
+                            
+                            if object.object(forKey: "lastname") != nil {
+                                self.lastnameArray.append(object.object(forKey: "lastname") as! String)
+                            } else {
+                                self.lastnameArray.append("")
+                            }
+                            
+                            if object.object(forKey: "private") != nil {
+                                self.privateArray.append(object.object(forKey: "private") as! Bool)
+                            } else {
+                                self.privateArray.append(false)
+                            }
+                            
+                            if self.acceptedArray.contains((object.object(forKey: "by") as! String)) {
+                                self.followTypeArray.append(2)
+                            } else if self.pendingArray.contains((object.object(forKey: "by") as! String)) {
+                                self.followTypeArray.append(1)
+                            } else {
+                                self.followTypeArray.append(0)
+                            }
+                            
+                            // save notifications as checked
+                            object["checked"] = "yes"
+                            object.saveEventually()
+                        }
+                        
+                        // reload tableView to show received data
+                        self.notificationsTableView.reloadData()
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                })
+            } else {
+                print(error!.localizedDescription)
             }
         })
     }
@@ -208,6 +247,8 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     
                     // reload tableView to show received data
                     self.requestsTableView.reloadData()
+                } else {
+                    print(error!.localizedDescription)
                 }
             })
         }
@@ -307,33 +348,14 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 
                 cell.followBtn.isHidden = false
                 
-                // check if following
-                let followingQuery = PFQuery(className: "follow")
-                followingQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
-                followingQuery.whereKey("following", equalTo: usernameArray[(indexPath as NSIndexPath).row])
-                followingQuery.countObjectsInBackground (block: { (count, error) -> Void in
-                    if error == nil {
-                        if count == 0 {
-                            cell.followBtn.tintColor = lightGrey
-                        } else {
-                            followingQuery.findObjectsInBackground(block: { (objects, error) -> Void in
-                                if error == nil {
-                                    for object in objects! {
-                                        if object.object(forKey: "accepted") as! Bool == true {
-                                            cell.followBtn.tintColor = mainColor
-                                        } else {
-                                            cell.followBtn.tintColor = mainFadedColor
-                                        }
-                                    }
-                                } else {
-                                    print(error!.localizedDescription)
-                                }
-                            })
-                        }
-                    } else {
-                        print(error!.localizedDescription)
-                    }
-                })
+                // tint follow button
+                if followTypeArray[(indexPath as NSIndexPath).row] == 0 {
+                    cell.followBtn.tintColor = lightGrey
+                } else if followTypeArray[(indexPath as NSIndexPath).row] == 1 {
+                    cell.followBtn.tintColor = mainFadedColor
+                } else {
+                    cell.followBtn.tintColor = mainColor
+                }
             }
             if typeArray[(indexPath as NSIndexPath).row] == "like" {
                 if lastnameArray[(indexPath as NSIndexPath).row] != "" {
@@ -343,7 +365,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 }
             }
         
-            // asign index of button
+            // assign index of button
             cell.avaImg.layer.setValue(indexPath, forKey: "index")
             cell.followBtn.layer.setValue(indexPath, forKey: "index")
             

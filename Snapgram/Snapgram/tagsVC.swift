@@ -160,6 +160,11 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
     
     // scrolled down
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
+            cancelButton.isEnabled = true
+        }
+        
         // scroll down for paging
         if scrollView.contentOffset.y >= scrollView.contentSize.height / 6 {
             
