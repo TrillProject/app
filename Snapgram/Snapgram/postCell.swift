@@ -190,16 +190,13 @@ class postCell: UITableViewCell {
                                     }
                                 }
                             })
-                            
-                            
                         }
                     })
                 }
             })
-            
         }
-        
     }
+    
     
     // set post rating
     func setRating(_ rating : CGFloat) {

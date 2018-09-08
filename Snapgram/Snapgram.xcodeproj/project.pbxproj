@@ -102,6 +102,9 @@
 		2ADF6B44212F1B710076B1B7 /* notificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ADF6B43212F1B710076B1B7 /* notificationCell.swift */; };
 		2AE23AAA212A0A3400F8FBE1 /* mentionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE23AA9212A0A3400F8FBE1 /* mentionCell.swift */; };
 		2AF0994A2101313E007555CE /* settingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF099492101313E007555CE /* settingsVC.swift */; };
+		2AF187EE2140C1D9006943AA /* tagsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF187ED2140C1D9006943AA /* tagsVC.swift */; };
+		2AF187F02140C22A006943AA /* tagsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF187EF2140C22A006943AA /* tagsCollectionCell.swift */; };
+		2AF187F22140C25A006943AA /* tagsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF187F12140C25A006943AA /* tagsTableCell.swift */; };
 		2AF761A2213C375200AE3AEF /* suitcaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF761A1213C375200AE3AEF /* suitcaseVC.swift */; };
 		2AF761A4213C3B6400AE3AEF /* suitcaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF761A3213C3B6400AE3AEF /* suitcaseCell.swift */; };
 /* End PBXBuildFile section */
@@ -207,6 +210,9 @@
 		2ADF6B43212F1B710076B1B7 /* notificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = notificationCell.swift; sourceTree = "<group>"; };
 		2AE23AA9212A0A3400F8FBE1 /* mentionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mentionCell.swift; sourceTree = "<group>"; };
 		2AF099492101313E007555CE /* settingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = settingsVC.swift; sourceTree = "<group>"; };
+		2AF187ED2140C1D9006943AA /* tagsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tagsVC.swift; sourceTree = "<group>"; };
+		2AF187EF2140C22A006943AA /* tagsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tagsCollectionCell.swift; sourceTree = "<group>"; };
+		2AF187F12140C25A006943AA /* tagsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tagsTableCell.swift; sourceTree = "<group>"; };
 		2AF761A1213C375200AE3AEF /* suitcaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = suitcaseVC.swift; sourceTree = "<group>"; };
 		2AF761A3213C3B6400AE3AEF /* suitcaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = suitcaseCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -319,6 +325,9 @@
 				2A6683E92139BE87005D94EE /* placeVC.swift */,
 				2A6683EB2139CB7F005D94EE /* placeImgCell.swift */,
 				2A6683ED2139CBA6005D94EE /* placeReviewCell.swift */,
+				2AF187ED2140C1D9006943AA /* tagsVC.swift */,
+				2AF187EF2140C22A006943AA /* tagsCollectionCell.swift */,
+				2AF187F12140C25A006943AA /* tagsTableCell.swift */,
 				2A6683F12139D7BF005D94EE /* review.swift */,
 				2A6683F32139E2C1005D94EE /* postCategory.swift */,
 				2A0BED7320FD8B13006AB72E /* extensions.swift */,
@@ -494,6 +503,7 @@
 				1F7901FE1DEC6BDA00D921C8 /* feedVC.swift in Sources */,
 				1F7902081DEC6BDA00D921C8 /* postVC.swift in Sources */,
 				2A6683F22139D7BF005D94EE /* review.swift in Sources */,
+				2AF187F22140C25A006943AA /* tagsTableCell.swift in Sources */,
 				2AC4DB4821001A0F00040525 /* profileGlobeVC.swift in Sources */,
 				2A6742A421066C6D00B13987 /* changePasswordVC.swift in Sources */,
 				2A6683F02139D72E005D94EE /* userCell.swift in Sources */,
@@ -519,11 +529,13 @@
 				2A1935FA211E20B0006EC81A /* tagCell.swift in Sources */,
 				2A3088602121F0B200C79809 /* constants.swift in Sources */,
 				2ADF6B44212F1B710076B1B7 /* notificationCell.swift in Sources */,
+				2AF187EE2140C1D9006943AA /* tagsVC.swift in Sources */,
 				2A65BA03211F582B00DC46EE /* leftAlignedCollectionView.swift in Sources */,
 				1F7901AB1DEC679500D921C8 /* AppDelegate.swift in Sources */,
 				2AC4DB462100199B00040525 /* profileFeedVC.swift in Sources */,
 				2AD306C220FE83ED006F16D0 /* profileVC.swift in Sources */,
 				1F4BE6671DEF4CF000C9129A /* FSAlbumViewCell.swift in Sources */,
+				2AF187F02140C22A006943AA /* tagsCollectionCell.swift in Sources */,
 				2A2957332107807700D60D7D /* followerCell.swift in Sources */,
 				1F7902071DEC6BDA00D921C8 /* pictureCell.swift in Sources */,
 				1F4BE6651DEF4CF000C9129A /* FSAlbumView.swift in Sources */,

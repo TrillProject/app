@@ -327,6 +327,16 @@ class postVC: UITableViewController {
     }
     
     
+    // tag clicked
+    @IBAction func tag_clicked(_ sender: UIButton) {
+        
+        currentTag = sender.currentTitle!.lowercased()
+        
+        let tagsViewController = self.storyboard?.instantiateViewController(withIdentifier: "tagsVC") as! tagsVC
+        self.navigationController?.pushViewController(tagsViewController, animated: true)
+    }
+    
+    
     // actions on post tap
     func postTap(gesture: UITapGestureRecognizer) {
         
