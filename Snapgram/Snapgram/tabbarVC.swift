@@ -29,7 +29,7 @@ class tabbarVC: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
 
         // color of item
-        self.tabBar.tintColor = mainColor
+        self.tabBar.tintColor = lightGrey
         
         // color of background
         self.tabBar.barTintColor = UIColor.white
@@ -106,6 +106,8 @@ class tabbarVC: UITabBarController, UITabBarControllerDelegate {
             dot.isHidden = true
         }
     }
+    
+
     
     
     // clicked upload button (go to upload)

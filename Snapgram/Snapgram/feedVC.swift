@@ -75,7 +75,7 @@ class feedVC: UITableViewController {
     // load posts
     func loadPosts() {
         
-        // STEP 1. Find posts realted to people who we are following
+        // STEP 1. Find posts related to people who we are following
         let followQuery = PFQuery(className: "follow")
         if PFUser.current() != nil {
             followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
@@ -352,7 +352,7 @@ class feedVC: UITableViewController {
             cell.locationImgWidth.constant = 22
             cell.locationBtn.setImage(UIImage(named: "like2"), for: .normal)
         } else {
-            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth)
+            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth, lightGrey)
         }
         
         // set location

@@ -33,6 +33,7 @@ class placeReviewCell: UITableViewCell {
     // set post rating
     func setRating(_ rating : CGFloat) {
         reviewOverlayLeadingSpace.constant = rating * reviewBackground.frame.size.width
+//        print("CELL \(reviewBackground.frame.size.width)")
         Review.colorReview(rating, reviewBackground)
     }
 

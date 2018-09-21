@@ -53,6 +53,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
     @IBOutlet weak var tagsCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var addTagTxtBottomSpace: NSLayoutConstraint!
     @IBOutlet weak var customTagsCollectionViewBottomSpace: NSLayoutConstraint!
+    @IBOutlet weak var customTagsCollectionViewHeight: NSLayoutConstraint!
     
     @IBOutlet weak var backgroundView: UIView!
     
@@ -145,6 +146,8 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             if !customTags.contains(addTagTxt.text!.lowercased()) && !tags.contains(addTagTxt.text!.lowercased()) {
                 customTags.append(addTagTxt.text!.lowercased())
                 customTagsCollectionView.reloadData()
+                self.customTagsCollectionView.layoutIfNeeded()
+                self.customTagsCollectionViewHeight.constant = self.customTagsCollectionView.contentSize.height
                 self.addTagTxt.text = nil
             }
         }

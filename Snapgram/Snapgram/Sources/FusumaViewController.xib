@@ -20,12 +20,12 @@
                 <outlet property="cameraShotContainer" destination="CFH-FU-LPW" id="gvI-wh-cln"/>
                 <outlet property="closeButton" destination="Dx0-Tt-oZs" id="ci8-ub-48f"/>
                 <outlet property="doneButton" destination="5iB-Jh-kTh" id="jJj-Rx-7ob"/>
-                <outlet property="libraryButton" destination="cph-QM-jcJ" id="a4Y-xk-mq9"/>
+                <outlet property="libraryButton" destination="8ew-Zi-63G" id="aP7-b4-su1"/>
                 <outlet property="menuView" destination="8ba-kc-jlJ" id="Gcf-Em-wAP"/>
                 <outlet property="noImgBtn" destination="Pwj-iU-zo5" id="GPN-t7-5eu"/>
                 <outlet property="photoLibraryViewerContainer" destination="1Pk-29-mUG" id="buU-Cs-7qz"/>
                 <outlet property="titleLabel" destination="cxN-Q8-Lgd" id="lSA-JT-Mpg"/>
-                <outlet property="videoButton" destination="8ew-Zi-63G" id="PFn-Tm-KwS"/>
+                <outlet property="videoButton" destination="cph-QM-jcJ" id="gfc-5H-B6e"/>
                 <outlet property="videoShotContainer" destination="RIt-Tt-mDz" id="vOH-eo-bHH"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="cGt-bX-D2t"/>
             </connections>
@@ -103,11 +103,11 @@
                         <constraint firstAttribute="height" constant="45" id="ef6-hG-yx4"/>
                     </constraints>
                     <inset key="contentEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
-                    <state key="normal" image="camera_roll"/>
+                    <state key="normal" image="video"/>
                     <state key="selected" image="ic_insert_photo"/>
                     <state key="highlighted" image="ic_insert_photo"/>
                     <connections>
-                        <action selector="libraryButtonPressed:" destination="-1" eventType="touchUpInside" id="4H9-TH-qO3"/>
+                        <action selector="videoButtonPressed:" destination="-1" eventType="touchUpInside" id="tMC-e2-eWh"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sCN-QB-mCu">
@@ -129,11 +129,11 @@
                         <constraint firstAttribute="height" constant="45" id="vif-4h-eUh"/>
                     </constraints>
                     <inset key="imageEdgeInsets" minX="2" minY="3" maxX="2" maxY="2"/>
-                    <state key="normal" image="video"/>
+                    <state key="normal" image="camera_roll"/>
                     <state key="selected" image="ic_photo_camera"/>
                     <state key="highlighted" image="ic_photo_camera"/>
                     <connections>
-                        <action selector="videoButtonPressed:" destination="-1" eventType="touchUpInside" id="jZa-kI-xDJ"/>
+                        <action selector="libraryButtonPressed:" destination="-1" eventType="touchUpInside" id="jdc-ku-gup"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pwj-iU-zo5">

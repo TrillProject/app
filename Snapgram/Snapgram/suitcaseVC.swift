@@ -9,8 +9,6 @@
 import UIKit
 import Parse
 
-var selectedCategories = [String]()
-
 class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
@@ -41,6 +39,8 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     // page size
     var page = 10
+    
+    var selectedCategories = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -180,7 +180,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                                         } else {
                                             // calculate average rating and category for suitcase item
                                             let category = self.calculateCategory(categories)
-                                            if selectedCategories.contains(category) {
+                                            if self.selectedCategories.contains(category) {
                                                 self.locationArray.append(suitcaseObject.object(forKey: "location") as! String)
                                                 self.addressArray.append(suitcaseObject.object(forKey: "address") as! String)
                                                 self.dateArray.append(suitcaseObject.createdAt)
@@ -213,6 +213,11 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     // scrolled down
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    
+        if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
+            cancelButton.isEnabled = true
+        }
+        
         if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
             loadMore()
         }
@@ -323,7 +328,8 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }
         
         // set category
-        PostCategory.selectImgType(categoryArray[(indexPath as NSIndexPath).row], cell.categoryIcon, cell.categoryIconWidth)
+        PostCategory.selectImgType(categoryArray[(indexPath as NSIndexPath).row], cell.categoryIcon, cell.categoryIconWidth, mediumGrey)
+        
 
         // set rating
         let rating = ratingArray[(indexPath as NSIndexPath).row]

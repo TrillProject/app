@@ -175,7 +175,7 @@ class postVC: UITableViewController {
             cell.locationBtn.setImage(UIImage(named: "like2"), for: UIControlState())
             cell.locationImgWidth.constant = 22
         } else {
-            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth)
+            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth, lightGrey)
         }
         
         // set location

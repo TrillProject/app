@@ -77,6 +77,8 @@
 		2A8033002134561200A444F1 /* findFriendsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8032FF2134561200A444F1 /* findFriendsVC.swift */; };
 		2A8A75DE214439450093F63C /* searchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8A75DD214439450093F63C /* searchVC.swift */; };
 		2A8A75E0214439E80093F63C /* searchUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8A75DF214439E80093F63C /* searchUserCell.swift */; };
+		2A8A75E221447DEF0093F63C /* searchPlaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8A75E121447DEF0093F63C /* searchPlaceCell.swift */; };
+		2AAA0A172145C81600FBB154 /* searchLocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AAA0A162145C81600FBB154 /* searchLocationCell.swift */; };
 		2AB40AF520F91E5E009903E2 /* SF-Pro-Display-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE320F91E39009903E2 /* SF-Pro-Display-RegularItalic.otf */; };
 		2AB40AF620F91E5E009903E2 /* SF-Pro-Display-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE420F91E3A009903E2 /* SF-Pro-Display-Black.otf */; };
 		2AB40AF720F91E5E009903E2 /* SF-Pro-Display-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2AB40AE520F91E3D009903E2 /* SF-Pro-Display-Heavy.otf */; };
@@ -187,6 +189,8 @@
 		2A8032FF2134561200A444F1 /* findFriendsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = findFriendsVC.swift; sourceTree = "<group>"; };
 		2A8A75DD214439450093F63C /* searchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchVC.swift; sourceTree = "<group>"; };
 		2A8A75DF214439E80093F63C /* searchUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchUserCell.swift; sourceTree = "<group>"; };
+		2A8A75E121447DEF0093F63C /* searchPlaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchPlaceCell.swift; sourceTree = "<group>"; };
+		2AAA0A162145C81600FBB154 /* searchLocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchLocationCell.swift; sourceTree = "<group>"; };
 		2AB40AE320F91E39009903E2 /* SF-Pro-Display-RegularItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-RegularItalic.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-RegularItalic.otf"; sourceTree = "<group>"; };
 		2AB40AE420F91E3A009903E2 /* SF-Pro-Display-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Black.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-Black.otf"; sourceTree = "<group>"; };
 		2AB40AE520F91E3D009903E2 /* SF-Pro-Display-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Display-Heavy.otf"; path = "../../../../Documents/Fonts/SF Pro/SF-Pro-Display-Heavy.otf"; sourceTree = "<group>"; };
@@ -334,6 +338,8 @@
 				2AF187F12140C25A006943AA /* tagsTableCell.swift */,
 				2A8A75DD214439450093F63C /* searchVC.swift */,
 				2A8A75DF214439E80093F63C /* searchUserCell.swift */,
+				2A8A75E121447DEF0093F63C /* searchPlaceCell.swift */,
+				2AAA0A162145C81600FBB154 /* searchLocationCell.swift */,
 				2A6683F12139D7BF005D94EE /* review.swift */,
 				2A6683F32139E2C1005D94EE /* postCategory.swift */,
 				2A0BED7320FD8B13006AB72E /* extensions.swift */,
@@ -509,6 +515,7 @@
 				1F7901FE1DEC6BDA00D921C8 /* feedVC.swift in Sources */,
 				1F7902081DEC6BDA00D921C8 /* postVC.swift in Sources */,
 				2A6683F22139D7BF005D94EE /* review.swift in Sources */,
+				2AAA0A172145C81600FBB154 /* searchLocationCell.swift in Sources */,
 				2AF187F22140C25A006943AA /* tagsTableCell.swift in Sources */,
 				2AC4DB4821001A0F00040525 /* profileGlobeVC.swift in Sources */,
 				2A6742A421066C6D00B13987 /* changePasswordVC.swift in Sources */,
@@ -557,6 +564,7 @@
 				1F4BE66B1DEF4CF000C9129A /* FSConstants.swift in Sources */,
 				2A8A75DE214439450093F63C /* searchVC.swift in Sources */,
 				2AF761A2213C375200AE3AEF /* suitcaseVC.swift in Sources */,
+				2A8A75E221447DEF0093F63C /* searchPlaceCell.swift in Sources */,
 				2AC4DB4C21001ABB00040525 /* profileFollowingVC.swift in Sources */,
 				1F7901FD1DEC6BDA00D921C8 /* resetPasswordVC.swift in Sources */,
 			);

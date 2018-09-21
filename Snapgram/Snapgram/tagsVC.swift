@@ -233,7 +233,7 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
         Review.colorReview(ratingArray[(indexPath as NSIndexPath).row], cell.reviewBackground)
         
         // set category
-        PostCategory.selectImgType(categoryArray[(indexPath as NSIndexPath).row], cell.categoryImg, cell.categoryImgWidth)
+        PostCategory.selectImgType(categoryArray[(indexPath as NSIndexPath).row], cell.categoryImg, cell.categoryImgWidth, mediumGrey)
         
         // set location
         cell.locationBtn.setTitle(locationArray[(indexPath as NSIndexPath).row], for: .normal)
@@ -278,7 +278,7 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
     // load tags
     func loadTags() {
         
-        // STEP 1. Find posts realted to people who we are following
+        // STEP 1. Get people current user is following
         let followQuery = PFQuery(className: "follow")
         if PFUser.current() != nil {
             followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
@@ -294,7 +294,7 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
                         self.followArray.append(object.object(forKey: "following") as! String)
                     }
                     
-                    // append current user to see own posts
+                    // append current user to see own tags
                     self.followArray.append(PFUser.current()!.username!)
                     
                     // STEP 2. Find tags made by people appended to followArray
@@ -303,7 +303,7 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
                     if self.searchBar.text! != "" {
                         tagQuery.whereKey("tag", hasPrefix: self.searchBar.text!.lowercased())
                     }
-                    tagQuery.limit = self.tagsPage
+//                    tagQuery.limit = self.tagsPage
                     tagQuery.addDescendingOrder("createdAt")
                     tagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
                         if error == nil {

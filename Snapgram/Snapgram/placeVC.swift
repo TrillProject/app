@@ -61,7 +61,7 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         addressBtn.setTitle(placeAddress!, for: .normal)
         
-        PostCategory.selectImgType(placeCategory!, locationIcon, locationIconWidth)
+        PostCategory.selectImgType(placeCategory!, locationIcon, locationIconWidth, mediumGrey)
         
         loadReviews()
     }
@@ -168,8 +168,6 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                                             
                                             if postObject.object(forKey: "rating") != nil {
                                                 self.ratingArray.append(postObject.object(forKey: "rating") as! CGFloat)
-                                            } else {
-                                                self.ratingArray.append(0.0)
                                             }
                                         }
                                         
@@ -177,7 +175,7 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                                         self.tableView.reloadData()
                                         
                                         self.setPicture(self.placeImgArray.count)
-                                        self.setAverageRating()
+                                        self.setAverageRating(self.ratingArray)
                                     } else {
                                         print(error!.localizedDescription)
                                     }
@@ -187,7 +185,7 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                                 self.tableView.reloadData()
                                 
                                 self.setPicture(self.placeImgArray.count)
-                                self.setAverageRating()
+                                self.setAverageRating(self.ratingArray)
                             }
                         } else {
                             print(error!.localizedDescription)
@@ -222,13 +220,14 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         }
     }
     
-    func setAverageRating() {
+    func setAverageRating(_ ratings : [CGFloat]) {
         var total = CGFloat(0)
-        for rating in ratingArray {
+        for rating in ratings {
             total += rating
         }
-        let rating = (ratingArray.count == 0 ? total : (total / CGFloat(ratingArray.count)))
+        let rating = (ratings.count == 0 ? total : (total / CGFloat(ratings.count)))
         reviewOverlayLeadingSpace.constant = rating * reviewBackground.frame.size.width
+        print("PLACEVC \(reviewBackground.frame.size.width)")
         Review.colorReview(rating, reviewBackground)
     }
     
