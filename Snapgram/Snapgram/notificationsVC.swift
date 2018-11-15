@@ -56,6 +56,9 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     var requestFirstnameArray = [String]()
     var requestLastnameArray = [String]()
     
+    var notificationsPage = 20
+    var requestsPage = 20
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,8 +109,8 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             requestsBtn.isHidden = true
         }
         
-        notificationsBtn.setTitleColor(darkGrey, for: .normal)
-        requestsBtn.setTitleColor(lightGrey, for: .normal)
+        notificationsBtn.setTitleColor(mainColor, for: .normal)
+        requestsBtn.setTitleColor(mediumGrey, for: .normal)
         notificationsTableView.isHidden = false
         requestsTableView.isHidden = true
     }
@@ -137,7 +140,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 // STEP 2. Get notifications
                 let query = PFQuery(className: "news")
                 query.whereKey("to", equalTo: PFUser.current()!.username!)
-                query.limit = 30
+                query.limit = self.notificationsPage
                 query.addDescendingOrder("createdAt")
                 query.findObjectsInBackground (block: { (objects, error) -> Void in
                     if error == nil {
@@ -206,13 +209,126 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         })
     }
     
+    // scrolled down
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
+            if scrollView == notificationsTableView {
+                loadMoreNotifications()
+            } else {
+                loadMoreRequests()
+            }
+        }
+    }
+    
+    
+    // notifications pagination
+    func loadMoreNotifications() {
+        
+        // if posts on the server are more than shown
+        if notificationsPage <= usernameArray.count {
+            
+            // increase page size to load +20 people
+            notificationsPage = notificationsPage + 20
+            
+            // STEP 1. Get all people current user follows and check if they are accepted or pending
+            let followingQuery = PFQuery(className: "follow")
+            followingQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+            followingQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+                if error == nil {
+                    
+                    // clean up
+                    self.acceptedArray.removeAll(keepingCapacity: false)
+                    self.pendingArray.removeAll(keepingCapacity: false)
+                    
+                    for object in objects! {
+                        
+                        if object.object(forKey: "accepted") as! Bool {
+                            self.acceptedArray.append(object.object(forKey: "following") as! String)
+                        } else {
+                            self.pendingArray.append(object.object(forKey: "following") as! String)
+                        }
+                    }
+                    
+                    // STEP 2. Get notifications
+                    let query = PFQuery(className: "news")
+                    query.whereKey("to", equalTo: PFUser.current()!.username!)
+                    query.limit = self.notificationsPage
+                    query.addDescendingOrder("createdAt")
+                    query.findObjectsInBackground (block: { (objects, error) -> Void in
+                        if error == nil {
+                            
+                            // clean up
+                            self.usernameArray.removeAll(keepingCapacity: false)
+                            self.avaArray.removeAll(keepingCapacity: false)
+                            self.typeArray.removeAll(keepingCapacity: false)
+                            self.dateArray.removeAll(keepingCapacity: false)
+                            self.uuidArray.removeAll(keepingCapacity: false)
+                            self.ownerArray.removeAll(keepingCapacity: false)
+                            self.firstnameArray.removeAll(keepingCapacity: false)
+                            self.lastnameArray.removeAll(keepingCapacity: false)
+                            self.privateArray.removeAll(keepingCapacity: false)
+                            self.followTypeArray.removeAll(keepingCapacity: false)
+                            
+                            // found related objects
+                            for object in objects! {
+                                self.usernameArray.append(object.object(forKey: "by") as! String)
+                                self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                                self.typeArray.append(object.object(forKey: "type") as! String)
+                                self.dateArray.append(object.createdAt)
+                                self.uuidArray.append(object.object(forKey: "uuid") as! String)
+                                self.ownerArray.append(object.object(forKey: "owner") as! String)
+                                
+                                if object.object(forKey: "firstname") != nil {
+                                    self.firstnameArray.append(object.object(forKey: "firstname") as! String)
+                                } else {
+                                    self.firstnameArray.append(object.object(forKey: "by") as! String)
+                                }
+                                
+                                if object.object(forKey: "lastname") != nil {
+                                    self.lastnameArray.append(object.object(forKey: "lastname") as! String)
+                                } else {
+                                    self.lastnameArray.append("")
+                                }
+                                
+                                if object.object(forKey: "private") != nil {
+                                    self.privateArray.append(object.object(forKey: "private") as! Bool)
+                                } else {
+                                    self.privateArray.append(false)
+                                }
+                                
+                                if self.acceptedArray.contains((object.object(forKey: "by") as! String)) {
+                                    self.followTypeArray.append(2)
+                                } else if self.pendingArray.contains((object.object(forKey: "by") as! String)) {
+                                    self.followTypeArray.append(1)
+                                } else {
+                                    self.followTypeArray.append(0)
+                                }
+                                
+                                // save notifications as checked
+                                object["checked"] = "yes"
+                                object.saveEventually()
+                            }
+                            
+                            // reload tableView to show received data
+                            self.notificationsTableView.reloadData()
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }
+    }
+    
     
     // get requests
     func getRequests() {
         if PFUser.current()?.object(forKey: "private") != nil, PFUser.current()?.object(forKey: "private") as! Bool {
             let requestQuery = PFQuery(className: "request")
             requestQuery.whereKey("to", equalTo: PFUser.current()!.username!)
-            requestQuery.limit = 30
+            requestQuery.limit = self.requestsPage
             requestQuery.addDescendingOrder("createdAt")
             requestQuery.findObjectsInBackground (block: { (objects, error) -> Void in
                 if error == nil {
@@ -253,6 +369,63 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
             })
         }
     }
+    
+    
+    // requests pagination
+    func loadMoreRequests() {
+        
+        // if posts on the server are more than shown
+        if requestsPage <= requestUsernameArray.count {
+            
+            // increase page size to load +20 people
+            requestsPage = requestsPage + 20
+            
+            if PFUser.current()?.object(forKey: "private") != nil, PFUser.current()?.object(forKey: "private") as! Bool {
+                let requestQuery = PFQuery(className: "request")
+                requestQuery.whereKey("to", equalTo: PFUser.current()!.username!)
+                requestQuery.limit = self.requestsPage
+                requestQuery.addDescendingOrder("createdAt")
+                requestQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+                    if error == nil {
+                        
+                        // clean up
+                        self.requestUsernameArray.removeAll(keepingCapacity: false)
+                        self.requestAvaArray.removeAll(keepingCapacity: false)
+                        self.requestFirstnameArray.removeAll(keepingCapacity: false)
+                        self.requestLastnameArray.removeAll(keepingCapacity: false)
+                        
+                        // found related objects
+                        for object in objects! {
+                            self.requestUsernameArray.append(object.object(forKey: "by") as! String)
+                            self.requestAvaArray.append(object.object(forKey: "ava") as! PFFile)
+                            
+                            if object.object(forKey: "firstname") != nil {
+                                self.requestFirstnameArray.append(object.object(forKey: "firstname") as! String)
+                            } else {
+                                self.requestFirstnameArray.append(object.object(forKey: "by") as! String)
+                            }
+                            
+                            if object.object(forKey: "lastname") != nil {
+                                self.requestLastnameArray.append(object.object(forKey: "lastname") as! String)
+                            } else {
+                                self.requestLastnameArray.append("")
+                            }
+                            
+                            // save notifications as checked
+                            object["checked"] = "yes"
+                            object.saveEventually()
+                        }
+                        
+                        // reload tableView to show received data
+                        self.requestsTableView.reloadData()
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                })
+            }
+        }
+    }
+    
     
     // cell number
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -354,7 +527,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 } else if followTypeArray[(indexPath as NSIndexPath).row] == 1 {
                     cell.followBtn.tintColor = mainFadedColor
                 } else {
-                    cell.followBtn.tintColor = mainColor
+                    cell.followBtn.tintColor = highlightColor
                 }
             }
             if typeArray[(indexPath as NSIndexPath).row] == "like" {
@@ -402,8 +575,8 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     // view notifications
     @IBAction func notificationsBtn_clicked(_ sender: UIButton) {
-        notificationsBtn.setTitleColor(darkGrey, for: .normal)
-        requestsBtn.setTitleColor(lightGrey, for: .normal)
+        notificationsBtn.setTitleColor(mainColor, for: .normal)
+        requestsBtn.setTitleColor(mediumGrey, for: .normal)
         requestsTableView.isHidden = true
         notificationsTableView.isHidden = false
         
@@ -415,8 +588,8 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     // view requests
     @IBAction func requestsBtn_clicked(_ sender: UIButton) {
-        notificationsBtn.setTitleColor(lightGrey, for: .normal)
-        requestsBtn.setTitleColor(darkGrey, for: .normal)
+        notificationsBtn.setTitleColor(mediumGrey, for: .normal)
+        requestsBtn.setTitleColor(mainColor, for: .normal)
         notificationsTableView.isHidden = true
         requestsTableView.isHidden = false
         
@@ -534,7 +707,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         // call cell to call further cell data
         let cell = notificationsTableView.cellForRow(at: i) as! notificationCell
         
-        if sender.tintColor == mainColor {
+        if sender.tintColor == highlightColor {
             // unfollow
             let query = PFQuery(className: "follow")
             query.whereKey("follower", equalTo: PFUser.current()!.username!)
@@ -609,7 +782,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "followingChanged"), object: nil)
                     
                     if self.privateArray[(i as NSIndexPath).row] == false {
-                        sender.tintColor = mainColor
+                        sender.tintColor = highlightColor
                         
                         // send notification to update feed
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
@@ -700,6 +873,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         // call index of button
         let i = sender.layer.value(forKey: "index") as! IndexPath
+        print(i)
         
         // call cell to call further cell data
         let cell = requestsTableView.cellForRow(at: i) as! requestsCell
@@ -753,7 +927,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                             self.requestAvaArray.remove(at: (i as NSIndexPath).row)
                             self.requestFirstnameArray.remove(at: (i as NSIndexPath).row)
                             self.requestLastnameArray.remove(at: (i as NSIndexPath).row)
-                            self.requestsTableView.deleteRows(at: [i], with: .fade)
+                            self.requestsTableView.reloadData()
                         } else {
                             print(error!.localizedDescription)
                         }
@@ -790,7 +964,7 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 self.requestAvaArray.remove(at: (i as NSIndexPath).row)
                 self.requestFirstnameArray.remove(at: (i as NSIndexPath).row)
                 self.requestLastnameArray.remove(at: (i as NSIndexPath).row)
-                self.requestsTableView.deleteRows(at: [i], with: .fade)
+                self.requestsTableView.reloadData()
                 
             } else {
                 print(error!.localizedDescription)

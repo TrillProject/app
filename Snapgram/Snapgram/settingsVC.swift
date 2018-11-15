@@ -12,7 +12,6 @@ import Parse
 class settingsVC: UITableViewController {
     
     @IBOutlet weak var changePasswordBtn: UIButton!
-    @IBOutlet weak var pushNotificationsSwitch: UISwitch!
     @IBOutlet weak var privateAccountSwitch: UISwitch!
     @IBOutlet weak var logoutBtn: UIButton!
     @IBOutlet weak var deleteAccountBtn: UIButton!
@@ -28,7 +27,7 @@ class settingsVC: UITableViewController {
         // icon colors
         let changePasswordImg = changePasswordBtn.backgroundImage(for: .normal)?.withRenderingMode(.alwaysTemplate)
         changePasswordBtn.setBackgroundImage(changePasswordImg, for: .normal)
-        changePasswordBtn.tintColor = darkGrey
+        changePasswordBtn.tintColor = mainColor
         
         if PFUser.current()?.object(forKey: "private") != nil, PFUser.current()?.object(forKey: "private") as? Bool == true {
             privateAccountSwitch.setOn(true, animated: false)

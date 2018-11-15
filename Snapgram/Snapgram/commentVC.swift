@@ -171,7 +171,7 @@ class commentVC: UIViewController, UITextViewDelegate, UITableViewDelegate, UITa
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == mediumGrey {
             textView.text = ""
-            textView.textColor = darkGrey
+            textView.textColor = mainColor
         }
     }
     

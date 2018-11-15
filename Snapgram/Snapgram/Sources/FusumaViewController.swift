@@ -124,7 +124,7 @@ public final class FusumaViewController: UIViewController {
         albumView.delegate  = self
         videoView.delegate = self
 
-        menuView.backgroundColor = mainColor
+        menuView.backgroundColor = .white
         
         let bundle = Bundle(for: self.classForCoder)
         
@@ -153,7 +153,7 @@ public final class FusumaViewController: UIViewController {
             cameraButton.adjustsImageWhenHighlighted  = false
             
             closeButton.setImage(closeImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            closeButton.tintColor = .white
+            closeButton.tintColor = mainColor
             
             videoButton.setImage(videoImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
             videoButton.setImage(videoImage?.withRenderingMode(.alwaysTemplate), for: .highlighted)
@@ -162,7 +162,7 @@ public final class FusumaViewController: UIViewController {
             videoButton.adjustsImageWhenHighlighted = false
             
             doneButton.setImage(checkImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            doneButton.tintColor = .white
+            doneButton.tintColor = mainColor
             
         } else {
             
@@ -195,7 +195,7 @@ public final class FusumaViewController: UIViewController {
         cameraShotContainer.addSubview(cameraView)
         videoShotContainer.addSubview(videoView)
         
-		titleLabel.textColor = .white
+		titleLabel.textColor = mainColor
 		
 //        if modeOrder != .LibraryFirst {
 //            libraryFirstConstraints.forEach { $0.priority = 250 }

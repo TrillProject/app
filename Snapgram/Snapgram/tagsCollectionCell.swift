@@ -12,13 +12,7 @@ class tagsCollectionCell: UICollectionViewCell {
     
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var uuidLbl: UILabel!
-    @IBOutlet weak var categoryImg: UIImageView!
-    @IBOutlet weak var locationBtn: UIButton!
     @IBOutlet weak var addressLbl: UILabel!
     @IBOutlet weak var picImg: UIImageView!
-    @IBOutlet weak var reviewBackground: UIView!
-    @IBOutlet weak var reviewOverlay: UIView!
-    
-    @IBOutlet weak var reviewOverlayLeadingSpace: NSLayoutConstraint!
-    @IBOutlet weak var categoryImgWidth: NSLayoutConstraint!
+    @IBOutlet weak var locationLbl: UILabel!
 }

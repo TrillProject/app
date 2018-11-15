@@ -172,10 +172,10 @@ class postVC: UITableViewController {
         
         // set location button
         if favoriteArray[(indexPath as NSIndexPath).row] == true {
-            cell.locationBtn.setImage(UIImage(named: "like2"), for: UIControlState())
-            cell.locationImgWidth.constant = 22
+            cell.locationBtn.setImage(UIImage(named: "heart-fill"), for: UIControlState())
+            cell.locationImgWidth.constant = 26
         } else {
-            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth, lightGrey)
+            PostCategory.selectLocationBtnType(categoryArray[(indexPath as NSIndexPath).row], cell.locationBtn, cell.locationImgWidth, mediumGrey)
         }
         
         // set location
@@ -190,10 +190,10 @@ class postVC: UITableViewController {
         // manipulate suitcase button depending on if it is added to user's suitcase
         if username == PFUser.current()!.username! {
             cell.suitcaseBtn.setTitle("currentUser", for: UIControlState())
-            cell.suitcaseBtnWidth.constant = 0
+            cell.suitcaseBtnHeight.constant = 0
             cell.suitcaseBtnLeadingSpace.constant = 0
         } else {
-            cell.suitcaseBtnWidth.constant = 24
+            cell.suitcaseBtnHeight.constant = 22
             cell.suitcaseBtnLeadingSpace.constant = 20
             let didAdd = PFQuery(className: "suitcase")
             didAdd.whereKey("user", equalTo: PFUser.current()!.username!)
@@ -202,10 +202,10 @@ class postVC: UITableViewController {
             didAdd.countObjectsInBackground { (count, error) -> Void in
                 if count == 0 {
                     cell.suitcaseBtn.setTitle("notAdded", for: UIControlState())
-                    cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
+                    cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-outline1.png"), for: UIControlState())
                 } else {
                     cell.suitcaseBtn.setTitle("added", for: UIControlState())
-                    cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
+                    cell.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-fill1.png"), for: UIControlState())
                 }
             }
         }
@@ -219,10 +219,10 @@ class postVC: UITableViewController {
             // if no any likes are found, else found likes
             if count == 0 {
                 cell.likeBtn.setTitle("unlike", for: UIControlState())
-                cell.likeBtn.setBackgroundImage(UIImage(named: "unlike.png"), for: UIControlState())
+                cell.likeBtn.setBackgroundImage(UIImage(named: "heart-outline.png"), for: UIControlState())
             } else {
                 cell.likeBtn.setTitle("like", for: UIControlState())
-                cell.likeBtn.setBackgroundImage(UIImage(named: "like.png"), for: UIControlState())
+                cell.likeBtn.setBackgroundImage(UIImage(named: "heart-fill.png"), for: UIControlState())
             }
         }
         

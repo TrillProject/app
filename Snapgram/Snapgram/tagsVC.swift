@@ -13,6 +13,7 @@ var currentTag : String?
 
 class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBOutlet weak var collectionView: UICollectionView! {
@@ -66,6 +67,8 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
     
     // load collection view cells
     func loadCells() {
+        
+        indicator.startAnimating()
         
         // STEP 1. Find posts realted to people who we are following
         let followQuery = PFQuery(className: "follow")
@@ -142,6 +145,10 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
                                     
                                     // reload collectionView
                                     self.collectionView.reloadData()
+                                    DispatchQueue.main.async {
+                                        self.collectionView.isHidden = false
+                                        self.indicator.stopAnimating()
+                                    }
                                     
                                 } else {
                                     print(error!.localizedDescription)
@@ -200,11 +207,11 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
         //check orientation for cell size
         if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
             // portrait
-            return CGSize(width: UIScreen.main.bounds.width / 2, height: (UIScreen.main.bounds.width / 2) + 60)
+            return CGSize(width: (UIScreen.main.bounds.width - 20) / 2, height: (UIScreen.main.bounds.width - 20) / 2)
 
         } else {
             // landscape
-            return CGSize(width: UIScreen.main.bounds.height / 2, height: (UIScreen.main.bounds.height / 2) + 60)
+            return CGSize(width: (UIScreen.main.bounds.height - 20) / 2, height: (UIScreen.main.bounds.height - 20) / 2)
         }
     }
     
@@ -227,22 +234,13 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
                 print(error!.localizedDescription)
             }
         }
-        
-        // set rating
-        cell.reviewOverlayLeadingSpace.constant = ratingArray[(indexPath as NSIndexPath).row] * cell.reviewBackground.frame.size.width
-        Review.colorReview(ratingArray[(indexPath as NSIndexPath).row], cell.reviewBackground)
-        
-        // set category
-        PostCategory.selectImgType(categoryArray[(indexPath as NSIndexPath).row], cell.categoryImg, cell.categoryImgWidth, mediumGrey)
-        
+
         // set location
-        cell.locationBtn.setTitle(locationArray[(indexPath as NSIndexPath).row], for: .normal)
+        cell.locationLbl.text = locationArray[(indexPath as NSIndexPath).row].uppercased()
         
         // set address
         cell.addressLbl.text = addressArray[(indexPath as NSIndexPath).row]
-        
-        // assign index
-        cell.locationBtn.layer.setValue(indexPath, forKey: "index")
+
         
         return cell
     }
@@ -250,26 +248,20 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
     // selected cell
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        // go to post
-        postuuid.append(uuidArray[(indexPath as NSIndexPath).row])
-        let post = self.storyboard?.instantiateViewController(withIdentifier: "postVC") as! postVC
-        self.navigationController?.pushViewController(post, animated: true)
-    }
-    
-    // selected location
-    @IBAction func locationBtn_clicked(_ sender: UIButton) {
+        let cell = collectionView.cellForItem(at: indexPath) as! tagsCollectionCell
         
-        let i = sender.layer.value(forKey: "index") as! IndexPath
-        
-        let cell = collectionView.cellForItem(at: i) as! tagsCollectionCell
-        
-        placeTitle = cell.locationBtn.currentTitle!
+        placeTitle = locationArray[(indexPath as NSIndexPath).row]
         placeAddress = cell.addressLbl.text!
-        placeCategory = categoryArray[(i as NSIndexPath).row]
+        placeCategory = categoryArray[(indexPath as NSIndexPath).row]
         didSelectSelf = (cell.usernameLbl.text! == PFUser.current()!.username! ? true : false)
         
         let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
         self.navigationController?.pushViewController(place, animated: true)
+        
+        // go to post
+//        postuuid.append(uuidArray[(indexPath as NSIndexPath).row])
+//        let post = self.storyboard?.instantiateViewController(withIdentifier: "postVC") as! postVC
+//        self.navigationController?.pushViewController(post, animated: true)
     }
     
     
@@ -387,8 +379,7 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
         
         loadCells()
         
-        tableView.isHidden = true
-        collectionView.isHidden = false
+        self.tableView.isHidden = true
     }
     
     

@@ -56,7 +56,7 @@ class profileUserVC: UIViewController {
         
         // icon colors
         feedImg.image = feedImg.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        feedImg.tintColor = darkGrey
+        feedImg.tintColor = .black
         
         globeImg.image = globeImg.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         globeImg.tintColor = lightGrey
@@ -193,9 +193,6 @@ class profileUserVC: UIViewController {
     // clicked follow button
     @IBAction func clicked_followBtn(_ sender: UIButton) {
         
-        // send notification to refresh notificationsVC
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "followingUserChanged"), object: nil)
-        
         // to follow
         if self.followBtn.tintColor == lightGrey {
             let object = PFObject(className: "follow")
@@ -236,6 +233,9 @@ class profileUserVC: UIViewController {
                         newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
                         newsObj.saveEventually()
                         
+                        // send notification to refresh notificationsVC
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "followingUserChanged"), object: nil)
+                        
                     } else {
                         self.followBtn.tintColor = mainFadedColor
                         self.privateLbl.text = "Follow request sent."
@@ -256,6 +256,9 @@ class profileUserVC: UIViewController {
                         requestObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
                         
                         requestObj.saveEventually()
+                        
+                        // send notification to refresh notificationsVC
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "followingUserChanged"), object: nil)
                     }
                 } else {
                     print(error!.localizedDescription)
@@ -300,6 +303,9 @@ class profileUserVC: UIViewController {
                                     }
                                 })
                                 
+                                // send notification to refresh notificationsVC
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "followingUserChanged"), object: nil)
+                                
                             } else {
                                 print(error!.localizedDescription)
                             }
@@ -343,6 +349,9 @@ class profileUserVC: UIViewController {
                 }
             })
             
+            // send notification to refresh notificationsVC
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "followingUserChanged"), object: nil)
+            
             // update view
             privateLbl.text = "\(firstname)'s profile is private.\nSend a request to follow."
         }
@@ -357,7 +366,7 @@ class profileUserVC: UIViewController {
             globeView.isHidden = true
             followersView.isHidden = true
             followingView.isHidden = true
-            feedImg.tintColor = darkGrey
+            feedImg.tintColor = .black
             globeImg.tintColor = lightGrey
             followers.textColor = lightGrey
             followersTitle.textColor = lightGrey
@@ -370,7 +379,7 @@ class profileUserVC: UIViewController {
             globeView.isHidden = true
             followersView.isHidden = true
             followingView.isHidden = true
-            feedImg.tintColor = darkGrey
+            feedImg.tintColor = .black
             globeImg.tintColor = lightGrey
             followers.textColor = lightGrey
             followersTitle.textColor = lightGrey
@@ -382,7 +391,7 @@ class profileUserVC: UIViewController {
             globeView.isHidden = true
             followersView.isHidden = true
             followingView.isHidden = true
-            feedImg.tintColor = darkGrey
+            feedImg.tintColor = .black
             globeImg.tintColor = lightGrey
             followers.textColor = lightGrey
             followersTitle.textColor = lightGrey
@@ -403,7 +412,7 @@ class profileUserVC: UIViewController {
                 globeView.isHidden = true
                 followersView.isHidden = true
                 followingView.isHidden = true
-                feedImg.tintColor = darkGrey
+                feedImg.tintColor = .black
                 globeImg.tintColor = lightGrey
                 followers.textColor = lightGrey
                 followersTitle.textColor = lightGrey
@@ -416,7 +425,7 @@ class profileUserVC: UIViewController {
                 followersView.isHidden = true
                 followingView.isHidden = true
                 feedImg.tintColor = lightGrey
-                globeImg.tintColor = darkGrey
+                globeImg.tintColor = .black
                 followers.textColor = lightGrey
                 followersTitle.textColor = lightGrey
                 following.textColor = lightGrey
@@ -429,8 +438,8 @@ class profileUserVC: UIViewController {
                 followingView.isHidden = true
                 feedImg.tintColor = lightGrey
                 globeImg.tintColor = lightGrey
-                followers.textColor = darkGrey
-                followersTitle.textColor = darkGrey
+                followers.textColor = .black
+                followersTitle.textColor = .black
                 following.textColor = lightGrey
                 followingTitle.textColor = lightGrey
             case 3:
@@ -443,15 +452,15 @@ class profileUserVC: UIViewController {
                 globeImg.tintColor = lightGrey
                 followers.textColor = lightGrey
                 followersTitle.textColor = lightGrey
-                following.textColor = darkGrey
-                followingTitle.textColor = darkGrey
+                following.textColor = .black
+                followingTitle.textColor = .black
             default:
                 // feed
                 feedView.isHidden = false
                 globeView.isHidden = true
                 followersView.isHidden = true
                 followingView.isHidden = true
-                feedImg.tintColor = darkGrey
+                feedImg.tintColor = .black
                 globeImg.tintColor = lightGrey
                 followers.textColor = lightGrey
                 followersTitle.textColor = lightGrey

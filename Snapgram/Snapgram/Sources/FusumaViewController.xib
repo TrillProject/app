@@ -9,8 +9,8 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="SF-Pro-Display-Semibold.otf">
-            <string>SFProDisplay-Semibold</string>
+        <array key="SF-Pro-Display-Regular.otf">
+            <string>SFProDisplay-Regular</string>
         </array>
     </customFonts>
     <objects>
@@ -22,7 +22,6 @@
                 <outlet property="doneButton" destination="5iB-Jh-kTh" id="jJj-Rx-7ob"/>
                 <outlet property="libraryButton" destination="8ew-Zi-63G" id="aP7-b4-su1"/>
                 <outlet property="menuView" destination="8ba-kc-jlJ" id="Gcf-Em-wAP"/>
-                <outlet property="noImgBtn" destination="Pwj-iU-zo5" id="GPN-t7-5eu"/>
                 <outlet property="photoLibraryViewerContainer" destination="1Pk-29-mUG" id="buU-Cs-7qz"/>
                 <outlet property="titleLabel" destination="cxN-Q8-Lgd" id="lSA-JT-Mpg"/>
                 <outlet property="videoButton" destination="cph-QM-jcJ" id="gfc-5H-B6e"/>
@@ -80,7 +79,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="JDW-4S-H17"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="20"/>
+                            <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="20"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -98,7 +97,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cph-QM-jcJ">
-                    <rect key="frame" x="94" y="622" width="93.5" height="45"/>
+                    <rect key="frame" x="125" y="622" width="125" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="ef6-hG-yx4"/>
                     </constraints>
@@ -111,7 +110,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sCN-QB-mCu">
-                    <rect key="frame" x="0.0" y="622" width="94" height="45"/>
+                    <rect key="frame" x="0.0" y="622" width="125" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="7VV-4q-BRr"/>
                     </constraints>
@@ -124,7 +123,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ew-Zi-63G">
-                    <rect key="frame" x="187.5" y="622" width="94" height="45"/>
+                    <rect key="frame" x="250" y="622" width="125" height="45"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="45" id="vif-4h-eUh"/>
                     </constraints>
@@ -136,16 +135,6 @@
                         <action selector="libraryButtonPressed:" destination="-1" eventType="touchUpInside" id="jdc-ku-gup"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pwj-iU-zo5">
-                    <rect key="frame" x="281.5" y="622" width="93.5" height="45"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="45" id="T9i-jZ-p93"/>
-                    </constraints>
-                    <state key="normal" image="none"/>
-                    <connections>
-                        <action selector="noImgBtnPressed:" destination="-1" eventType="touchUpInside" id="yzS-XT-SyX"/>
-                    </connections>
-                </button>
             </subviews>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="8ba-kc-jlJ" secondAttribute="trailing" id="00c-gY-uy6"/>
@@ -153,22 +142,19 @@
                 <constraint firstItem="cph-QM-jcJ" firstAttribute="top" secondItem="sCN-QB-mCu" secondAttribute="top" id="1ER-ck-h3o"/>
                 <constraint firstItem="8ba-kc-jlJ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ADX-qy-sfu"/>
                 <constraint firstItem="8ew-Zi-63G" firstAttribute="top" secondItem="cph-QM-jcJ" secondAttribute="top" id="AKV-04-Bf2"/>
-                <constraint firstItem="Pwj-iU-zo5" firstAttribute="top" secondItem="8ew-Zi-63G" secondAttribute="top" id="BxO-yS-RS7"/>
-                <constraint firstItem="Pwj-iU-zo5" firstAttribute="width" secondItem="8ew-Zi-63G" secondAttribute="width" id="EwM-dO-ODM"/>
-                <constraint firstItem="Pwj-iU-zo5" firstAttribute="leading" secondItem="8ew-Zi-63G" secondAttribute="trailing" id="JPa-xW-ckn"/>
                 <constraint firstItem="CFH-FU-LPW" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="QcH-4o-bGU"/>
                 <constraint firstItem="sCN-QB-mCu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="RZI-oC-Tih"/>
                 <constraint firstItem="8ba-kc-jlJ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Tq6-c6-93y"/>
                 <constraint firstItem="sCN-QB-mCu" firstAttribute="top" secondItem="RIt-Tt-mDz" secondAttribute="bottom" id="Y3W-yI-yTm"/>
                 <constraint firstItem="sCN-QB-mCu" firstAttribute="width" secondItem="cph-QM-jcJ" secondAttribute="width" id="ZJg-S4-hJ4"/>
                 <constraint firstItem="RIt-Tt-mDz" firstAttribute="leading" secondItem="1Pk-29-mUG" secondAttribute="leading" id="Zh6-JC-yZB"/>
-                <constraint firstAttribute="trailing" secondItem="Pwj-iU-zo5" secondAttribute="trailing" id="ZiD-IZ-Y81"/>
                 <constraint firstAttribute="trailing" secondItem="1Pk-29-mUG" secondAttribute="trailing" id="b0C-4x-heo"/>
                 <constraint firstItem="sCN-QB-mCu" firstAttribute="width" secondItem="8ew-Zi-63G" secondAttribute="width" id="ctQ-Ka-mGj"/>
                 <constraint firstItem="CFH-FU-LPW" firstAttribute="trailing" secondItem="1Pk-29-mUG" secondAttribute="trailing" id="dTI-0B-myd"/>
                 <constraint firstItem="RIt-Tt-mDz" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="gTV-NE-IMv"/>
                 <constraint firstItem="1Pk-29-mUG" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gbM-f6-jpP"/>
                 <constraint firstItem="cph-QM-jcJ" firstAttribute="leading" secondItem="sCN-QB-mCu" secondAttribute="trailing" id="pda-eT-W2e"/>
+                <constraint firstAttribute="trailing" secondItem="8ew-Zi-63G" secondAttribute="trailing" id="tTb-Xd-deh"/>
                 <constraint firstItem="8ew-Zi-63G" firstAttribute="leading" secondItem="cph-QM-jcJ" secondAttribute="trailing" id="tUR-ML-fMq"/>
                 <constraint firstItem="RIt-Tt-mDz" firstAttribute="trailing" secondItem="1Pk-29-mUG" secondAttribute="trailing" id="u9n-zf-deV"/>
                 <constraint firstAttribute="bottom" secondItem="sCN-QB-mCu" secondAttribute="bottom" id="xJm-U3-LA5"/>
@@ -185,7 +171,6 @@
         <image name="ic_close" width="48" height="48"/>
         <image name="ic_insert_photo" width="36" height="36"/>
         <image name="ic_photo_camera" width="36" height="36"/>
-        <image name="none" width="25" height="25"/>
         <image name="video" width="25" height="25"/>
     </resources>
 </document>

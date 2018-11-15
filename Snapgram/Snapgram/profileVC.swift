@@ -44,15 +44,15 @@ class profileVC: UIViewController {
         
         // icon colors
         feedImg.image = feedImg.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        feedImg.tintColor = darkGrey
+        feedImg.tintColor = .black
         
         globeImg.image = globeImg.image!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
-        globeImg.tintColor = lightGrey
+        globeImg.tintColor = mediumGrey
         
         let editImage = UIImage(named: "edit")
         let tintedEditImage = editImage?.withRenderingMode(.alwaysTemplate)
         editBtn.setBackgroundImage(tintedEditImage, for: .normal)
-        editBtn.tintColor = lightGrey
+        editBtn.tintColor = mediumGrey
         
         if PFUser.current() != nil {
         
@@ -131,60 +131,60 @@ class profileVC: UIViewController {
             globeView.isHidden = true
             followersView.isHidden = true
             followingView.isHidden = true
-            feedImg.tintColor = darkGrey
-            globeImg.tintColor = lightGrey
-            followers.textColor = lightGrey
-            followersTitle.textColor = lightGrey
-            following.textColor = lightGrey
-            followingTitle.textColor = lightGrey
+            feedImg.tintColor = .black
+            globeImg.tintColor = mediumGrey
+            followers.textColor = mediumGrey
+            followersTitle.textColor = mediumGrey
+            following.textColor = mediumGrey
+            followingTitle.textColor = mediumGrey
         case 1:
             // globe
             feedView.isHidden = true
             globeView.isHidden = false
             followersView.isHidden = true
             followingView.isHidden = true
-            feedImg.tintColor = lightGrey
-            globeImg.tintColor = darkGrey
-            followers.textColor = lightGrey
-            followersTitle.textColor = lightGrey
-            following.textColor = lightGrey
-            followingTitle.textColor = lightGrey
+            feedImg.tintColor = mediumGrey
+            globeImg.tintColor = .black
+            followers.textColor = mediumGrey
+            followersTitle.textColor = mediumGrey
+            following.textColor = mediumGrey
+            followingTitle.textColor = mediumGrey
         case 2:
             // followers
             feedView.isHidden = true
             globeView.isHidden = true
             followersView.isHidden = false
             followingView.isHidden = true
-            feedImg.tintColor = lightGrey
-            globeImg.tintColor = lightGrey
-            followers.textColor = darkGrey
-            followersTitle.textColor = darkGrey
-            following.textColor = lightGrey
-            followingTitle.textColor = lightGrey
+            feedImg.tintColor = mediumGrey
+            globeImg.tintColor = mediumGrey
+            followers.textColor = .black
+            followersTitle.textColor = .black
+            following.textColor = mediumGrey
+            followingTitle.textColor = mediumGrey
         case 3:
             // following
             feedView.isHidden = true
             globeView.isHidden = true
             followersView.isHidden = true
             followingView.isHidden = false
-            feedImg.tintColor = lightGrey
-            globeImg.tintColor = lightGrey
-            followers.textColor = lightGrey
-            followersTitle.textColor = lightGrey
-            following.textColor = darkGrey
-            followingTitle.textColor = darkGrey
+            feedImg.tintColor = mediumGrey
+            globeImg.tintColor = mediumGrey
+            followers.textColor = mediumGrey
+            followersTitle.textColor = mediumGrey
+            following.textColor = .black
+            followingTitle.textColor = .black
         default:
             // feed
             feedView.isHidden = false
             globeView.isHidden = true
             followersView.isHidden = true
             followingView.isHidden = true
-            feedImg.tintColor = darkGrey
-            globeImg.tintColor = lightGrey
-            followers.textColor = lightGrey
-            followersTitle.textColor = lightGrey
-            following.textColor = lightGrey
-            followingTitle.textColor = lightGrey
+            feedImg.tintColor = .black
+            globeImg.tintColor = mediumGrey
+            followers.textColor = mediumGrey
+            followersTitle.textColor = mediumGrey
+            following.textColor = mediumGrey
+            followingTitle.textColor = mediumGrey
         }
     }
     

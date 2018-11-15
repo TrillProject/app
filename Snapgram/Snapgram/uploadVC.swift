@@ -310,14 +310,14 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             titleTxt.textColor = mediumGrey
         } else {
             titleTxt.text = postComment
-            titleTxt.textColor = darkGrey
+            titleTxt.textColor = mainColor
         }
         
         // tint edit location image
         let editImage = UIImage(named: "edit")
         let tintedEditImage = editImage?.withRenderingMode(.alwaysTemplate)
         editLocationBtn.setBackgroundImage(tintedEditImage, for: .normal)
-        editLocationBtn.tintColor = mediumGrey
+        editLocationBtn.tintColor = mainColor
         
         // tint category icons
         for categoryBtn in categoryBtns {
@@ -383,7 +383,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == mediumGrey {
             textView.text = ""
-            textView.textColor = darkGrey
+            textView.textColor = mainColor
         }
     }
     

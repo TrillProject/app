@@ -9,26 +9,29 @@
 import UIKit
 import Parse
 
-class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class suitcaseVC: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
+    
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet var categoryBtns: [UIButton]!
     
-    @IBOutlet weak var tableView: UITableView! {
+    @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
-            tableView.delegate = self
-            tableView.dataSource = self
+            collectionView.delegate = self
+            collectionView.dataSource = self
         }
     }
     
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
-    var refresher = UIRefreshControl()
-    
     // arrays to hold server data
+    var uuidArray = [String]()
     var locationArray = [String]()
     var addressArray = [String]()
-    var dateArray = [Date?]()
+    var picArray = [PFFile]()
     var categoryArray = [String]()
+    
+    var dateArray = [Date?]()
     var ratingArray = [CGFloat]()
     
     var followArray = [String]()
@@ -36,6 +39,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     var postAddressArray = [String]()
     var postCategoryArray = [String]()
     var postRatingArray = [CGFloat]()
+    var postPicArray = [PFFile]()
     
     // page size
     var page = 10
@@ -48,13 +52,6 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         self.navigationItem.title = "Suitcase"
         
         searchBar.delegate = self
-        
-        // pull to refresh
-        refresher.addTarget(self, action: #selector(suitcaseVC.load), for: UIControlEvents.valueChanged)
-        tableView.addSubview(refresher)
-        
-        // indicator's x(horizontal) center
-        indicator.center.x = tableView.center.x
         
         // receive notification from postsCell if post is added to suitcase, to update tableView
         NotificationCenter.default.addObserver(self, selector: #selector(suitcaseVC.refresh), name: NSNotification.Name(rawValue: "suitcase"), object: nil)
@@ -71,7 +68,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     // refreshing after recieved notification
     func refresh() {
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     func load() {
@@ -80,6 +77,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     // load places
     func loadPlaces(filterBy categories : [String], withLocation location : String) {
+        indicator.startAnimating()
         
         if PFUser.current() != nil {
             
@@ -105,6 +103,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                         if error == nil {
                             
                             // clean up
+                            self.postPicArray.removeAll(keepingCapacity: false)
                             self.postLocationArray.removeAll(keepingCapacity: false)
                             self.postAddressArray.removeAll(keepingCapacity: false)
                             self.postCategoryArray.removeAll(keepingCapacity: false)
@@ -112,6 +111,8 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                             
                             // get data of posts
                             for postObject in postObjects! {
+                                
+                                self.postPicArray.append(postObject.object(forKey: "pic") as! PFFile)
                                 
                                 if postObject.object(forKey: "location") != nil {
                                     self.postLocationArray.append(postObject.object(forKey: "location") as! String)
@@ -152,6 +153,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                                 if error == nil {
                                     
                                     // clean up
+                                    self.picArray.removeAll(keepingCapacity: false)
                                     self.locationArray.removeAll(keepingCapacity: false)
                                     self.addressArray.removeAll(keepingCapacity: false)
                                     self.dateArray.removeAll(keepingCapacity: false)
@@ -162,6 +164,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                                         
                                         var categories = [String]()
                                         var ratings = [CGFloat]()
+                                        var pics = [PFFile]()
                                         
                                         // loop through posts to find matching location and address
                                         for i in 0...self.postLocationArray.count - 1 {
@@ -170,6 +173,7 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                                                 
                                                 categories.append(self.postCategoryArray[i])
                                                 ratings.append(self.postRatingArray[i])
+                                                pics.append(self.postPicArray[i])
                                             }
                                         }
                                         
@@ -186,13 +190,17 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
                                                 self.dateArray.append(suitcaseObject.createdAt)
                                                 self.categoryArray.append(category)
                                                 self.ratingArray.append(self.calculateAverageRating(ratings))
+                                                self.picArray.append(pics[0])
                                             }
                                         }
                                     }
                                     
-                                    // reload tableView & end spinning of refresher
-                                    self.tableView.reloadData()
-                                    self.refresher.endRefreshing()
+                                    // reload collectionView
+                                    self.collectionView.reloadData()
+                                    DispatchQueue.main.async {
+                                        self.indicator.stopAnimating()
+                                        self.collectionView.isHidden = false
+                                    }
                                     
                                 } else {
                                     print(error!.localizedDescription)
@@ -228,23 +236,19 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         
         if page <= locationArray.count {
             
-            // start animating indicator
-            indicator.startAnimating()
-            
             // increase page size to load +10 posts
             page = page + 10
             
             // filter
             loadPlaces(filterBy: selectedCategories, withLocation: searchBar.text!)
-            
-            // stop animating indicator
-            self.indicator.stopAnimating()
         }
     }
 
     
     // clicked on category button
     @IBAction func categoryBtn_clicked(_ sender: UIButton) {
+        
+        self.collectionView.isHidden = true
         
         // dismiss keyboard
         searchBar.resignFirstResponder()
@@ -291,61 +295,73 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         }
     }
     
-    // TABLE VIEW
-    //cell number
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    // COLLECTION VIEW
+    
+    // cell number
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return locationArray.count
     }
     
+    // cell size
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        //check orientation for cell size
+        if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
+            // portrait
+            return CGSize(width: (UIScreen.main.bounds.width - 20) / 2, height: (UIScreen.main.bounds.width - 20) / 2)
+            
+        } else {
+            // landscape
+            return CGSize(width: (UIScreen.main.bounds.height - 20) / 2, height: (UIScreen.main.bounds.height - 20) / 2)
+        }
+    }
+    
+    
     // cell config
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         // define cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Suitcase Cell", for: indexPath) as! suitcaseCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Suitcase Collection Cell", for: indexPath) as! SuitcaseCollectionCell
         
-        // adjust line
-        if (indexPath as NSIndexPath).row == locationArray.count - 1 {
-            cell.line.isHidden = true
-        } else {
-            cell.line.isHidden = false
+        // set picture
+        picArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
+            if error == nil {
+                cell.picImg.image = UIImage(data: data!)
+            } else {
+                print(error!.localizedDescription)
+            }
         }
         
-        if (indexPath as NSIndexPath).row == 0 {
-            cell.underline.isHidden = true
-        } else {
-            cell.underline.isHidden = false
-        }
-        
-        cell.locationBtn.setTitle(locationArray[(indexPath as NSIndexPath).row], for: .normal)
-        cell.dateLbl.text = dateArray[(indexPath as NSIndexPath).row]?.asString(style: .long)
+        // set location
+        cell.locationLbl.text = locationArray[(indexPath as NSIndexPath).row].uppercased()
         
         // set address
         cell.addressLbl.text = addressArray[(indexPath as NSIndexPath).row]
-        if addressArray[(indexPath as NSIndexPath).row] == "" {
-            cell.addressLblTopSpace.constant = 0
-        } else {
-            cell.addressLblTopSpace.constant = 10
-        }
-        
-        // set category
-        PostCategory.selectImgType(categoryArray[(indexPath as NSIndexPath).row], cell.categoryIcon, cell.categoryIconWidth, mediumGrey)
-        
-
-        // set rating
-        let rating = ratingArray[(indexPath as NSIndexPath).row]
-        cell.reviewOverlayLeadingSpace.constant = rating * cell.reviewBackground.frame.size.width
-        Review.colorReview(rating, cell.reviewBackground)
-        
-        // assign index
-        cell.locationBtn.layer.setValue(indexPath, forKey: "index")
         
         return cell
+    }
+    
+    // selected cell
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let cell = collectionView.cellForItem(at: indexPath) as! SuitcaseCollectionCell
+        
+        placeTitle = locationArray[(indexPath as NSIndexPath).row]
+        placeAddress = cell.addressLbl.text!
+        placeCategory = categoryArray[(indexPath as NSIndexPath).row]
+        didSelectSelf = false
+        
+        let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
+        self.navigationController?.pushViewController(place, animated: true)
     }
     
     
     // SEARCH BAR
     // search updated
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        self.collectionView.isHidden = true
         
         loadPlaces(filterBy: selectedCategories, withLocation: searchBar.text!)
         
@@ -361,6 +377,8 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
     
     // clicked cancel button
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        self.collectionView.isHidden = true
         
         // dismiss keyboard
         searchBar.resignFirstResponder()
@@ -385,22 +403,6 @@ class suitcaseVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         } else {
             sender.tintColor = lightGrey
         }
-    }
-    
-    // clicked on location
-    @IBAction func locationBtn_clicked(_ sender: UIButton) {
-        
-        let i = sender.layer.value(forKey: "index") as! IndexPath
-        
-        let cell = tableView.cellForRow(at: i) as! suitcaseCell
-        
-        placeTitle = cell.locationBtn.currentTitle!
-        placeAddress = cell.addressLbl.text!
-        placeCategory = categoryArray[(i as NSIndexPath).row]
-        didSelectSelf = false
-        
-        let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
-        self.navigationController?.pushViewController(place, animated: true)
     }
     
     @IBAction func backBtn_clicked(_ sender: UIBarButtonItem) {

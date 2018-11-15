@@ -23,10 +23,15 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
     // array showing who we follow or who follows us
     var followArray = [String]()
     
+    var page = 18
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         usernameHiddenLbl.text = user
+        
+        // receive notification from profileUserVC
+        NotificationCenter.default.addObserver(self, selector: #selector(profileFollowingVC.reloadFollowings(_:)), name: NSNotification.Name(rawValue: "followingUserChanged"), object: nil)
         
         loadFollowings()
     }
@@ -38,6 +43,8 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
         let followQuery = PFQuery(className: "follow")
         followQuery.whereKey("follower", equalTo: usernameHiddenLbl.text!)
         followQuery.whereKey("accepted", equalTo: true)
+        followQuery.limit = self.page
+        followQuery.addDescendingOrder("createdAt")
         followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
             if error == nil {
                 
@@ -89,6 +96,84 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
                 print(error!.localizedDescription)
             }
         })
+    }
+    
+    
+    // scrolled down
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
+            loadMore()
+        }
+    }
+    
+    
+    // pagination
+    func loadMore() {
+        
+        // if posts on the server are more than shown
+        if page <= usernameArray.count {
+            
+            // increase page size to load +30 people
+            page = page + 18
+            
+            // STEP 1. Find people followed by User
+            let followQuery = PFQuery(className: "follow")
+            followQuery.whereKey("follower", equalTo: usernameHiddenLbl.text!)
+            followQuery.whereKey("accepted", equalTo: true)
+            followQuery.limit = self.page
+            followQuery.addDescendingOrder("createdAt")
+            followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+                if error == nil {
+                    
+                    // clean up
+                    self.followArray.removeAll(keepingCapacity: false)
+                    
+                    // STEP 2. Hold received data in followArray
+                    // find related objects in "follow" class of Parse
+                    for object in objects! {
+                        self.followArray.append(object.value(forKey: "following") as! String)
+                    }
+                    
+                    // STEP 3. Based on followArray information (inside users) show information from User class of Parse
+                    // find users followed by user
+                    let query = PFQuery(className: "_User")
+                    query.whereKey("username", containedIn: self.followArray)
+                    query.addDescendingOrder("createdAt")
+                    query.findObjectsInBackground(block: { (objects, error) -> Void in
+                        if error == nil {
+                            
+                            // clean up
+                            self.usernameArray.removeAll(keepingCapacity: false)
+                            self.firstnameArray.removeAll(keepingCapacity: false)
+                            self.avaArray.removeAll(keepingCapacity: false)
+                            
+                            // find related objects in "User" class of Parse
+                            for object in objects! {
+                                self.usernameArray.append(object.object(forKey: "username") as! String)
+                                if object.object(forKey: "firstname") != nil {
+                                    self.firstnameArray.append((object.object(forKey: "firstname") as! String).capitalized)
+                                } else {
+                                    self.firstnameArray.append((object.object(forKey: "username") as! String).capitalized)
+                                }
+                                if object.object(forKey: "ava") == nil {
+                                    let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                                    let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                                    self.avaArray.append(avaFile!)
+                                } else {
+                                    self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                                }
+                                self.followersCollectionView.reloadData()
+                            }
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }
     }
     
     @IBOutlet weak var followersCollectionView: UICollectionView! {
@@ -159,6 +244,12 @@ class profileFollowingVC: UIViewController, UICollectionViewDataSource, UICollec
             let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
             self.navigationController?.pushViewController(profileUser, animated: true)
         }
+    }
+    
+    
+    // reload after following user changed
+    func reloadFollowings(_ notification:Notification) {
+        loadFollowings()
     }
     
 }

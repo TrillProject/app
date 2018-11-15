@@ -29,7 +29,7 @@ class tabbarVC: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
 
         // color of item
-        self.tabBar.tintColor = lightGrey
+        self.tabBar.tintColor = mainColor
         
         // color of background
         self.tabBar.barTintColor = UIColor.white

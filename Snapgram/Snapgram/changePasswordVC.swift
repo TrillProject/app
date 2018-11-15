@@ -40,6 +40,10 @@ class changePasswordVC: UIViewController {
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(hideTap)
         
+        currentTxt.setBottomBorder(color: mainColor, height: 2.0)
+        newTxt.setBottomBorder(color: mainColor, height: 2.0)
+        repeatTxt.setBottomBorder(color: mainColor, height: 2.0)
+        
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.currentTxt.frame.height))
         currentTxt.leftView = paddingView
         currentTxt.leftViewMode = UITextFieldViewMode.always

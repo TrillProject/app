@@ -31,8 +31,8 @@ class postCell: UITableViewCell {
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
     @IBOutlet weak var suitcaseBtn: UIButton!
-    @IBOutlet weak var suitcaseBtnWidth: NSLayoutConstraint!
     @IBOutlet weak var suitcaseBtnLeadingSpace: NSLayoutConstraint!
+    @IBOutlet weak var suitcaseBtnHeight: NSLayoutConstraint!
     
     // tags
     @IBOutlet weak var tag1View: UIView!
@@ -82,7 +82,7 @@ class postCell: UITableViewCell {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
                     
                     self.suitcaseBtn.setTitle("added", for: UIControlState())
-                    self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase3.png"), for: UIControlState())
+                    self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-fill1.png"), for: UIControlState())
                 } else {
                     print(error!.localizedDescription)
                 }
@@ -105,7 +105,7 @@ class postCell: UITableViewCell {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
                             
                             self.suitcaseBtn.setTitle("notAdded", for: UIControlState())
-                            self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase4.png"), for: UIControlState())
+                            self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-outline1.png"), for: UIControlState())
                         } else {
                             print(error!.localizedDescription)
                         }
@@ -131,7 +131,7 @@ class postCell: UITableViewCell {
                 if success {
                     print("liked")
                     self.likeBtn.setTitle("like", for: UIControlState())
-                    self.likeBtn.setBackgroundImage(UIImage(named: "like.png"), for: UIControlState())
+                    self.likeBtn.setBackgroundImage(UIImage(named: "heart-fill.png"), for: UIControlState())
                     
                     // send notification if we liked to refresh TableView
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
@@ -171,7 +171,7 @@ class postCell: UITableViewCell {
                         if success {
                             print("disliked")
                             self.likeBtn.setTitle("unlike", for: UIControlState())
-                            self.likeBtn.setBackgroundImage(UIImage(named: "unlike.png"), for: UIControlState())
+                            self.likeBtn.setBackgroundImage(UIImage(named: "heart-outline.png"), for: UIControlState())
                             
                             // send notification if we liked to refresh TableView
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)

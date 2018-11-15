@@ -61,7 +61,7 @@ class placeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         addressBtn.setTitle(placeAddress!, for: .normal)
         
-        PostCategory.selectImgType(placeCategory!, locationIcon, locationIconWidth, mediumGrey)
+        PostCategory.selectImgType(placeCategory!, locationIcon, locationIconWidth, mainColor)
         
         loadReviews()
     }

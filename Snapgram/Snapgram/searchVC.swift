@@ -13,7 +13,6 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
 
     @IBOutlet weak var peopleBtn: UIButton!
     @IBOutlet weak var placeBtn: UIButton!
-    @IBOutlet weak var locationBtn: UIButton!
     
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -62,17 +61,6 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     @IBOutlet weak var placeCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var placeReviewTableViewTopSpace: NSLayoutConstraint!
     
-    // location outlets
-    @IBOutlet weak var categoryIconsView: UIView!
-    @IBOutlet var categoryIcons: [UIButton]!
-    
-    @IBOutlet weak var locationTableView: UITableView! {
-        didSet {
-            locationTableView.dataSource = self
-            locationTableView.delegate = self
-        }
-    }
-    
     // arrays to hold data from server
     // people
     var usernameArray = [String]()
@@ -100,17 +88,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     var placeRatingArray = [CGFloat]()
     var placeCommentArray = [String]()
     var placeUuidArray = [String]()
-    
-    // location
-    var searchingCategories = [String]()
-    
-    var locationImgArray = [PFFile]()
-    var locationNameArray = [String]()
-    var locationAddressArray = [String]()
-    var locationCategoryArray = [[String]]()
-    var locationUsersArray = [[String]]()
-    var locationRatingsArray = [[CGFloat]]()
-    var locationTagsArray = [[String]]()
+
     
     // pagination
     var pagePeople = 20
@@ -132,9 +110,8 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     // display the people search view
     func showView() {
         
-        peopleBtn.setTitleColor(darkGrey, for: .normal)
-        placeBtn.setTitleColor(lightGrey, for: .normal)
-        locationBtn.setTitleColor(lightGrey, for: .normal)
+        peopleBtn.setTitleColor(mainColor, for: .normal)
+        placeBtn.setTitleColor(mediumGrey, for: .normal)
         
         peopleTableView.tableFooterView = UIView()
         peopleTableView.isHidden = false
@@ -144,27 +121,6 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         
         placeReviewTableView.tableFooterView = UIView()
         placeScrollView.isHidden = true
-        
-        locationTableView.tableFooterView = UIView()
-        categoryIconsView.isHidden = true
-        locationTableView.isHidden = true
-        
-        for categoryBtn in categoryIcons {
-            
-            searchingCategories.append(categoryBtn.restorationIdentifier!)
-            tintIcons(categoryBtn)
-        }
-    }
-    
-    // tint category icons
-    func tintIcons(_ sender : UIButton) {
-        let img = sender.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
-        sender.setImage(img, for: .normal)
-        if sender.restorationIdentifier != nil && searchingCategories.contains(sender.restorationIdentifier!) {
-            sender.tintColor = mainColor
-        } else {
-            sender.tintColor = lightGrey
-        }
     }
     
     // PEOPLE SEARCH
@@ -192,6 +148,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 
                 // STEP 2. Get users that match search
                 let userQuery = PFQuery(className: "_User")
+                userQuery.whereKey("username", notEqualTo: PFUser.current()!.username!)
                 userQuery.addDescendingOrder("createdAt")
                 userQuery.limit = self.pagePeople
                 
@@ -304,7 +261,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         // call cell to call further cell data
         let cell = peopleTableView.cellForRow(at: i) as! searchUserCell
         
-        if sender.tintColor == mainColor {
+        if sender.tintColor == highlightColor {
             // unfollow
             let query = PFQuery(className: "follow")
             query.whereKey("follower", equalTo: PFUser.current()!.username!)
@@ -378,7 +335,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "followingChanged"), object: nil)
                     
                     if self.privateArray[(i as NSIndexPath).row] == false {
-                        sender.tintColor = mainColor
+                        sender.tintColor = highlightColor
                         
                         // send notification to update feed
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
@@ -555,7 +512,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         
         locationLbl.text = location
         addressLbl.text = address
-        PostCategory.selectImgType(calculateCategory(categories), categoryIcon, categoryIconWidth, mediumGrey)
+        PostCategory.selectImgType(calculateCategory(categories), categoryIcon, categoryIconWidth, mainColor)
         
         var selfPost = true
         for username in usernames {
@@ -732,7 +689,6 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     }
     
     // calculate the average category
-    // calculate category of place
     func calculateCategory(_ categories : [String]) -> String {
         var counts = [String: Int]()
         categories.forEach { counts[$0] = (counts[$0] ?? 0) + 1 }
@@ -765,36 +721,6 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         }
     }
     
-    
-    // LOCATION SEARCH
-    
-    func loadLocations() {
-        
-    }
-    
-    // clicked on category button
-    @IBAction func categoryBtn_clicked(_ sender: UIButton) {
-        
-        // dismiss keyboard
-        searchBar.resignFirstResponder()
-        
-        // change tint of category button
-        if sender.tintColor == mainColor {
-            sender.tintColor = lightGrey
-            searchingCategories.removeAll()
-            for btn in categoryIcons {
-                if btn.tintColor == mainColor {
-                    searchingCategories.append(btn.restorationIdentifier!)
-                }
-            }
-        } else {
-            sender.tintColor = mainColor
-            searchingCategories.append(sender.restorationIdentifier!)
-        }
-        
-        // filter
-        loadLocations()
-    }
     
     
     // scrolled down
@@ -830,12 +756,8 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             return locationArray.count
             
         // loading place reviews
-        } else if tableView == placeReviewTableView {
-            return placeUsernameArray.count
-        
-        // searching for locations
         } else {
-            return locationNameArray.count
+            return placeUsernameArray.count
         }
     }
     
@@ -871,7 +793,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             } else if followTypeArray[(indexPath as NSIndexPath).row] == 1 {
                 cell.followBtn.tintColor = mainFadedColor
             } else {
-                cell.followBtn.tintColor = mainColor
+                cell.followBtn.tintColor = highlightColor
             }
             
             // assign index of button
@@ -890,7 +812,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             return cell
             
         // loading place reviews
-        } else if tableView == placeReviewTableView {
+        } else {
             
             // define cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "Place Review Cell", for: indexPath) as! placeReviewCell
@@ -924,36 +846,6 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             
             cell.avaImg.layer.setValue(indexPath, forKey: "index")
             cell.usernameBtn.layer.setValue(indexPath, forKey: "index")
-            
-            return cell
-        
-        // searching for location
-        } else {
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Search Location Cell") as! searchLocationCell
-            
-            // set picture
-            locationImgArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
-                if error == nil {
-                    cell.picImg.image = UIImage(data: data!)
-                } else {
-                    print(error!.localizedDescription)
-                }
-            }
-            
-            // set category
-            PostCategory.selectImgType(calculateCategory(self.locationCategoryArray[(indexPath as NSIndexPath).row]), cell.categoryIcon, cell.categoryIconWidth, mediumGrey)
-            
-            // set location
-            cell.locationBtn.setTitle(self.locationNameArray[(indexPath as NSIndexPath).row], for: .normal)
-            
-            // set address
-            cell.addressLbl.text = self.locationAddressArray[(indexPath as NSIndexPath).row]
-            
-            // set rating
-            setAverageRating(locationRatingsArray[(indexPath as NSIndexPath).row], cell.reviewOverlayLeadingSpace, cell.reviewBackground)
-            
-            // set tags
             
             return cell
         }
@@ -995,7 +887,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             
         
         // loading place reviews
-        } else if tableView == placeReviewTableView {
+        } else {
             
             // go to post
             postuuid.append(placeUuidArray[(indexPath as NSIndexPath).row])
@@ -1040,19 +932,16 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     // search updated
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        if peopleBtn.titleColor(for: .normal) == darkGrey {
+        if peopleBtn.titleColor(for: .normal) == mainColor {
             
             pagePeople = 20
             loadUsers()
             
-        } else if placeBtn.titleColor(for: .normal) == darkGrey {
+        } else if placeBtn.titleColor(for: .normal) == mainColor {
             
             pagePlaces = 30
             loadPlaces()
             
-        } else if locationBtn.titleColor(for: .normal) == darkGrey {
-            
-            loadLocations()
         }
         
         return true
@@ -1061,19 +950,16 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.count == 0 {
             
-            if peopleBtn.titleColor(for: .normal) == darkGrey {
+            if peopleBtn.titleColor(for: .normal) == mainColor {
                 
                 pagePeople = 20
                 loadUsers()
                 
-            } else if placeBtn.titleColor(for: .normal) == darkGrey {
+            } else if placeBtn.titleColor(for: .normal) == mainColor {
                 
                 pagePlaces = 30
                 loadPlaces()
                 
-            } else if locationBtn.titleColor(for: .normal) == darkGrey {
-                
-                loadLocations()
             }
         }
     }
@@ -1084,7 +970,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         // show cancel button
         searchBar.showsCancelButton = true
         
-        if placeBtn.titleColor(for: .normal) == darkGrey {
+        if placeBtn.titleColor(for: .normal) == mainColor {
             
             placeTableView.isHidden = false
             placeScrollView.isHidden = true
@@ -1106,11 +992,11 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         // reset text
         searchBar.text = ""
         
-        if peopleBtn.titleColor(for: .normal) == darkGrey {
+        if peopleBtn.titleColor(for: .normal) == mainColor {
             
             loadUsers()
             
-        } else if placeBtn.titleColor(for: .normal) == darkGrey {
+        } else if placeBtn.titleColor(for: .normal) == mainColor {
             
             if placeSelected {
                 placeTableView.isHidden = true
@@ -1120,9 +1006,6 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                 loadPlaces()
             }
             
-        } else if locationBtn.titleColor(for: .normal) == darkGrey {
-            
-            loadLocations()
         }
     }
     
@@ -1141,48 +1024,30 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         // reset text
         searchBar.text = ""
         
-        sender.setTitleColor(darkGrey, for: .normal)
+        sender.setTitleColor(mainColor, for: .normal)
         
         if sender.currentTitle == "People" {
             
-            placeBtn.setTitleColor(lightGrey, for: .normal)
-            locationBtn.setTitleColor(lightGrey, for: .normal)
+            placeBtn.setTitleColor(mediumGrey, for: .normal)
             
             peopleTableView.isHidden = false
             placeTableView.isHidden = true
             placeScrollView.isHidden = true
-            categoryIconsView.isHidden = true
-            locationTableView.isHidden = true
             
             pagePeople = 20
             loadUsers()
             
         } else if sender.currentTitle == "Place" {
             
-            peopleBtn.setTitleColor(lightGrey, for: .normal)
-            locationBtn.setTitleColor(lightGrey, for: .normal)
+            peopleBtn.setTitleColor(mediumGrey, for: .normal)
             
             peopleTableView.isHidden = true
             placeTableView.isHidden = false
             placeScrollView.isHidden = true
-            categoryIconsView.isHidden = true
-            locationTableView.isHidden = true
             
             pagePlaces = 30
             loadPlaces()
             
-        } else if sender.currentTitle == "Location" {
-            
-            peopleBtn.setTitleColor(lightGrey, for: .normal)
-            placeBtn.setTitleColor(lightGrey, for: .normal)
-            
-            peopleTableView.isHidden = true
-            placeTableView.isHidden = true
-            placeScrollView.isHidden = true
-            categoryIconsView.isHidden = false
-            locationTableView.isHidden = false
-            
-            loadLocations()
         }
     }
     

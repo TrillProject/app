@@ -66,7 +66,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         
         let addImg = addBtn.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
         addBtn.setImage(addImg, for: .normal)
-        addBtn.tintColor = mediumGrey
+        addBtn.tintColor = mainColor
         
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.addTagTxt.frame.height))
         addTagTxt.leftView = paddingView
@@ -108,7 +108,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Tag Cell", for: indexPath) as! tagCell
             cell.tagLbl.text = tags[(indexPath as NSIndexPath).row].uppercased()
             if selectedTags.contains(cell.tagLbl.text!.lowercased()) {
-                cell.backgroundColor = mainColor
+                cell.backgroundColor = highlightColor
             } else {
                 cell.backgroundColor = lightGrey
             }
@@ -116,7 +116,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tagCell", for: indexPath) as! tagCell
             cell.tagLbl.text = customTags[(indexPath as NSIndexPath).row].uppercased()
-            cell.backgroundColor = mainColor
+            cell.backgroundColor = highlightColor
             return cell
         }
     }
@@ -126,7 +126,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         if collectionView == tagsCollectionView {
             let cell = tagsCollectionView.cellForItem(at: indexPath) as! tagCell
             if cell.backgroundColor == lightGrey {
-                cell.backgroundColor = mainColor
+                cell.backgroundColor = highlightColor
                 selectedTags.append(cell.tagLbl.text!.lowercased())
             } else {
                 cell.backgroundColor = lightGrey

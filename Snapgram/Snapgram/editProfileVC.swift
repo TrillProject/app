@@ -34,6 +34,10 @@ class editProfileVC: UIViewController, UIPickerViewDelegate, UIImagePickerContro
         
         self.navigationItem.title = "Edit Profile"
         
+        firstnameTxt.setBottomBorder(color: mainColor, height: 2.0)
+        lastnameTxt.setBottomBorder(color: mainColor, height: 2.0)
+        emailTxt.setBottomBorder(color: mainColor, height: 2.0)
+        
         // check notifications of keyboard - shown or not
         NotificationCenter.default.addObserver(self, selector: #selector(editProfileVC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(editProfileVC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
