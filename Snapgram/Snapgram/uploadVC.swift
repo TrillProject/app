@@ -9,6 +9,7 @@
 import UIKit
 import Parse
 
+var loadCamera = true
 
 class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FusumaDelegate, UITextViewDelegate {
     
@@ -20,6 +21,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     var address = ""
 
     // UI objects
+    @IBOutlet var mainView: UIView!
+    
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var containerView: UIView!
     
@@ -28,6 +31,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var editLocationBtn: UIButton!
     
+    @IBOutlet weak var imgOverlayView: UIView!
     @IBOutlet weak var ratingContainerView: UIView!
     @IBOutlet weak var ratingOverlayView: UIView!
     @IBOutlet weak var gradientImg: UIImageView!
@@ -50,15 +54,6 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // *** CORE LOAD *** //
-        // Show Fusuma
-        let fusuma = FusumaViewController()
-        //        fusumaCropImage = false
-        fusuma.delegate = self
-        self.present(fusuma, animated: false, completion: nil)
-        fusuma.closeButton.isHidden = false
-        // *** CORE LOAD END *** //
         
         // title at the top
         self.navigationItem.title = "Post"
@@ -95,7 +90,14 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     // preload func
     override func viewWillAppear(_ animated: Bool) {
-        style()
+        if loadCamera {
+            let fusuma = FusumaViewController()
+            fusuma.delegate = self
+            self.present(fusuma, animated: false, completion: nil)
+            loadCamera = false
+        } else {
+            style()
+        }
     }
 
     // hide keyboard function
@@ -113,7 +115,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             self.ratingWord.text = ""
             self.gradientImg.isHidden = true
             UIView.animate(withDuration: 0.3, animations: {
-                self.picImg.alpha = 0.3
+//                self.picImg.alpha = 0.3
+                self.imgOverlayView.isHidden = false
                 self.ratingWord.isHidden = false
                 self.addFavoriteView.isHidden = true
                 })
@@ -201,7 +204,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                 })
             } else {
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.picImg.alpha = 1.0
+//                    self.picImg.alpha = 1.0
+                    self.imgOverlayView.isHidden = true
                     self.ratingWord.isHidden = true
                 })
             }
@@ -213,7 +217,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBAction func addFavorite(_ sender: UIButton) {
         isPostFavorite = true
         UIView.animate(withDuration: 0.3, animations: {
-            self.picImg.alpha = 1.0
+//            self.picImg.alpha = 1.0
+            self.imgOverlayView.isHidden = true
             self.ratingWord.isHidden = true
             self.addFavoriteView.isHidden = true
         })
@@ -221,7 +226,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     @IBAction func doNotAddFavorite(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
-            self.picImg.alpha = 1.0
+//            self.picImg.alpha = 1.0
+            self.imgOverlayView.isHidden = true
             self.ratingWord.isHidden = true
             self.addFavoriteView.isHidden = true
         })
@@ -334,6 +340,8 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             ratingOverlayView.frame.origin.x = postRating! * ratingContainerView.frame.size.width
             Review.colorReview(postRating!, ratingContainerView)
         }
+        
+        mainView.isHidden = false
     }
     
     // tint category icons
@@ -395,7 +403,12 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     }
     
     @IBAction func backBtn_clicked(_ sender: UIBarButtonItem) {
-        self.viewDidLoad()
+        let fusuma = FusumaViewController()
+        fusuma.delegate = self
+        self.present(fusuma, animated: false, completion: nil)
+        fusuma.closeButton.isHidden = false
+        loadCamera = false
+        mainView.isHidden = true
     }
     
     // MARK: FusumaDelegate Protocol
@@ -466,12 +479,15 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     // close camera
     func fusumaClosed() {
         // Go to Feed page
+        mainView.isHidden = true
         self.tabBarController?.selectedIndex = 0
         print("Called when the close button is pressed")
+        loadCamera = true
     }
     
     // done posting
     func donePosting(_ notification:Notification) {
+        print("donePosting")
         self.tabBarController?.selectedIndex = 0
         selectedImg = nil
         postLocation = nil
@@ -481,7 +497,9 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         customTags.removeAll()
         postRating = nil
         isPostFavorite = false
-        self.viewDidLoad()
+//        self.viewDidLoad()
+        mainView.isHidden = true
+        loadCamera = true
         print("post added")
     }
     

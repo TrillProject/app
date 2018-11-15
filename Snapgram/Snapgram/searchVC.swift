@@ -9,8 +9,11 @@
 import UIKit
 import Parse
 
-class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-
+class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
+    
+    @IBOutlet weak var hiddenView: UIView!
+    
+    
     @IBOutlet weak var peopleBtn: UIButton!
     @IBOutlet weak var placeBtn: UIButton!
     
@@ -56,10 +59,18 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         }
     }
     
+    @IBOutlet weak var placeReviewTableHeight: NSLayoutConstraint!
     @IBOutlet weak var categoryIconWidth: NSLayoutConstraint!
     @IBOutlet weak var reviewOverlayLeadingSpace: NSLayoutConstraint!
     @IBOutlet weak var placeCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var placeReviewTableViewTopSpace: NSLayoutConstraint!
+    
+    @IBOutlet weak var placeScrollViewIndicatorContainer: UIView!
+    @IBOutlet weak var placeScrollViewIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var peopleTableViewIndicatorContainer: UIView!
+    @IBOutlet weak var peopleTableViewIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var placeTableViewIndicatorContainer: UIView!
+    @IBOutlet weak var placeTableViewIndicator: UIActivityIndicatorView!
     
     // arrays to hold data from server
     // people
@@ -96,6 +107,7 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     var placeSelected = false
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -121,11 +133,24 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         
         placeReviewTableView.tableFooterView = UIView()
         placeScrollView.isHidden = true
+        
+        self.placeReviewTableView.isScrollEnabled = false
+        self.placeScrollView.bounces = false
+        self.placeReviewTableView.bounces = true
+        
+        placeScrollViewIndicatorContainer.isHidden = true
+        peopleTableViewIndicatorContainer.isHidden = true
+        placeTableViewIndicatorContainer.isHidden = true
     }
+    
     
     // PEOPLE SEARCH
     
     func loadUsers() {
+        
+        peopleTableView.isHidden = true
+        peopleTableViewIndicatorContainer.isHidden = false
+        peopleTableViewIndicator.startAnimating()
         
         // STEP 1. Get all people current user follows and check if they are accepted or pending
         let followingQuery = PFQuery(className: "follow")
@@ -230,6 +255,12 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                         
                         // reload table view
                         self.peopleTableView.reloadData()
+                        
+                        DispatchQueue.main.async {
+                            self.peopleTableView.isHidden = false
+                            self.peopleTableViewIndicatorContainer.isHidden = true
+                            self.peopleTableViewIndicator.stopAnimating()
+                        }
                         
                     } else {
                         print(error!.localizedDescription)
@@ -426,6 +457,10 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     func loadPlaces() {
         
+        placeTableView.isHidden = true
+        placeTableViewIndicatorContainer.isHidden = false
+        placeTableViewIndicator.startAnimating()
+        
         // STEP 1. Get people current user is following
         let followQuery = PFQuery(className: "follow")
         if PFUser.current() != nil {
@@ -485,6 +520,12 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                             // reload data
                             self.placeTableView.reloadData()
                             
+                            DispatchQueue.main.async {
+                                self.placeTableView.isHidden = false
+                                self.placeTableViewIndicatorContainer.isHidden = true
+                                self.placeTableViewIndicator.stopAnimating()
+                            }
+                            
                         } else {
                             print(error!.localizedDescription)
                         }
@@ -509,6 +550,11 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
     
     // load data of place once selected
     func loadPlaceInfo(_ location : String, _ address : String, _ categories : [String], _ usernames: [String]) {
+        
+        self.placeScrollView.isHidden = true
+        self.placeScrollView.setContentOffset(.zero, animated: false)
+        placeScrollViewIndicatorContainer.isHidden = false
+        placeScrollViewIndicator.startAnimating()
         
         locationLbl.text = location
         addressLbl.text = address
@@ -636,12 +682,22 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                                     }
                                 })
                             } else {
-                                
                                 self.placeCollectionView.reloadData()
                                 self.placeReviewTableView.reloadData()
                                 
                                 self.setPicture(self.placeImgArray.count)
                                 self.setAverageRating(self.placeRatingArray, self.reviewOverlayLeadingSpace, self.reviewBackground)
+                                
+                                DispatchQueue.main.async {
+                                    if self.placeUsernameArray.count * 141 > Int(self.placeScrollView.frame.height) {
+                                        self.placeReviewTableHeight.constant = self.placeScrollView.frame.height
+                                    } else {
+                                        self.placeReviewTableHeight.constant = CGFloat(self.placeUsernameArray.count * 141)
+                                    }
+                                    self.placeScrollView.isHidden = false
+                                    self.placeScrollViewIndicatorContainer.isHidden = true
+                                    self.placeScrollViewIndicator.stopAnimating()
+                                }
                             }
                         } else {
                             print(error!.localizedDescription)
@@ -731,13 +787,18 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         }
         
         // scroll down for paging
-        if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
-            
-            if scrollView == peopleTableView {
+        if scrollView == peopleTableView {
+            if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
                 self.loadMoreUsers()
-            } else if scrollView == placeTableView {
+            }
+        } else if scrollView == placeTableView {
+            if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
                 self.loadMorePlaces()
             }
+        } else if scrollView == self.placeScrollView {
+            placeReviewTableView.isScrollEnabled = (self.placeScrollView.contentOffset.y >= 200)
+        } else if scrollView == self.placeReviewTableView {
+            self.placeReviewTableView.isScrollEnabled = (placeReviewTableView.contentOffset.y > 0)
         }
     }
     

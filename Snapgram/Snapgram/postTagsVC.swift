@@ -61,6 +61,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         super.viewDidLoad()
         
         self.navigationItem.title = "Post"
+        
         layout.estimatedItemSize = CGSize(width: 100.0, height: 30.0)
         customTagsLayout.estimatedItemSize = CGSize(width: 100.0, height: 30.0)
         

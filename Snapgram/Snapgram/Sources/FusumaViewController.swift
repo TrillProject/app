@@ -266,6 +266,7 @@ public final class FusumaViewController: UIViewController {
     
     @IBAction func closeButtonPressed(_ sender: UIButton) {
         self.dismiss(animated: false, completion: {
+            print("closeButtonPressed")
             selectedCategory = nil
             selectedTags.removeAll()
             self.delegate?.fusumaClosed?()
@@ -296,6 +297,7 @@ public final class FusumaViewController: UIViewController {
     
     @IBAction func doneButtonPressed(_ sender: UIButton) {
         let view = albumView.imageCropView
+        loadCamera = false
 
         if fusumaCropImage {
             let normalizedX = (view?.contentOffset.x)! / (view?.contentSize.width)!

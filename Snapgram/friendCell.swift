@@ -19,7 +19,10 @@ class friendCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
+        let checkImage = UIImage(named: "check")
+        let tintedCheckImage = checkImage?.withRenderingMode(.alwaysTemplate)
+        checkBtn.setImage(tintedCheckImage, for: .normal)
+        checkBtn.tintColor = mainColor
     }
     
 }

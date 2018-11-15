@@ -13,7 +13,6 @@ var filterFriends = [String]()
 
 class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-
     @IBOutlet weak var tableView: UITableView!{
         didSet{
             tableView.dataSource = self
@@ -21,6 +20,8 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
     }
     
+    @IBOutlet weak var checkBtn: UIButton!
+    @IBOutlet weak var selectLbl: UILabel!
     
     // arrays to hold server data
     var usernameArray = [String]()
@@ -45,6 +46,11 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         tableView.tableFooterView = UIView()
         tableView.separatorInset = UIEdgeInsets.zero
+        
+        let checkImage = UIImage(named: "check")
+        let tintedCheckImage = checkImage?.withRenderingMode(.alwaysTemplate)
+        checkBtn.setImage(tintedCheckImage, for: .normal)
+        checkBtn.tintColor = mainColor
         
         getFriends()
     }
@@ -76,7 +82,7 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                     
                     let query = PFUser.query()
                     query?.whereKey("username", containedIn: self.usernameArray)
-                    query?.addDescendingOrder("firstname")
+                    query?.addAscendingOrder("firstname")
                     query?.findObjectsInBackground(block: { (objects, error) -> Void in
                         if error == nil {
                             
@@ -98,7 +104,7 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                                 if object.object(forKey: "lastname") != nil {
                                     self.lastnameArray.append((object.object(forKey: "lastname") as! String).capitalized)
                                 } else {
-                                    self.lastnameArray.append((object.object(forKey: "lastname") as! String).capitalized)
+                                    self.lastnameArray.append("")
                                 }
                                 
                                 if object.object(forKey: "ava") == nil {
@@ -203,14 +209,50 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         
         if selected {
             cell.checkBtn.tintColor = lightGrey
+            selectedArray[(i as NSIndexPath).row] = false
             
             if let index = filterFriends.index(of: usernameArray[(i as NSIndexPath).row]){
                 filterFriends.remove(at: index)
             }
         } else {
             cell.checkBtn.tintColor = mainColor
+            selectedArray[(i as NSIndexPath).row] = true
             filterFriends.append(usernameArray[(i as NSIndexPath).row])
         }
     }
     
+    @IBAction func deselectBtn_clicked(_ sender: UIButton) {
+        
+        let cells = self.tableView.visibleCells as! Array<friendCell>
+        
+        if sender.tintColor == mainColor {
+            
+            sender.tintColor = lightGrey
+        
+            for i in 0..<selectedArray.count {
+                selectedArray[i] = false
+            }
+            
+            for cell in cells {
+                cell.checkBtn.tintColor = lightGrey
+            }
+            
+            filterFriends.removeAll(keepingCapacity: false)
+            selectLbl.text = "SELECT ALL"
+        } else {
+            
+            sender.tintColor = mainColor
+            
+            for i in 0..<selectedArray.count {
+                selectedArray[i] = true
+            }
+            
+            for cell in cells {
+                cell.checkBtn.tintColor = mainColor
+                filterFriends.append(cell.usernameLbl.text!)
+            }
+            
+            selectLbl.text = "DESELECT ALL"
+        }
+    }
 }
