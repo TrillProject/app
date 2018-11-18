@@ -949,7 +949,28 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
         
         // loading place reviews
         } else {
-            
+            // scrolled down
+            func scrollViewDidScroll(_ scrollView: UIScrollView) {
+                
+                if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
+                    cancelButton.isEnabled = true
+                }
+                
+                // scroll down for paging
+                if scrollView == peopleTableView {
+                    if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
+                        self.loadMoreUsers()
+                    }
+                } else if scrollView == placeTableView {
+                    if scrollView.contentOffset.y >= scrollView.contentSize.height - self.view.frame.size.height * 2 {
+                        self.loadMorePlaces()
+                    }
+                } else if scrollView == self.placeScrollView {
+                    placeReviewTableView.isScrollEnabled = (self.placeScrollView.contentOffset.y >= 200)
+                } else if scrollView == self.placeReviewTableView {
+                    self.placeReviewTableView.isScrollEnabled = (placeReviewTableView.contentOffset.y > 0)
+                }
+            }
             // go to post
             postuuid.append(placeUuidArray[(indexPath as NSIndexPath).row])
             let post = self.storyboard?.instantiateViewController(withIdentifier: "postVC") as! postVC

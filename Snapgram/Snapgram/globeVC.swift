@@ -9,15 +9,31 @@
 import UIKit
 import Parse
 
-class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate {
+class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     
     // value to hold keyboard frame size
     var keyboard = CGRect()
     var keyboardVisible = false
     
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var mapView: UIView!
+    @IBOutlet weak var mapFavoritesSeparator: UIView!
+    @IBOutlet weak var favoritesView: UIView!
+    @IBOutlet weak var favoritesFilterSeparator: UIView!
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var locationSearchBar: UISearchBar!
     @IBOutlet weak var tagsSearchBar: UISearchBar!
+    @IBOutlet weak var tagsSearchBarActive: UISearchBar!
+    
+    @IBOutlet weak var searchContainer: UIView!
+    
+    @IBOutlet weak var tagsTableView: UITableView! {
+        didSet{
+            tagsTableView.dataSource = self
+            tagsTableView.delegate = self
+        }
+    }
+    
     
     @IBOutlet weak var favoritesCollectionView: UICollectionView!{
         didSet{
@@ -36,7 +52,7 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         }
     }
     
-    @IBOutlet weak var locationCollectionViewLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var locationCollectionViewLayout: LeftAlignedCollectionViewFlowLayout!
     
     @IBOutlet weak var tagsCollectionView: UICollectionView!{
         didSet{
@@ -45,9 +61,10 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         }
     }
     
-    @IBOutlet weak var tagsCollectionViewLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var tagsCollectionViewLayout: LeftAlignedCollectionViewFlowLayout!
     
     
+    @IBOutlet weak var reviewContainerView: UIView!
     @IBOutlet weak var reviewOverlay: UIView!
     @IBOutlet weak var reviewBackgroundImg: UIImageView!
     @IBOutlet var categoryBtns: [UIButton]!
@@ -58,6 +75,18 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     @IBOutlet weak var locationCollectionViewTopSpace: NSLayoutConstraint!
     @IBOutlet weak var tagsCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var tagsCollectionViewTopSpace: NSLayoutConstraint!
+    
+    @IBOutlet weak var filterTableView: UITableView! {
+        didSet{
+            filterTableView.dataSource = self
+            filterTableView.delegate = self
+        }
+    }
+    @IBOutlet weak var filterTableViewHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var filterTableViewOverlay: UIView!
+    @IBOutlet weak var filterIndicatorView: UIView!
+    @IBOutlet weak var filterIndicator: UIActivityIndicatorView!
     
     
     // arrays to hold server data
@@ -71,14 +100,30 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     var filterLocations = [String]()
     var filterTags = [String]()
     
+    var filterRatingStart = CGFloat(0.0)
+    var filterRatingEnd = CGFloat(1.0)
+    
+    // table view data
+    var tagsArray = [String]()
+    var countArray = [Int]()
+    
+    var filterCategories = [String]()
+    
+    var sortedPicImgArray = [PFFile]()
+    var sortedLocationArray = [String]()
+    var sortedAddressArray = [String]()
+    var sortedCategoryArray = [String]()
+    var sortedPlaceTagsArray = [[String]]()
+    var sortedRatingArray = [CGFloat]()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Explore Network"
         
-        locationCollectionViewLayout.estimatedItemSize = CGSize(width: 100.0, height: 30.0)
-        tagsCollectionViewLayout.estimatedItemSize = CGSize(width: 100.0, height: 30.0)
+        locationCollectionViewLayout.estimatedItemSize = CGSize(width: 100.0, height: 26.0)
+        tagsCollectionViewLayout.estimatedItemSize = CGSize(width: 100.0, height: 26.0)
         
         // tint category icons
         filterCategories.removeAll()
@@ -87,42 +132,127 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             tintIcons(categoryBtn)
         }
         
-        locationCollectionViewHeight.constant = 0
+//        locationCollectionViewHeight.constant = 0
         locationCollectionViewTopSpace.constant = 0
-        tagsCollectionViewHeight.constant = 0
+//        tagsCollectionViewHeight.constant = 0
         tagsCollectionViewTopSpace.constant = 0
         
         // receive notification from postTagsVC when post is added
         NotificationCenter.default.addObserver(self, selector: #selector(globeVC.uploaded(_:)), name: NSNotification.Name(rawValue: "uploaded"), object: nil)
         
+        // receive notification from profileUserVC
+        NotificationCenter.default.addObserver(self, selector: #selector(globeVC.reloadFriends(_:)), name: NSNotification.Name(rawValue: "followingUserChanged"), object: nil)
+        
         //check orientation for collection view height
         if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
             // portrait
             favoritesCollectionViewHeight.constant = UIScreen.main.bounds.width / 2
-            reviewOverlayLeadingSpace.constant = UIScreen.main.bounds.width / 2
-            reviewOverlayTrailingSpace.constant = UIScreen.main.bounds.width / 2
+//            reviewOverlayLeadingSpace.constant = UIScreen.main.bounds.width / 2
+//            reviewOverlayTrailingSpace.constant = UIScreen.main.bounds.width / 2
             
         } else {
             // landscape
             favoritesCollectionViewHeight.constant = UIScreen.main.bounds.height / 2
-            reviewOverlayLeadingSpace.constant = UIScreen.main.bounds.height / 2
-            reviewOverlayTrailingSpace.constant = UIScreen.main.bounds.height / 2
+//            reviewOverlayLeadingSpace.constant = UIScreen.main.bounds.height / 2
+//            reviewOverlayTrailingSpace.constant = UIScreen.main.bounds.height / 2
         }
         
         locationSearchBar.delegate = self
         tagsSearchBar.delegate = self
+        tagsSearchBarActive.delegate = self
         locationSearchBar.returnKeyType = UIReturnKeyType.done
         tagsSearchBar.returnKeyType = UIReturnKeyType.done
+        tagsSearchBarActive.returnKeyType = UIReturnKeyType.done
+        
+        // rating pan gesture
+        let ratingPan = UIPanGestureRecognizer(target: self, action: #selector(globeVC.handleRatingPan(_:)))
+        reviewContainerView.addGestureRecognizer(ratingPan)
+        
+//        reviewOverlayLeadingSpace.constant = UIScreen.main.bounds.width
 
+        searchContainer.isHidden = true
+        tagsTableView.isHidden = true
+        
+        tagsTableView.tableFooterView = UIView()
+        tagsTableView.separatorInset = UIEdgeInsets.zero
+        
+        filterTableView.tableFooterView = UIView()
+        filterTableView.separatorInset = UIEdgeInsets.zero
+        
+        self.filterTableView.isScrollEnabled = false
+        self.scrollView.bounces = false
+        self.filterTableView.bounces = true
+        
+        filterIndicatorView.isHidden = true
+        filterTableViewOverlay.isHidden = false
+        
+        getFriends()
         
         loadFavorites()
+    }
+    
+    // scrolled down
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+        if scrollView == self.scrollView {
+            filterTableView.isScrollEnabled = (self.scrollView.contentOffset.y >= 200)
+        } else if scrollView == self.filterTableView {
+            self.filterTableView.isScrollEnabled = (filterTableView.contentOffset.y > 0)
+        }
+    }
+    
+    
+    func getFriends() {
+        
+        let followQuery = PFQuery(className: "follow")
+        if PFUser.current() != nil {
+            followQuery.whereKey("follower", equalTo: PFUser.current()!.username!)
+            followQuery.whereKey("accepted", equalTo: true)
+            followQuery.findObjectsInBackground (block: { (objects, error) -> Void in
+                if error == nil {
+                    
+                    // clean up
+                    filterFriends.removeAll(keepingCapacity: false)
+                    
+                    // find related objects
+                    for object in objects! {
+                        filterFriends.append(object.object(forKey: "following") as! String)
+                    }
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        }
+    }
+    
+    // reload after following user changed
+    func reloadFriends(_ notification:Notification) {
+        getFriends()
     }
     
     
     // reloading func with posts after received notification
     func uploaded(_ notification:Notification) {
         loadFavorites()
+    }
+    
+    
+    // filter rating
+    func handleRatingPan(_ sender : UIPanGestureRecognizer) {
+        
+        let reviewWidth = UIScreen.main.bounds.width
+        
+        switch sender.state {
+        case .began:
+            break
+        case .changed:
+            let location = sender.location(in: self.reviewContainerView).x
+            reviewOverlayTrailingSpace.constant = reviewWidth - location
+        case .ended:
+            filterRatingStart = (reviewWidth - reviewOverlayTrailingSpace.constant) / reviewWidth
+        default:
+            break
+        }
     }
     
     
@@ -284,11 +414,15 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             let indexOfTag = filterLocations.index(of: cell.tagLbl.text!.lowercased())
             filterLocations.remove(at: indexOfTag!)
             locationCollectionView.reloadData()
+            self.locationCollectionView.layoutIfNeeded()
+            self.locationCollectionViewHeight.constant = self.locationCollectionView.contentSize.height
         } else {
             let cell = tagsCollectionView.cellForItem(at: indexPath) as! tagCell
             let indexOfTag = filterTags.index(of: cell.tagLbl.text!.lowercased())
             filterTags.remove(at: indexOfTag!)
             tagsCollectionView.reloadData()
+            self.tagsCollectionView.layoutIfNeeded()
+            self.tagsCollectionViewHeight.constant = self.tagsCollectionView.contentSize.height
         }
     }
     
@@ -354,4 +488,392 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             // TO DO
         })
     }
+    
+    
+    // SEARCH
+    
+    // tapped on the  search bar
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        
+        if searchBar == tagsSearchBar {
+            tagsSearchBar.resignFirstResponder()
+            tagsSearchBarActive.becomeFirstResponder()
+            searchContainer.isHidden = false
+            tagsTableView.isHidden = false
+            
+            // show cancel button
+            tagsSearchBarActive.showsCancelButton = true
+            
+            loadTags()
+            
+        } else if searchBar == locationSearchBar {
+            
+        } else if searchBar == tagsSearchBarActive {
+            tagsSearchBarActive.becomeFirstResponder()
+            searchContainer.isHidden = false
+            tagsTableView.isHidden = false
+            
+            // show cancel button
+            tagsSearchBarActive.showsCancelButton = true
+            
+            loadTags()
+        }
+    }
+    
+    // search updated
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        if searchBar == tagsSearchBarActive {
+            loadTags()
+        }
+        
+        return true
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.count == 0 {
+            if searchBar == tagsSearchBarActive {
+                loadTags()
+            }
+        }
+    }
+    
+    // clicked cancel button
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        
+        // dismiss keyboard
+        searchBar.resignFirstResponder()
+        
+        // hide cancel button
+        searchBar.showsCancelButton = false
+        
+        // reset text
+        searchBar.text = ""
+        
+        searchContainer.isHidden = true
+        tagsTableView.isHidden = true
+    }
+    
+    
+    // TABLE VIEW
+    
+    // table view cell number
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if tableView == tagsTableView {
+            return tagsArray.count
+            
+//        } else if tableView == filterTableView {
+        } else {
+            return sortedPicImgArray.count
+        }
+    }
+    
+    // cell config
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if tableView == tagsTableView {
+        
+            // define cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Tags Table Cell", for: indexPath) as! tagsTableCell
+            
+            cell.tagLbl.text = tagsArray[(indexPath as NSIndexPath).row]
+            if countArray[(indexPath as NSIndexPath).row] == 1 {
+                cell.countLbl.text = "\(countArray[(indexPath as NSIndexPath).row]) post"
+            } else {
+                cell.countLbl.text = "\(countArray[(indexPath as NSIndexPath).row]) posts"
+            }
+            
+            return cell
+            
+//        } else if tableView == filterTableView {
+        } else{
+            
+            // define cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "globeFilterCell", for: indexPath) as! globeFilterCell
+            
+            sortedPicImgArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
+                cell.singleImg.image = UIImage(data: data!)
+            }
+            
+            PostCategory.selectImgType(sortedCategoryArray[(indexPath as NSIndexPath).row], cell.categoryIcon, cell.categoryIconWidth, mainColor)
+            
+            cell.locationBtn.setTitle(sortedLocationArray[(indexPath as NSIndexPath).row], for: .normal)
+            
+            cell.addressLbl.text = sortedAddressArray[(indexPath as NSIndexPath).row]
+            
+            // set rating
+            cell.reviewOverlayLeadingSpace.constant = sortedRatingArray[(indexPath as NSIndexPath).row] * UIScreen.main.bounds.width
+            Review.colorReview(sortedRatingArray[(indexPath as NSIndexPath).row], cell.reviewBackground)
+            
+            // set tags
+            let assignedTags = sortedPlaceTagsArray[(indexPath as NSIndexPath).row]
+            let numberOfTags = assignedTags.count
+            if 0 < numberOfTags {
+                cell.tag1Btn.setTitle(assignedTags[0].uppercased(), for: .normal)
+                cell.tag1View.isHidden = false
+            } else {
+                cell.tag1View.isHidden = true
+            }
+            if 1 < numberOfTags {
+                cell.tag2Btn.setTitle(assignedTags[1].uppercased(), for: .normal)
+                cell.tag2View.isHidden = false
+            } else {
+                cell.tag2View.isHidden = true
+            }
+            if 2 < numberOfTags {
+                cell.tag3Btn.setTitle(assignedTags[2].uppercased(), for: .normal)
+                cell.tag3View.isHidden = false
+            } else {
+                cell.tag3View.isHidden = true
+            }
+            
+            // assign index
+            cell.locationBtn.layer.setValue(indexPath, forKey: "index")
+            
+            return cell
+        }
+    }
+    
+    // selected cell
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if tableView == tagsTableView {
+            
+            // dismiss keyboard
+            tagsSearchBarActive.resignFirstResponder()
+            
+            // hide cancel button
+            tagsSearchBar.showsCancelButton = false
+            
+            // reset text
+            tagsSearchBar.text = ""
+            
+            self.searchContainer.isHidden = true
+            self.tagsTableView.isHidden = true
+            
+            filterTags.append(tagsArray[(indexPath as NSIndexPath).row])
+            tagsCollectionView.reloadData()
+            self.tagsCollectionView.layoutIfNeeded()
+            self.tagsCollectionViewHeight.constant = self.tagsCollectionView.contentSize.height
+            self.tagsCollectionViewTopSpace.constant = 15
+        }
+    }
+    
+    
+    // load tags
+    func loadTags() {
+                    
+        // STEP 1. Find tags made by people appended to filterFriends
+        let tagQuery = PFQuery(className: "postTags")
+        tagQuery.whereKey("by", containedIn: filterFriends)
+        tagQuery.whereKey("tag", notContainedIn: filterTags)
+        if self.tagsSearchBarActive.text! != "" {
+            tagQuery.whereKey("tag", hasPrefix: self.tagsSearchBarActive.text!.lowercased())
+        }
+        tagQuery.addDescendingOrder("createdAt")
+        tagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                
+                // clean up
+                self.tagsArray.removeAll(keepingCapacity: false)
+                self.countArray.removeAll(keepingCapacity: false)
+                
+                for object in objects! {
+                    
+                    if !self.tagsArray.contains(object.object(forKey: "tag") as! String) {
+                        self.tagsArray.append(object.object(forKey: "tag") as! String)
+                        self.countArray.append(1)
+                    } else {
+                        let index = self.tagsArray.index(of: object.object(forKey: "tag") as! String)!
+                        self.countArray[index] = self.countArray[index] + 1
+                    }
+                }
+                
+                // reload table view
+                self.tagsTableView.reloadData()
+                
+            } else {
+                print(error!.localizedDescription)
+            }
+        })
+    }
+    
+    
+    // filter
+    func loadPlaces() {
+        
+        filterIndicator.startAnimating()
+        filterIndicatorView.isHidden = false
+        filterTableViewOverlay.isHidden = false
+        
+        // STEP 1. Find posts made by people appended to filterFriends
+        let query = PFQuery(className: "posts")
+        query.whereKey("username", containedIn: filterFriends)
+        query.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                
+                // local arrays
+                var picImgArray = [PFFile]()
+                var locationArray = [String]()
+                var addressArray = [String]()
+                var categoryArray = [[String]]()
+                var placeTagsArray = [[String]]()
+                var ratingArray = [[CGFloat]]()
+                var filteredPicImgArray = [PFFile]()
+                var filteredLocationArray = [String]()
+                var filteredAddressArray = [String]()
+                var filteredCategoryArray = [String]()
+                var filteredPlaceTagsArray = [[String]]()
+                var filteredRatingArray = [CGFloat]()
+                
+                // clean up
+                self.sortedPicImgArray.removeAll(keepingCapacity: false)
+                self.sortedLocationArray.removeAll(keepingCapacity: false)
+                self.sortedAddressArray.removeAll(keepingCapacity: false)
+                self.sortedCategoryArray.removeAll(keepingCapacity: false)
+                self.sortedRatingArray.removeAll(keepingCapacity: false)
+                self.sortedPlaceTagsArray.removeAll(keepingCapacity: false)
+                
+                
+                for object in objects! {
+                    
+                    let picImg = object.object(forKey: "pic")
+                    let location = object.object(forKey: "location")
+                    let address = object.object(forKey: "address")
+                    let category = object.object(forKey: "category")
+                    let rating = object.object(forKey: "rating")
+                    let tags = object.object(forKey: "tags")
+                    
+                    if picImg != nil && location != nil && address != nil && category != nil && rating != nil && tags != nil {
+                        
+                        if !addressArray.contains(address as! String) {
+                            
+                            picImgArray.append(picImg as! PFFile)
+                            addressArray.append(address as! String)
+                            locationArray.append(location as! String)
+                            categoryArray.append([category as! String])
+                            ratingArray.append([rating as! CGFloat])
+                            placeTagsArray.append(tags as! [String])
+                            
+                        } else {
+                            
+                            let index = addressArray.index(of: address as! String)!
+                            categoryArray[index].append(category as! String)
+                            ratingArray[index].append(rating as! CGFloat)
+                            for tag in (tags as! [String]) {
+                                placeTagsArray[index].append(tag)
+                            }
+                            
+                        }
+                    }
+                }
+                
+                for i in 0..<categoryArray.count {
+                    
+                    var categoryPresent = false
+                    var presentCategory = ""
+                    for category in categoryArray[i] {
+                        if self.filterCategories.contains(category) {
+                            categoryPresent = true
+                            presentCategory = category
+                        }
+                    }
+                    
+                    let rating = self.getAverageRating(ratingArray[i])
+                    var ratingIncluded = false
+                    if rating >= self.filterRatingStart && rating <= self.filterRatingEnd {
+                        ratingIncluded = true
+                    }
+                    
+                    var tagIncluded = false
+                    if self.filterTags.count == 0 {
+                        tagIncluded = true
+                    } else {
+                        for tag in placeTagsArray[i] {
+                            if self.filterTags.contains(tag) {
+                                tagIncluded = true
+                            }
+                        }
+                    }
+                    
+                    if categoryPresent && ratingIncluded && tagIncluded {
+                        filteredPicImgArray.append(picImgArray[i])
+                        filteredLocationArray.append(locationArray[i])
+                        filteredAddressArray.append(addressArray[i])
+                        filteredCategoryArray.append(presentCategory)
+                        filteredPlaceTagsArray.append(placeTagsArray[i])
+                        filteredRatingArray.append(rating)
+                    }
+                }
+                
+                // Sort filteredRatingArray along with its offsets
+                // and then extract the offsets using map
+                let offsets = filteredRatingArray.enumerated().sorted { $0.element > $1.element }.map { $0.offset }
+                
+                // Use map on the array of ordered offsets to order the other arrays
+                self.sortedRatingArray = offsets.map { filteredRatingArray[$0] }
+                self.sortedPicImgArray = offsets.map { filteredPicImgArray[$0] }
+                self.sortedLocationArray = offsets.map { filteredLocationArray[$0] }
+                self.sortedAddressArray = offsets.map { filteredAddressArray[$0] }
+                self.sortedCategoryArray = offsets.map { filteredCategoryArray[$0] }
+                self.sortedPlaceTagsArray = offsets.map { filteredPlaceTagsArray[$0] }
+ 
+                self.filterTableView.reloadData()
+                
+                DispatchQueue.main.async {
+                    self.filterTableViewHeight.constant = CGFloat(self.sortedPicImgArray.count * 380)
+//                    let o1 = self.mapView.frame.size.height + 2
+//                    let o2 = self.favoritesView.frame.size.height
+//                    let o3 = self.filterTableView.frame.origin.y
+//                    
+//                    var offset = o1 + o2 + o3
+//                    if self.filterTableViewHeight.constant < UIScreen.main.bounds.height {
+//                        offset = offset + self.filterTableViewHeight.constant - UIScreen.main.bounds.height
+//                    }
+                    
+                    self.filterIndicatorView.isHidden = true
+                    self.filterIndicator.stopAnimating()
+                    self.filterTableViewOverlay.isHidden = true
+                    
+//                    self.scrollView.setContentOffset(CGPoint(x: 0, y: offset), animated: false)
+                }
+                
+            } else {
+                print(error!.localizedDescription)
+            }
+        })
+    }
+    
+    func getAverageRating(_ ratings : [CGFloat]) -> CGFloat {
+        var total = CGFloat(0)
+        for rating in ratings {
+            total += rating
+        }
+        let rating = (ratings.count == 0 ? total : (total / CGFloat(ratings.count)))
+        return rating
+    }
+    
+    // filter places
+    @IBAction func filterBtn_clicked(_ sender: UIButton) {
+        loadPlaces()
+    }
+    
+    // click location button in filter cell, go to place VC
+    @IBAction func locationBtn_clicked(_ sender: UIButton) {
+        
+        let i = sender.layer.value(forKey: "index") as! IndexPath
+        
+        let cell = filterTableView.cellForRow(at: i) as! globeFilterCell
+        
+        placeTitle = cell.locationBtn.currentTitle!
+        placeAddress = cell.addressLbl.text!
+        placeCategory = sortedCategoryArray[(i as NSIndexPath).row]
+        didSelectSelf = false
+        
+        let place = self.storyboard?.instantiateViewController(withIdentifier: "placeVC") as! placeVC
+        self.navigationController?.pushViewController(place, animated: true)
+    }
 }
+
+

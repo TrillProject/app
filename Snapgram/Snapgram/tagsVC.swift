@@ -59,6 +59,9 @@ class tagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDele
         
         searchBar.delegate = self
         
+        tableView.tableFooterView = UIView()
+        tableView.separatorInset = UIEdgeInsets.zero
+        
         loadCells()
     }
     

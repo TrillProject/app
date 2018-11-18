@@ -24,6 +24,7 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     @IBOutlet weak var selectLbl: UILabel!
     
     // arrays to hold server data
+    var followArray = [String]()
     var usernameArray = [String]()
     var avaArray = [PFFile]()
     var firstnameArray = [String]()
@@ -71,22 +72,21 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 if error == nil {
                     
                     // clean up
-                    self.usernameArray.removeAll(keepingCapacity: false)
-                    filterFriends.removeAll(keepingCapacity: false)
+                    self.followArray.removeAll(keepingCapacity: false)
                     
                     // find related objects
                     for object in objects! {
-                        self.usernameArray.append(object.object(forKey: "following") as! String)
-                        filterFriends.append(object.object(forKey: "following") as! String)
+                        self.followArray.append(object.object(forKey: "following") as! String)
                     }
                     
                     let query = PFUser.query()
-                    query?.whereKey("username", containedIn: self.usernameArray)
+                    query?.whereKey("username", containedIn: self.followArray)
                     query?.addAscendingOrder("firstname")
                     query?.findObjectsInBackground(block: { (objects, error) -> Void in
                         if error == nil {
                             
                             // clean up
+                            self.usernameArray.removeAll(keepingCapacity: false)
                             self.avaArray.removeAll(keepingCapacity: false)
                             self.firstnameArray.removeAll(keepingCapacity: false)
                             self.lastnameArray.removeAll(keepingCapacity: false)
@@ -94,6 +94,8 @@ class filterFriendsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                             
                             // find related objects in User class of Parse
                             for object in objects! {
+                                
+                                self.usernameArray.append(object.object(forKey: "username") as! String)
                                
                                 if object.object(forKey: "firstname") != nil {
                                     self.firstnameArray.append((object.object(forKey: "firstname") as! String).capitalized)
