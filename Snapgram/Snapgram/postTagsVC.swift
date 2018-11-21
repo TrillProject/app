@@ -12,6 +12,8 @@ import Parse
 var selectedImg : UIImage?
 var postLocation : String?
 var postAddress : String?
+var postCountry : String?
+var postCity : String?
 var postComment : String?
 var selectedCategory : String?
 var selectedTags = [String]()
@@ -85,6 +87,8 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         
         // to connect with apple/google maps
         postAddress = "122 North 5th Street, Brooklyn, NY 11211"
+        postCountry = "USA"
+        postCity = "New York"
     }
     
     override func viewDidLayoutSubviews() {
@@ -190,6 +194,8 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         
         object["location"] = postLocation
         object["address"] = postAddress
+        object["country"] = postCountry
+        object["city"] = postCity
         object["category"] = selectedCategory
         object["tags"] = objTags
         object["rating"] = postRating

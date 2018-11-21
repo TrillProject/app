@@ -22,10 +22,18 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     @IBOutlet weak var favoritesFilterSeparator: UIView!
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var locationSearchBar: UISearchBar!
+    @IBOutlet weak var locationSearchBarActive: UISearchBar!
     @IBOutlet weak var tagsSearchBar: UISearchBar!
     @IBOutlet weak var tagsSearchBarActive: UISearchBar!
     
     @IBOutlet weak var searchContainer: UIView!
+    
+    @IBOutlet weak var locationsTableView: UITableView! {
+        didSet {
+            locationsTableView.dataSource = self
+            locationsTableView.delegate = self
+        }
+    }
     
     @IBOutlet weak var tagsTableView: UITableView! {
         didSet{
@@ -107,6 +115,9 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     var tagsArray = [String]()
     var countArray = [Int]()
     
+    var locationsArray = [String]()
+    var locationsCountArray = [Int]()
+    
     var filterCategories = [String]()
     
     var sortedPicImgArray = [PFFile]()
@@ -158,9 +169,11 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         }
         
         locationSearchBar.delegate = self
+        locationSearchBarActive.delegate = self
         tagsSearchBar.delegate = self
         tagsSearchBarActive.delegate = self
         locationSearchBar.returnKeyType = UIReturnKeyType.done
+        locationSearchBarActive.returnKeyType = UIReturnKeyType.done
         tagsSearchBar.returnKeyType = UIReturnKeyType.done
         tagsSearchBarActive.returnKeyType = UIReturnKeyType.done
         
@@ -171,7 +184,13 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
 //        reviewOverlayLeadingSpace.constant = UIScreen.main.bounds.width
 
         searchContainer.isHidden = true
+        tagsSearchBarActive.isHidden = true
         tagsTableView.isHidden = true
+        locationSearchBarActive.isHidden = true
+        locationsTableView.isHidden = true
+        
+        locationsTableView.tableFooterView = UIView()
+        locationsTableView.separatorInset = UIEdgeInsets.zero
         
         tagsTableView.tableFooterView = UIView()
         tagsTableView.separatorInset = UIEdgeInsets.zero
@@ -497,6 +516,7 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         if searchBar == tagsSearchBar {
             tagsSearchBar.resignFirstResponder()
+            tagsSearchBarActive.isHidden = false
             tagsSearchBarActive.becomeFirstResponder()
             searchContainer.isHidden = false
             tagsTableView.isHidden = false
@@ -508,6 +528,17 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             
         } else if searchBar == locationSearchBar {
             
+            locationSearchBar.resignFirstResponder()
+            locationSearchBarActive.isHidden = false
+            locationSearchBarActive.becomeFirstResponder()
+            searchContainer.isHidden = false
+            locationsTableView.isHidden = false
+            
+            // show cancel button
+            locationSearchBarActive.showsCancelButton = true
+            
+            loadLocations()
+            
         } else if searchBar == tagsSearchBarActive {
             tagsSearchBarActive.becomeFirstResponder()
             searchContainer.isHidden = false
@@ -517,6 +548,16 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             tagsSearchBarActive.showsCancelButton = true
             
             loadTags()
+            
+        } else if searchBar == locationSearchBarActive {
+            locationSearchBarActive.becomeFirstResponder()
+            searchContainer.isHidden = false
+            locationsTableView.isHidden = false
+            
+            // show cancel button
+            locationSearchBarActive.showsCancelButton = true
+            
+            loadLocations()
         }
     }
     
@@ -525,6 +566,8 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         if searchBar == tagsSearchBarActive {
             loadTags()
+        } else if searchBar == locationSearchBarActive {
+            loadLocations()
         }
         
         return true
@@ -534,6 +577,8 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         if searchText.count == 0 {
             if searchBar == tagsSearchBarActive {
                 loadTags()
+            } else if searchBar == locationSearchBarActive {
+                loadLocations()
             }
         }
     }
@@ -552,6 +597,9 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         searchContainer.isHidden = true
         tagsTableView.isHidden = true
+        locationsTableView.isHidden = true
+        locationSearchBarActive.isHidden = true
+        tagsSearchBarActive.isHidden = true
     }
     
     
@@ -562,6 +610,10 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         if tableView == tagsTableView {
             return tagsArray.count
+            
+        } else if tableView == locationsTableView {
+                
+            return locationsArray.count
             
 //        } else if tableView == filterTableView {
         } else {
@@ -582,6 +634,20 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                 cell.countLbl.text = "\(countArray[(indexPath as NSIndexPath).row]) post"
             } else {
                 cell.countLbl.text = "\(countArray[(indexPath as NSIndexPath).row]) posts"
+            }
+            
+            return cell
+        
+        } else if tableView == locationsTableView {
+            
+            // define cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "locationCell", for: indexPath) as! tagsTableCell
+            
+            cell.tagLbl.text = locationsArray[(indexPath as NSIndexPath).row]
+            if locationsCountArray[(indexPath as NSIndexPath).row] == 1 {
+                cell.countLbl.text = "\(locationsCountArray[(indexPath as NSIndexPath).row]) post"
+            } else {
+                cell.countLbl.text = "\(locationsCountArray[(indexPath as NSIndexPath).row]) posts"
             }
             
             return cell
@@ -644,11 +710,12 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             tagsSearchBarActive.resignFirstResponder()
             
             // hide cancel button
-            tagsSearchBar.showsCancelButton = false
+            tagsSearchBarActive.showsCancelButton = false
             
             // reset text
-            tagsSearchBar.text = ""
+            tagsSearchBarActive.text = ""
             
+            tagsSearchBarActive.isHidden = true
             self.searchContainer.isHidden = true
             self.tagsTableView.isHidden = true
             
@@ -657,6 +724,28 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             self.tagsCollectionView.layoutIfNeeded()
             self.tagsCollectionViewHeight.constant = self.tagsCollectionView.contentSize.height
             self.tagsCollectionViewTopSpace.constant = 15
+        
+        } else if tableView == locationsTableView {
+            
+            // dismiss keyboard
+            locationSearchBarActive.resignFirstResponder()
+            
+            // hide cancel button
+            locationSearchBarActive.showsCancelButton = false
+            
+            // reset text
+            locationSearchBarActive.text = ""
+            
+            locationSearchBarActive.isHidden = true
+            self.searchContainer.isHidden = true
+            self.locationsTableView.isHidden = true
+            
+            filterLocations.append(locationsArray[(indexPath as NSIndexPath).row])
+            locationCollectionView.reloadData()
+            self.locationCollectionView.layoutIfNeeded()
+            self.locationCollectionViewHeight.constant = self.tagsCollectionView.contentSize.height
+            self.locationCollectionViewTopSpace.constant = 15
+            
         }
     }
     
@@ -700,6 +789,63 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     }
     
     
+    // load locations
+    func loadLocations() {
+        
+        // STEP 1. Find posts made by people appended to filterFriends
+        let query = PFQuery(className: "posts")
+        query.whereKey("username", containedIn: filterFriends)
+        query.whereKey("country", notContainedIn: filterLocations)
+        query.whereKey("city", notContainedIn: filterLocations)
+        query.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                
+                // clean up
+                self.locationsArray.removeAll(keepingCapacity: false)
+                self.locationsCountArray.removeAll(keepingCapacity: false)
+                
+                for object in objects! {
+                    
+                    let country = object.object(forKey: "country")
+                    let city = object.object(forKey: "city")
+                    
+                    if country != nil && city != nil {
+                    
+                        if (self.locationSearchBarActive.text! == "") ||  (self.locationSearchBarActive.text! != "" && (country as! String).hasPrefix(self.locationSearchBarActive.text!)) {
+                        
+                            if !self.locationsArray.contains(country as! String) {
+                                self.locationsArray.append(country as! String)
+                                self.locationsCountArray.append(1)
+                            } else {
+                                let index = self.locationsArray.index(of: country as! String)!
+                                self.locationsCountArray[index] = self.locationsCountArray[index] + 1
+                            }
+                        }
+                        
+                        if (self.locationSearchBarActive.text! == "") ||  (self.locationSearchBarActive.text! != "" && (city as! String).hasPrefix(self.locationSearchBarActive.text!)) {
+                            
+                            if !self.locationsArray.contains(city as! String) {
+                                self.locationsArray.append(city as! String)
+                                self.locationsCountArray.append(1)
+                            } else {
+                                let index = self.locationsArray.index(of: city as! String)!
+                                self.locationsCountArray[index] = self.locationsCountArray[index] + 1
+                            }
+                        }
+                    }
+                }
+                
+                // reload table view
+                self.locationsTableView.reloadData()
+                
+            } else {
+                print(error!.localizedDescription)
+            }
+        })
+        
+    }
+    
+    
     // filter
     func loadPlaces() {
         
@@ -717,9 +863,12 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                 var picImgArray = [PFFile]()
                 var locationArray = [String]()
                 var addressArray = [String]()
+                var countryArray = [String]()
+                var cityArray = [String]()
                 var categoryArray = [[String]]()
                 var placeTagsArray = [[String]]()
                 var ratingArray = [[CGFloat]]()
+                
                 var filteredPicImgArray = [PFFile]()
                 var filteredLocationArray = [String]()
                 var filteredAddressArray = [String]()
@@ -741,16 +890,20 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                     let picImg = object.object(forKey: "pic")
                     let location = object.object(forKey: "location")
                     let address = object.object(forKey: "address")
+                    let country = object.object(forKey: "country")
+                    let city = object.object(forKey: "city")
                     let category = object.object(forKey: "category")
                     let rating = object.object(forKey: "rating")
                     let tags = object.object(forKey: "tags")
                     
-                    if picImg != nil && location != nil && address != nil && category != nil && rating != nil && tags != nil {
+                    if picImg != nil && location != nil && address != nil && country != nil && city != nil && category != nil && rating != nil && tags != nil {
                         
                         if !addressArray.contains(address as! String) {
                             
                             picImgArray.append(picImg as! PFFile)
                             addressArray.append(address as! String)
+                            countryArray.append(country as! String)
+                            cityArray.append(city as! String)
                             locationArray.append(location as! String)
                             categoryArray.append([category as! String])
                             ratingArray.append([rating as! CGFloat])
@@ -770,6 +923,15 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                 }
                 
                 for i in 0..<categoryArray.count {
+                    
+                    var locationPresent = false
+                    if self.filterLocations.count == 0 {
+                        locationPresent = true
+                    } else {
+                        if self.filterLocations.contains(countryArray[i]) || self.filterLocations.contains(cityArray[i]) {
+                            locationPresent = true
+                        }
+                    }
                     
                     var categoryPresent = false
                     var presentCategory = ""
@@ -797,7 +959,7 @@ class globeVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
                         }
                     }
                     
-                    if categoryPresent && ratingIncluded && tagIncluded {
+                    if locationPresent && categoryPresent && ratingIncluded && tagIncluded {
                         filteredPicImgArray.append(picImgArray[i])
                         filteredLocationArray.append(locationArray[i])
                         filteredAddressArray.append(addressArray[i])
