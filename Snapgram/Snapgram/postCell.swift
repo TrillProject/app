@@ -13,173 +13,107 @@ import Parse
 class postCell: UITableViewCell {
 
     // header objects
-    @IBOutlet weak var avaImg: UIImageView!
+    @IBOutlet weak var avaImg: UIButton!
     @IBOutlet weak var usernameBtn: UIButton!
-    @IBOutlet weak var dateLbl: UILabel!
+    @IBOutlet weak var locationBtn: UIButton!
+    @IBOutlet weak var locationTitleBtn: UIButton!
+    @IBOutlet weak var addressLbl: UILabel!
     
     // main picture
     @IBOutlet weak var picImg: UIImageView!
     
+    // review
+    @IBOutlet weak var reviewBackground: UIView!
+    @IBOutlet weak var reviewOverlay: UIView!
+    @IBOutlet weak var reviewOverlayLeadingSpace: NSLayoutConstraint!
+    
     // buttons
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
-    @IBOutlet weak var moreBtn: UIButton!
+    @IBOutlet weak var suitcaseBtn: UIButton!
+    @IBOutlet weak var suitcaseBtnLeadingSpace: NSLayoutConstraint!
+    @IBOutlet weak var suitcaseBtnHeight: NSLayoutConstraint!
+    
+    // tags
+    @IBOutlet weak var tag1View: UIView!
+    @IBOutlet weak var tag1Btn: UIButton!
+    @IBOutlet weak var tag2View: UIView!
+    @IBOutlet weak var tag2Btn: UIButton!
+    @IBOutlet weak var tag3View: UIView!
+    @IBOutlet weak var tag3Btn: UIButton!
     
     // labels
     @IBOutlet weak var likeLbl: UILabel!
     @IBOutlet weak var titleLbl: KILabel!
     @IBOutlet weak var uuidLbl: UILabel!
     
+    @IBOutlet weak var usernameLbl: UILabel!
+    
+    @IBOutlet weak var locationImgWidth: NSLayoutConstraint!
     
     // default func
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        // clear like button title color
+        // clear like button & suitcase button title color
         likeBtn.setTitleColor(UIColor.clear, for: UIControlState())
-        
-        // double tap to like
-        let likeTap = UITapGestureRecognizer(target: self, action: #selector(postCell.likeTap))
-        likeTap.numberOfTapsRequired = 2
-        picImg.isUserInteractionEnabled = true
-        picImg.addGestureRecognizer(likeTap)
-        
-        
-        // alignment
-        let width = UIScreen.main.bounds.width
-        
-        // allow constraints
-        avaImg.translatesAutoresizingMaskIntoConstraints = false
-        usernameBtn.translatesAutoresizingMaskIntoConstraints = false
-        dateLbl.translatesAutoresizingMaskIntoConstraints = false
-        
-        picImg.translatesAutoresizingMaskIntoConstraints = false
-        
-        likeBtn.translatesAutoresizingMaskIntoConstraints = false
-        commentBtn.translatesAutoresizingMaskIntoConstraints = false
-        moreBtn.translatesAutoresizingMaskIntoConstraints = false
-        
-        likeLbl.translatesAutoresizingMaskIntoConstraints = false
-        titleLbl.translatesAutoresizingMaskIntoConstraints = false
-        uuidLbl.translatesAutoresizingMaskIntoConstraints = false
-        
-        let pictureWidth = width
-        
-        // constraints
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-10-[ava(30)]-10-[pic(\(pictureWidth))]-5-[like(30)]",
-            options: [], metrics: nil, views: ["ava":avaImg, "pic":picImg, "like":likeBtn]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-10-[username]",
-            options: [], metrics: nil, views: ["username":usernameBtn]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:[pic]-5-[comment(30)]",
-            options: [], metrics: nil, views: ["pic":picImg, "comment":commentBtn]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:|-15-[date]",
-            options: [], metrics: nil, views: ["date":dateLbl]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:[like]-5-[title]-5-|",
-            options: [], metrics: nil, views: ["like":likeBtn, "title":titleLbl]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:[pic]-5-[more(30)]",
-            options: [], metrics: nil, views: ["pic":picImg, "more":moreBtn]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "V:[pic]-10-[likes]",
-            options: [], metrics: nil, views: ["pic":picImg, "likes":likeLbl]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-10-[ava(30)]-10-[username]",
-            options: [], metrics: nil, views: ["ava":avaImg, "username":usernameBtn]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-0-[pic]-0-|",
-            options: [], metrics: nil, views: ["pic":picImg]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-15-[like(30)]-10-[likes]-20-[comment(30)]",
-            options: [], metrics: nil, views: ["like":likeBtn, "likes":likeLbl, "comment":commentBtn]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "H:[more(30)]-15-|",
-            options: [], metrics: nil, views: ["more":moreBtn]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|-15-[title]-15-|",
-            options: [], metrics: nil, views: ["title":titleLbl]))
-        
-        self.contentView.addConstraints(NSLayoutConstraint.constraints(
-            withVisualFormat: "H:|[date]-10-|",
-            options: [], metrics: nil, views: ["date":dateLbl]))
-        
-        // round ava
-        avaImg.layer.cornerRadius = avaImg.frame.size.width / 2
-        avaImg.clipsToBounds = true
+        suitcaseBtn.setTitleColor(UIColor.clear, for: UIControlState())
         
     }
     
-    
-    // double tap to like
-    func likeTap() {
-        
-        // create large like gray heart
-        let likePic = UIImageView(image: UIImage(named: "unlike.png"))
-        likePic.frame.size.width = picImg.frame.size.width / 1.5
-        likePic.frame.size.height = picImg.frame.size.width / 1.5
-        likePic.center = picImg.center
-        likePic.alpha = 0.8
-        self.addSubview(likePic)
-        
-        // hide likePic with animation and transform to be smaller
-        UIView.animate(withDuration: 0.4, animations: { () -> Void in
-            likePic.alpha = 0
-            likePic.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        }) 
+    // clicked suitcase button
+    @IBAction func suitcaseBtn_click(_ sender: UIButton) {
         
         // declare title of button
-        let title = likeBtn.title(for: UIControlState())
+        let title = sender.title(for: UIControlState())
         
-        if title == "unlike" {
+        // to add to suitcase
+        if title == "notAdded" {
             
-            let object = PFObject(className: "likes")
-            object["by"] = PFUser.current()?.username
-            object["to"] = uuidLbl.text
+            let object = PFObject(className: "suitcase")
+            object["user"] = PFUser.current()?.username
+            object["location"] = self.locationTitleBtn.currentTitle!
+            object["address"] = self.addressLbl.text!
             object.saveInBackground(block: { (success, error) -> Void in
                 if success {
-                    print("liked")
-                    self.likeBtn.setTitle("like", for: UIControlState())
-                    self.likeBtn.setBackgroundImage(UIImage(named: "like.png"), for: UIControlState())
+                    print("added to suitcase")
                     
                     // send notification if we liked to refresh TableView
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
                     
-                    
-                    // send notification as like
-                    if self.usernameBtn.titleLabel?.text != PFUser.current()?.username {
-                        let newsObj = PFObject(className: "news")
-                        newsObj["by"] = PFUser.current()?.username
-                        newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
-                        newsObj["to"] = self.usernameBtn.titleLabel!.text
-                        newsObj["owner"] = self.usernameBtn.titleLabel!.text
-                        newsObj["uuid"] = self.uuidLbl.text
-                        newsObj["type"] = "like"
-                        newsObj["checked"] = "no"
-                        newsObj.saveEventually()
-                    }
-                    
+                    self.suitcaseBtn.setTitle("added", for: UIControlState())
+                    self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-fill1.png"), for: UIControlState())
+                } else {
+                    print(error!.localizedDescription)
                 }
             })
-            
         }
-        
+            
+        // to remove from suitcase
+        else {
+            let query = PFQuery(className: "suitcase")
+            query.whereKey("user", equalTo: PFUser.current()!.username!)
+            query.whereKey("location", equalTo: locationTitleBtn.currentTitle!)
+            query.whereKey("address", equalTo: addressLbl.text!)
+            query.findObjectsInBackground(block: { (objects, error) -> Void in
+                for object in objects! {
+                    object.deleteInBackground(block: { (success, error) -> Void in
+                        if success {
+                            print("removed from suitcase")
+                            
+                            // send notification if we liked to refresh TableView
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
+                            
+                            self.suitcaseBtn.setTitle("notAdded", for: UIControlState())
+                            self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-outline1.png"), for: UIControlState())
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                }
+            })
+        }
     }
-    
     
     // clicked like button
     @IBAction func likeBtn_click(_ sender: AnyObject) {
@@ -197,24 +131,26 @@ class postCell: UITableViewCell {
                 if success {
                     print("liked")
                     self.likeBtn.setTitle("like", for: UIControlState())
-                    self.likeBtn.setBackgroundImage(UIImage(named: "like.png"), for: UIControlState())
+                    self.likeBtn.setBackgroundImage(UIImage(named: "heart-fill.png"), for: UIControlState())
                     
                     // send notification if we liked to refresh TableView
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
                     
                     // send notification as like
-                    if self.usernameBtn.titleLabel?.text != PFUser.current()?.username {
+                    if self.usernameLbl.text != PFUser.current()?.username {
                         let newsObj = PFObject(className: "news")
                         newsObj["by"] = PFUser.current()?.username
                         newsObj["ava"] = PFUser.current()?.object(forKey: "ava") as! PFFile
-                        newsObj["to"] = self.usernameBtn.titleLabel!.text
-                        newsObj["owner"] = self.usernameBtn.titleLabel!.text
+                        newsObj["to"] = self.usernameLbl.text
+                        newsObj["owner"] = self.usernameLbl.text
                         newsObj["uuid"] = self.uuidLbl.text
                         newsObj["type"] = "like"
                         newsObj["checked"] = "no"
+                        newsObj["firstname"] = PFUser.current()?.object(forKey: "firstname") as! String
+                        newsObj["lastname"] = PFUser.current()?.object(forKey: "lastname") as! String
+                        newsObj["private"] = PFUser.current()?.object(forKey: "private") as! Bool
                         newsObj.saveEventually()
                     }
-                    
                 }
             })
             
@@ -235,7 +171,7 @@ class postCell: UITableViewCell {
                         if success {
                             print("disliked")
                             self.likeBtn.setTitle("unlike", for: UIControlState())
-                            self.likeBtn.setBackgroundImage(UIImage(named: "unlike.png"), for: UIControlState())
+                            self.likeBtn.setBackgroundImage(UIImage(named: "heart-outline.png"), for: UIControlState())
                             
                             // send notification if we liked to refresh TableView
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
@@ -244,7 +180,7 @@ class postCell: UITableViewCell {
                             // delete like notification
                             let newsQuery = PFQuery(className: "news")
                             newsQuery.whereKey("by", equalTo: PFUser.current()!.username!)
-                            newsQuery.whereKey("to", equalTo: self.usernameBtn.titleLabel!.text!)
+                            newsQuery.whereKey("to", equalTo: self.usernameLbl.text!)
                             newsQuery.whereKey("uuid", equalTo: self.uuidLbl.text!)
                             newsQuery.whereKey("type", equalTo: "like")
                             newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
@@ -254,16 +190,112 @@ class postCell: UITableViewCell {
                                     }
                                 }
                             })
-                            
-                            
                         }
                     })
                 }
             })
-            
         }
-        
     }
     
     
+    // set post rating
+    func setRating(_ rating : CGFloat) {
+        reviewOverlayLeadingSpace.constant = rating * reviewBackground.frame.size.width
+        Review.colorReview(rating, reviewBackground)
+    }
+    
+    // set tags
+    func setTags(_ assignedTags : [String]) {
+        let numberOfTags = assignedTags.count
+        if 0 < numberOfTags {
+            tag1Btn.setTitle(assignedTags[0].uppercased(), for: .normal)
+            tag1View.isHidden = false
+        } else {
+            tag1View.isHidden = true
+        }
+        if 1 < numberOfTags {
+            tag2Btn.setTitle(assignedTags[1].uppercased(), for: .normal)
+            tag2View.isHidden = false
+        } else {
+            tag2View.isHidden = true
+        }
+        if 2 < numberOfTags {
+            tag3Btn.setTitle(assignedTags[2].uppercased(), for: .normal)
+            tag3View.isHidden = false
+        } else {
+            tag3View.isHidden = true
+        }
+    }
+    
+    // DELETE post action
+    class func deletePostData(_ uuid : String, _ isFavorite : Bool) {
+        
+        // STEP 1. Delete likes of post from server
+        let likeQuery = PFQuery(className: "likes")
+        likeQuery.whereKey("to", equalTo: uuid)
+        likeQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 2. Delete comments of post from server
+        let commentQuery = PFQuery(className: "comments")
+        commentQuery.whereKey("to", equalTo: uuid)
+        commentQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 3. Delete hashtags of post from server
+        let hashtagQuery = PFQuery(className: "hashtags")
+        hashtagQuery.whereKey("to", equalTo: uuid)
+        hashtagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 4. Delete tags to post from server
+        let tagQuery = PFQuery(className: "postTags")
+        tagQuery.whereKey("to", equalTo: uuid)
+        tagQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+        
+        // STEP 5. Delete post favorites from server
+        if isFavorite {
+            let favoriteQuery = PFQuery(className: "postFavorites")
+            favoriteQuery.whereKey("to", equalTo: uuid)
+            favoriteQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+                if error == nil {
+                    for object in objects! {
+                        object.deleteEventually()
+                    }
+                }
+            })
+        }
+        
+        // STEP 6. Delete news related to post from server
+        let newsQuery = PFQuery(className: "news")
+        newsQuery.whereKey("uuid", equalTo: uuid)
+        newsQuery.findObjectsInBackground(block: { (objects, error) -> Void in
+            if error == nil {
+                for object in objects! {
+                    object.deleteEventually()
+                }
+            }
+        })
+    }
 }

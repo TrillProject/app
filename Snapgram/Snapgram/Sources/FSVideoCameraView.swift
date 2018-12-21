@@ -15,6 +15,7 @@ import AVFoundation
 
 final class FSVideoCameraView: UIView {
 
+    @IBOutlet weak var cameraBtnView: UIView!
     @IBOutlet weak var previewViewContainer: UIView!
     @IBOutlet weak var shotButton: UIButton!
     @IBOutlet weak var flashButton: UIButton!
@@ -48,9 +49,13 @@ final class FSVideoCameraView: UIView {
             return
         }
         
+        cameraBtnView.addBottomBorder(lightGrey, width: 1.0)
+        
         self.backgroundColor = fusumaBackgroundColor
         
         self.isHidden = false
+        
+        shotButton.layer.cornerRadius = shotButton.frame.size.height / 2
         
         // AVCapture
         session = AVCaptureSession()
@@ -109,22 +114,22 @@ final class FSVideoCameraView: UIView {
         flashOnImage = fusumaFlashOnImage != nil ? fusumaFlashOnImage : UIImage(named: "ic_flash_on", in: bundle, compatibleWith: nil)
         flashOffImage = fusumaFlashOffImage != nil ? fusumaFlashOffImage : UIImage(named: "ic_flash_off", in: bundle, compatibleWith: nil)
         let flipImage = fusumaFlipImage != nil ? fusumaFlipImage : UIImage(named: "ic_loop", in: bundle, compatibleWith: nil)
-        videoStartImage = fusumaVideoStartImage != nil ? fusumaVideoStartImage : UIImage(named: "video_button", in: bundle, compatibleWith: nil)
-        videoStopImage = fusumaVideoStopImage != nil ? fusumaVideoStopImage : UIImage(named: "video_button_rec", in: bundle, compatibleWith: nil)
+        //videoStartImage = fusumaVideoStartImage != nil ? fusumaVideoStartImage : UIImage(named: "video_button", in: bundle, compatibleWith: nil)
+        //videoStopImage = fusumaVideoStopImage != nil ? fusumaVideoStopImage : UIImage(named: "video_button_rec", in: bundle, compatibleWith: nil)
 
         
         if(fusumaTintIcons) {
             flashButton.tintColor = fusumaBaseTintColor
             flipButton.tintColor  = fusumaBaseTintColor
-            shotButton.tintColor  = fusumaBaseTintColor
+            //shotButton.tintColor  = fusumaBaseTintColor
             
             flashButton.setImage(flashOffImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
             flipButton.setImage(flipImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
-            shotButton.setImage(videoStartImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
+            //shotButton.setImage(videoStartImage?.withRenderingMode(.alwaysTemplate), for: UIControlState())
         } else {
             flashButton.setImage(flashOffImage, for: UIControlState())
             flipButton.setImage(flipImage, for: UIControlState())
-            shotButton.setImage(videoStartImage, for: UIControlState())
+            //shotButton.setImage(videoStartImage, for: UIControlState())
         }
         
         flashConfiguration()
@@ -170,13 +175,15 @@ final class FSVideoCameraView: UIView {
         
         self.isRecording = !self.isRecording
         
-        let shotImage: UIImage?
+//        let shotImage: UIImage?
         if self.isRecording {
-            shotImage = videoStopImage
+            self.shotButton.layer.borderColor = lightGrey as! CGColor
+//            shotImage = videoStopImage
         } else {
-            shotImage = videoStartImage
+            self.shotButton.layer.borderColor = mainColor as! CGColor
+//            shotImage = videoStartImage
         }
-        self.shotButton.setImage(shotImage, for: UIControlState())
+//        self.shotButton.setImage(shotImage, for: UIControlState())
         
         if self.isRecording {
             let outputPath = "\(NSTemporaryDirectory())output.mov"

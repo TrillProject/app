@@ -12,6 +12,10 @@ import Parse
 
 class resetPasswordVC: UIViewController {
 
+    @IBOutlet weak var scrollView: UIScrollView!
+    
+    @IBOutlet weak var backgroundShape: UIView!
+    
     // textfield
     @IBOutlet weak var emailTxt: UITextField!
     
@@ -19,25 +23,34 @@ class resetPasswordVC: UIViewController {
     @IBOutlet weak var resetBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
     
+    @IBOutlet weak var resetBtnBottomSpace: NSLayoutConstraint!
+    
+    // variable to hold keyboard frame
+    private var keyboard = CGRect()
+    private var keyboardVisible = false
+    private var bottomScrollOffset = CGFloat(0)
     
     // default func
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // alignment
-        emailTxt.frame = CGRect(x: 10, y: 120, width: self.view.frame.size.width - 20, height: 30)
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.emailTxt.frame.height))
+        emailTxt.leftView = paddingView
+        emailTxt.leftViewMode = UITextFieldViewMode.always
         
-        resetBtn.frame = CGRect(x: 20, y: emailTxt.frame.origin.y + 50, width: self.view.frame.size.width / 4, height: 30)
-        resetBtn.layer.cornerRadius = resetBtn.frame.size.width / 20
+        emailTxt.setBottomBorder(color: mainColor, height: 2.0)
         
-        cancelBtn.frame = CGRect(x: self.view.frame.size.width - self.view.frame.size.width / 4 - 20, y: resetBtn.frame.origin.y, width: self.view.frame.size.width / 4, height: 30)
-        cancelBtn.layer.cornerRadius = cancelBtn.frame.size.width / 20
+//        backgroundShape.cornerRadius = backgroundShape.frame.size.width / 2
         
-        // background
-        let bg = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height))
-        bg.image = UIImage(named: "bg.jpg")
-        bg.layer.zPosition = -1
-        self.view.addSubview(bg)
+        // tap to hide keyboard
+        let hideTap = UITapGestureRecognizer(target: self, action: #selector(resetPasswordVC.hideKeyboard(_:)))
+        hideTap.numberOfTapsRequired = 1
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(hideTap)
+        
+        // check notifications of keyboard - shown or not
+        NotificationCenter.default.addObserver(self, selector: #selector(resetPasswordVC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resetPasswordVC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     
@@ -75,6 +88,48 @@ class resetPasswordVC: UIViewController {
             }
         }
         
+    }
+    
+    // hide keyboard func
+    func hideKeyboard(_ recognizer : UITapGestureRecognizer) {
+        self.view.endEditing(true)
+    }
+    
+    // func when keyboard is shown
+    @objc func keyboardWillShow(_ notification: Notification) {
+        
+        // define keyboard frame size
+        keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
+        
+        // move up with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            if !self.keyboardVisible {
+                self.resetBtnBottomSpace.constant = self.resetBtnBottomSpace.constant + self.keyboard.height
+                self.bottomScrollOffset = self.scrollView.contentSize.height + self.keyboard.height - self.scrollView.bounds.size.height
+            }
+            
+            if self.emailTxt.isFirstResponder {
+                if self.bottomScrollOffset > 0 {
+                    if self.bottomScrollOffset > self.emailTxt.frame.origin.y {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.emailTxt.frame.origin.y - 20), animated: true)
+                    } else {
+                        self.scrollView.setContentOffset(CGPoint(x: 0, y: self.bottomScrollOffset), animated: true)
+                    }
+                }
+                self.keyboardVisible = true
+            }
+        })
+    }
+    
+    // func when keyboard is hidden
+    @objc func keyboardWillHide(_ notification: Notification) {
+        
+        self.keyboardVisible = false
+        
+        // move down with animation
+        UIView.animate(withDuration: 0.4, animations: { () -> Void in
+            self.resetBtnBottomSpace.constant = self.resetBtnBottomSpace.constant - self.keyboard.height
+        })
     }
     
     

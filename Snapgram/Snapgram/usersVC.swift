@@ -66,7 +66,13 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
                 // found related objects
                 for object in objects! {
                     self.usernameArray.append(object.value(forKey: "username") as! String)
-                    self.avaArray.append(object.value(forKey: "ava") as! PFFile)
+                    if object.value(forKey: "ava") == nil {
+                        let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                        let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                        self.avaArray.append(avaFile!)
+                    } else {
+                        self.avaArray.append(object.value(forKey: "ava") as! PFFile)
+                    }
                 }
                 
                 // reload
@@ -121,7 +127,13 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
                 // found related objects
                 for object in objects! {
                     self.usernameArray.append(object.object(forKey: "username") as! String)
-                    self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                    if object.object(forKey: "ava") != nil {
+                        self.avaArray.append(object.object(forKey: "ava") as! PFFile)
+                    } else {
+                        let avaData = UIImageJPEGRepresentation(UIImage(named: "pp")!, 0.5)
+                        let avaFile = PFFile(name: "ava.jpg", data: avaData!)
+                        self.avaArray.append(avaFile!)
+                    }
                 }
                 
                 // reload
@@ -181,18 +193,18 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         // define cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! followersCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! userCell
 
-        // hide follow button
-        cell.followBtn.isHidden = true
-        
-        // connect cell's objects with received infromation from server
-        cell.usernameLbl.text = usernameArray[(indexPath as NSIndexPath).row]
-        avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
-            if error == nil {
-                cell.avaImg.image = UIImage(data: data!)
-            }
-        }
+//        // hide follow button
+//        cell.followBtn.isHidden = true
+//
+//        // connect cell's objects with received infromation from server
+//        cell.usernameLbl.text = usernameArray[(indexPath as NSIndexPath).row]
+//        avaArray[(indexPath as NSIndexPath).row].getDataInBackground { (data, error) -> Void in
+//            if error == nil {
+//                cell.avaImg.image = UIImage(data: data!)
+//            }
+//        }
 
         return cell
     }
@@ -202,17 +214,19 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // calling cell again to call cell data
-        let cell = tableView.cellForRow(at: indexPath) as! followersCell
+        let cell = tableView.cellForRow(at: indexPath) as! userCell
         
         // if user tapped on his name go home, else go guest
-        if cell.usernameLbl.text! == PFUser.current()?.username {
-            let home = self.storyboard?.instantiateViewController(withIdentifier: "homeVC") as! homeVC
-            self.navigationController?.pushViewController(home, animated: true)
-        } else {
-            guestname.append(cell.usernameLbl.text!)
-            let guest = self.storyboard?.instantiateViewController(withIdentifier: "guestVC") as! guestVC
-            self.navigationController?.pushViewController(guest, animated: true)
-        }
+//        if cell.usernameLbl.text! == PFUser.current()?.username {
+//            user = PFUser.current()!.username!
+//            let profile = self.storyboard?.instantiateViewController(withIdentifier: "profileVC") as! profileVC
+//            self.navigationController?.pushViewController(profile, animated: true)
+//        } else {
+//            guestname.append(cell.usernameLbl.text!)
+//            user = cell.usernameLbl.text!
+//            let profileUser = self.storyboard?.instantiateViewController(withIdentifier: "profileUserVC") as! profileUserVC
+//            self.navigationController?.pushViewController(profileUser, animated: true)
+//        }
     }
     
     
@@ -230,7 +244,7 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
         layout.scrollDirection = UICollectionViewScrollDirection.vertical
         
         // define frame of collectionView
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - self.tabBarController!.tabBar.frame.size.height - self.navigationController!.navigationBar.frame.size.height - 20)
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height - self.navigationController!.navigationBar.frame.size.height - 20)
         
         // declare collectionView
         collectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
@@ -333,7 +347,7 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
     // pagination
     func loadMore() {
         
-        // if more posts are unloaded, we wanna load them
+        // if more posts are unloaded, we want to load them
         if page <= picArray.count {
             
             // increase page size
@@ -367,4 +381,8 @@ class usersVC: UITableViewController, UISearchBarDelegate, UICollectionViewDeleg
         
     }
     
+    @IBAction func back_clicked(_ sender: UIBarButtonItem) {
+        self.view.endEditing(true)
+        self.dismiss(animated: true, completion: nil)
+    }
 }
