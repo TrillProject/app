@@ -263,7 +263,7 @@ final class FSCameraView: UIView, UIGestureRecognizerDelegate {
                 
                 for input in session.inputs {
                     
-                    session.removeInput(input as! AVCaptureInput)
+                    session.removeInput(input as? AVCaptureInput)
                 }
 
                 let position = (videoInput?.device.position == AVCaptureDevicePosition.front) ? AVCaptureDevicePosition.back : AVCaptureDevicePosition.front
