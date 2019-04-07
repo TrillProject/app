@@ -2,13 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<<<<<<< HEAD
-=======
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Tryll would like access to your photos!</string>
+	<string>Allow Tryll to access your photos</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Tryll would like to use your camera please!</string>
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
+	<string>Allow Tryll to access your camera</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -36,13 +33,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-<<<<<<< HEAD
-	<key>NSCameraUsageDescription</key>
-	<string>Tryll would like to use your camera please!</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Tryll would like access to your photos!</string>
-=======
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pacifico.tft</string>

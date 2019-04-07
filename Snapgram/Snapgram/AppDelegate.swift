@@ -9,11 +9,8 @@
 import UIKit
 import Parse
 import Bolts
-<<<<<<< HEAD
 import GoogleMaps
 import GooglePlaces
-=======
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,30 +19,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-<<<<<<< HEAD
         GMSServices.provideAPIKey("AIzaSyDztTkCcayrUSQKU3oKTZt-XM3kEr130dU")
         GMSPlacesClient.provideAPIKey("AIzaSyDztTkCcayrUSQKU3oKTZt-XM3kEr130dU")
-        
+
         // Override point for customization after application launch.
         // [Optional] Power your app with Local Datastore. For more info, go to
         // https://parse.com/docs/ios_guide#localdatastore/iOS
-        
-=======
-        // Override point for customization after application launch.
-        
-        // [Optional] Power your app with Local Datastore. For more info, go to
-        // https://parse.com/docs/ios_guide#localdatastore/iOS
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
+
         Parse.enableLocalDatastore()
-        
+
         // Initialize Parse.
         // Go to heroku.com register and deploy parse server--You will need to make database classes and columns later but for now use this to see how it works
-       
-<<<<<<< HEAD
+
         Message.registerSubclass()
-=======
-        
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         let parseConfig = ParseClientConfiguration { (ParseMutableClientConfiguration) in
             // accesing Heroku app via id & keys
             ParseMutableClientConfiguration.applicationId = "givmiIDbitEFMgFfJtWOUDvTySP"
@@ -53,22 +39,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ParseMutableClientConfiguration.server = "http://givmi.herokuapp.com/parse"
         }
         Parse.initialize(with: parseConfig)
-        
-<<<<<<< HEAD
-=======
-        
-        
-        
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
+
+
         // [Optional] Track statistics around application opens.
         PFAnalytics.trackAppOpened(launchOptions: launchOptions)
-        
+
         // call login function
         login()
-        
+
         // color of window
         window?.backgroundColor = .white
-        
+
         return true
     }
 
@@ -95,19 +76,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func login() {
-        
+
         // remember user's login
         let username : String? = UserDefaults.standard.string(forKey: "username")
-        
+
         // if loged in
         if username != nil {
-            
+
             let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let myTabBar = storyboard.instantiateViewController(withIdentifier: "tabBar") as! UITabBarController
             window?.rootViewController = myTabBar
         }
-        
-    }
-    
-}
 
+    }
+
+}

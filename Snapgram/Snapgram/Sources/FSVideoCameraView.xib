@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-<<<<<<< HEAD
     <device id="retina5_5" orientation="portrait">
-=======
-    <device id="retina4_7" orientation="portrait">
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -22,11 +18,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0hK-pW-0DW">
                     <rect key="frame" x="0.0" y="50" width="400" height="400"/>
-<<<<<<< HEAD
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-=======
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                     <constraints>
                         <constraint firstAttribute="width" secondItem="0hK-pW-0DW" secondAttribute="height" multiplier="1:1" id="EYm-IN-2Mh"/>
                     </constraints>
@@ -35,11 +27,7 @@
                     <rect key="frame" x="0.0" y="450" width="400" height="150"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oPV-fC-75T">
-<<<<<<< HEAD
                             <rect key="frame" x="15" y="55" width="40" height="40"/>
-=======
-                            <rect key="frame" x="20" y="55" width="40" height="40"/>
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="GcK-Ga-JH3"/>
                                 <constraint firstAttribute="height" constant="40" id="TcK-3W-Kpf"/>
@@ -57,28 +45,13 @@
                                 <constraint firstAttribute="width" constant="68" id="ggw-fN-Nue"/>
                             </constraints>
                             <inset key="contentEdgeInsets" minX="2" minY="2" maxX="2" maxY="2"/>
-<<<<<<< HEAD
                             <state key="normal" image="ic_shutter"/>
-=======
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                    <color key="value" red="0.72549019609999998" green="0.67450980390000004" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                    <real key="value" value="6"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                             <connections>
                                 <action selector="shotButtonPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="sNT-eM-y2G"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yHq-QZ-jPz">
-<<<<<<< HEAD
                             <rect key="frame" x="345" y="55" width="40" height="40"/>
-=======
-                            <rect key="frame" x="340" y="55" width="40" height="40"/>
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="C6F-2l-AWm"/>
                                 <constraint firstAttribute="height" constant="40" id="OR0-eQ-5pN"/>
@@ -94,17 +67,10 @@
                     <constraints>
                         <constraint firstItem="cpy-ro-bt6" firstAttribute="centerX" secondItem="6gh-EB-weA" secondAttribute="centerX" id="CPa-UK-eV1"/>
                         <constraint firstItem="oPV-fC-75T" firstAttribute="centerY" secondItem="6gh-EB-weA" secondAttribute="centerY" id="D1d-s9-DBb"/>
-<<<<<<< HEAD
                         <constraint firstItem="oPV-fC-75T" firstAttribute="leading" secondItem="6gh-EB-weA" secondAttribute="leading" constant="15" id="GTv-Vt-Mwd"/>
                         <constraint firstItem="cpy-ro-bt6" firstAttribute="centerY" secondItem="6gh-EB-weA" secondAttribute="centerY" id="USf-rF-Oy8"/>
                         <constraint firstItem="yHq-QZ-jPz" firstAttribute="centerY" secondItem="6gh-EB-weA" secondAttribute="centerY" id="udF-Hg-0iR"/>
                         <constraint firstAttribute="trailing" secondItem="yHq-QZ-jPz" secondAttribute="trailing" constant="15" id="x4Y-A2-snd"/>
-=======
-                        <constraint firstItem="oPV-fC-75T" firstAttribute="leading" secondItem="6gh-EB-weA" secondAttribute="leading" constant="20" id="GTv-Vt-Mwd"/>
-                        <constraint firstItem="cpy-ro-bt6" firstAttribute="centerY" secondItem="6gh-EB-weA" secondAttribute="centerY" id="USf-rF-Oy8"/>
-                        <constraint firstItem="yHq-QZ-jPz" firstAttribute="centerY" secondItem="6gh-EB-weA" secondAttribute="centerY" id="udF-Hg-0iR"/>
-                        <constraint firstAttribute="trailing" secondItem="yHq-QZ-jPz" secondAttribute="trailing" constant="20" id="x4Y-A2-snd"/>
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                     </constraints>
                 </view>
             </subviews>
@@ -120,10 +86,6 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-<<<<<<< HEAD
-=======
-                <outlet property="cameraBtnView" destination="6gh-EB-weA" id="i1n-C0-4tq"/>
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                 <outlet property="flashButton" destination="yHq-QZ-jPz" id="umV-Ve-W2b"/>
                 <outlet property="flipButton" destination="oPV-fC-75T" id="J96-fz-NnG"/>
                 <outlet property="previewViewContainer" destination="0hK-pW-0DW" id="8bh-3S-jSb"/>
@@ -135,9 +97,6 @@
     <resources>
         <image name="ic_flash_off" width="48" height="48"/>
         <image name="ic_loop" width="48" height="48"/>
-<<<<<<< HEAD
         <image name="ic_shutter" width="40" height="40"/>
-=======
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
     </resources>
 </document>

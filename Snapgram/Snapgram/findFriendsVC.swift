@@ -11,38 +11,34 @@ import UIKit
 class findFriendsVC: UITableViewController {
 
     @IBOutlet var nextBtns: [UIButton]!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.navigationItem.title = "Find Friends"
-        
+
         tableView.tableFooterView = UIView()
 
         for btn in nextBtns {
             tintBtn(btn)
         }
-        
+
     }
-    
+
     func tintBtn(_ button : UIButton) {
         let img = button.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
         button.setImage(img, for: .normal)
         button.tintColor = darkGrey
     }
-    
+
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let header = view as? UITableViewHeaderFooterView else { return }
         header.textLabel?.textColor = mainColor
-<<<<<<< HEAD
         header.textLabel?.font = UIFont(name: "Helvetica-Bold", size: 17)!
-=======
-        header.textLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 17)!
->>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         header.textLabel?.frame = header.frame
         header.contentView.backgroundColor = .white
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50.0
     }
