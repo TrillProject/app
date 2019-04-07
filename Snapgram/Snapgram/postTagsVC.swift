@@ -21,6 +21,7 @@ var customTags = [String]()
 var postRating : CGFloat?
 var isPostFavorite = false
 
+<<<<<<< HEAD
 
 var tags: [String] = []
 
@@ -37,6 +38,10 @@ let artsTags = ["Museum", "Movie Theater", "Orchestra", "Comedy Club", "Karaoke"
 let shopTags = ["Shopping Mall", "Boutique", "Bookshop", "Market", "Thrift Store", "Bakery", "High Fashion", "Supermarket", "Flea Market", "Florist"]
 
 let hotelTags = ["Vacation Resort", "AirBnB", "Hostel", "Bed and Breakfast", "Rental Apartment", "Inn", "Luxury Hotel", "Family Hotels", "Motel"]
+=======
+let tags = ["lobortis", "nam", "fermentum", "fusce", "dictum", "aman", "eu", "placerat", "suscipt", "neque", "imperdiet", "dabibus", "risus", "laoreet", "urna", "convallius", "quisque", "iaculis", "mattis"]
+
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 
 class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
@@ -100,10 +105,16 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         self.backgroundView.addGestureRecognizer(hideTap)
         
         // to connect with apple/google maps
+<<<<<<< HEAD
         //postAddress = "122 North 5th Street, Brooklyn, NY 11211"
         //postCountry = "USA"
         //postCity = "New York"
         
+=======
+        postAddress = "122 North 5th Street, Brooklyn, NY 11211"
+        postCountry = "USA"
+        postCity = "New York"
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
     }
     
     override func viewDidLayoutSubviews() {
@@ -114,6 +125,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
 
     // cell number
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+<<<<<<< HEAD
         
         if (selectedCategory == "country") {
             tags = countryTags
@@ -131,6 +143,8 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             tags = hotelTags
         }
         
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         if collectionView == tagsCollectionView {
             return tags.count
         } else {
@@ -193,7 +207,10 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
     // add post
     @IBAction func publishBtn_clicked(_ sender: UIBarButtonItem) {
         
+<<<<<<< HEAD
         sender.isEnabled = false
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
          //dissmiss keyboard
         self.view.endEditing(true)
         
@@ -227,8 +244,13 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         
         object["location"] = postLocation
         object["address"] = postAddress
+<<<<<<< HEAD
         //object["country"] = postCountry
         //object["city"] = postCity
+=======
+        object["country"] = postCountry
+        object["city"] = postCity
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         object["category"] = selectedCategory
         object["tags"] = objTags
         object["rating"] = postRating

@@ -258,7 +258,11 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                         
                         DispatchQueue.main.async {
                             self.peopleTableView.isHidden = false
+<<<<<<< HEAD
                             self.peopleTableViewIndicatorContainer.isHidden = false
+=======
+                            self.peopleTableViewIndicatorContainer.isHidden = true
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                             self.peopleTableViewIndicator.stopAnimating()
                         }
                         
@@ -392,8 +396,12 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
                         newsObj.saveEventually()
                         
                     } else {
+<<<<<<< HEAD
                         //sender.tintColor = mainFadedColor
                         sender.tintColor = darkGrey
+=======
+                        sender.tintColor = mainFadedColor
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                         
                         // send request notification
                         let requestObj = PFObject(className: "request")
@@ -853,8 +861,12 @@ class searchVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UI
             if followTypeArray[(indexPath as NSIndexPath).row] == 0 {
                 cell.followBtn.tintColor = lightGrey
             } else if followTypeArray[(indexPath as NSIndexPath).row] == 1 {
+<<<<<<< HEAD
                 //cell.followBtn.tintColor = mainFadedColor
                 cell.followBtn.tintColor = darkGrey
+=======
+                cell.followBtn.tintColor = mainFadedColor
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
             } else {
                 cell.followBtn.tintColor = highlightColor
             }

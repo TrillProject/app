@@ -34,7 +34,11 @@ class findFriendsVC: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let header = view as? UITableViewHeaderFooterView else { return }
         header.textLabel?.textColor = mainColor
+<<<<<<< HEAD
         header.textLabel?.font = UIFont(name: "Helvetica-Bold", size: 17)!
+=======
+        header.textLabel?.font = UIFont(name: "SFProDisplay-Regular", size: 17)!
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         header.textLabel?.frame = header.frame
         header.contentView.backgroundColor = .white
     }

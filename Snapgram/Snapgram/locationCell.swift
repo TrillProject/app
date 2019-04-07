@@ -7,8 +7,11 @@
 //
 
 import UIKit
+<<<<<<< HEAD
 import GoogleMaps
 import GooglePlaces
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 
 class locationCell: UITableViewCell {
 

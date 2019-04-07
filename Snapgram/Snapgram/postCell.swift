@@ -43,7 +43,10 @@ class postCell: UITableViewCell {
     @IBOutlet weak var tag3Btn: UIButton!
     
     // labels
+<<<<<<< HEAD
     @IBOutlet weak var commentLbl: UILabel!
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
     @IBOutlet weak var likeLbl: UILabel!
     @IBOutlet weak var titleLbl: KILabel!
     @IBOutlet weak var uuidLbl: UILabel!

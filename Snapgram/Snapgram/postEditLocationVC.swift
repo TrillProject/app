@@ -2,6 +2,7 @@
 //  postEditLocationVC.swift
 //  Snapgram
 //
+<<<<<<< HEAD
 //  Created by Anita Onyimah on 02/23/19.
 //
 
@@ -38,6 +39,32 @@ class postEditLocationVC: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+=======
+//  Created by Aleksandra Kolanko on 8/11/18.
+//  Copyright © 2018 Jaksa Tomovic. All rights reserved.
+//
+
+import UIKit
+
+class postEditLocationVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    
+    @IBOutlet weak var tableView: UITableView! {
+        didSet {
+            tableView.dataSource = self
+            tableView.delegate = self
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.navigationItem.title = "Edit Location"
+        
+        tableView.tableFooterView = UIView()
+        
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         if let textfield = searchBar.value(forKey: "_searchField") as? UITextField {
             textfield.textColor = darkGrey
             if let backgroundview = textfield.subviews.first {
@@ -45,6 +72,7 @@ class postEditLocationVC: UIViewController, UITableViewDelegate, UITableViewData
                 backgroundview.clipsToBounds = true
             }
         }
+<<<<<<< HEAD
            searchPlaceFromGoogle(place:searchBar.text!)
     }
     
@@ -80,11 +108,17 @@ class postEditLocationVC: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
         task.resume()
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
     }
     
     //cell number
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+<<<<<<< HEAD
         return resultsArray.count
+=======
+        return 0
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
     }
     
     // cell config
@@ -92,6 +126,7 @@ class postEditLocationVC: UIViewController, UITableViewDelegate, UITableViewData
         
         // define cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "Location Cell") as! locationCell
+<<<<<<< HEAD
         let place = self.resultsArray[indexPath.row]
         cell.locationTitle.text = "\(place["name"] as! String)"
         cell.addressLbl.text = "\(place["formatted_address"] as! String)"
@@ -107,6 +142,20 @@ class postEditLocationVC: UIViewController, UITableViewDelegate, UITableViewData
         let cell = tableView.cellForRow(at: indexPath) as! locationCell
         postLocation = cell.locationTitle.text!
         postAddress = cell.addressLbl.text!
+=======
+        
+        return cell
+    }
+    
+    // selected location
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let cell = tableView.cellForRow(at: indexPath) as! locationCell
+        
+        postLocation = cell.locationTitle.text!
+        postAddress = cell.addressLbl.text!
+        
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         self.dismiss(animated: true, completion: nil)
     }
     

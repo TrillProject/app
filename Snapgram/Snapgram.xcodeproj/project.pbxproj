@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+<<<<<<< HEAD
 		1F4BE6651DEF4CF000C9129A /* FSAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE6571DEF4CF000C9129A /* FSAlbumView.swift */; };
 		1F4BE6671DEF4CF000C9129A /* FSAlbumViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE6591DEF4CF000C9129A /* FSAlbumViewCell.swift */; };
 		1F4BE6691DEF4CF000C9129A /* FSCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE65B1DEF4CF000C9129A /* FSCameraView.swift */; };
@@ -14,6 +15,25 @@
 		1F4BE66D1DEF4CF000C9129A /* FSVideoCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE65F1DEF4CF000C9129A /* FSVideoCameraView.swift */; };
 		1F4BE66F1DEF4CF000C9129A /* FusumaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE6611DEF4CF000C9129A /* FusumaViewController.swift */; };
 		1F4BE6701DEF4CF000C9129A /* FusumaViewController.swift.orig in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE6621DEF4CF000C9129A /* FusumaViewController.swift.orig */; };
+=======
+		05CF842421CD65EE00BC850E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F7901D41DEC68E600D921C8 /* StoreKit.framework */; };
+		05CF842721D1997000BC850E /* SF Pro in Resources */ = {isa = PBXBuildFile; fileRef = 05CF842521D1997000BC850E /* SF Pro */; };
+		05CF842821D1997000BC850E /* SF Compact in Resources */ = {isa = PBXBuildFile; fileRef = 05CF842621D1997000BC850E /* SF Compact */; };
+		1F4BE6641DEF4CF000C9129A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE6561DEF4CF000C9129A /* Assets.xcassets */; };
+		1F4BE6651DEF4CF000C9129A /* FSAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE6571DEF4CF000C9129A /* FSAlbumView.swift */; };
+		1F4BE6661DEF4CF000C9129A /* FSAlbumView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE6581DEF4CF000C9129A /* FSAlbumView.xib */; };
+		1F4BE6671DEF4CF000C9129A /* FSAlbumViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE6591DEF4CF000C9129A /* FSAlbumViewCell.swift */; };
+		1F4BE6681DEF4CF000C9129A /* FSAlbumViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE65A1DEF4CF000C9129A /* FSAlbumViewCell.xib */; };
+		1F4BE6691DEF4CF000C9129A /* FSCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE65B1DEF4CF000C9129A /* FSCameraView.swift */; };
+		1F4BE66A1DEF4CF000C9129A /* FSCameraView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE65C1DEF4CF000C9129A /* FSCameraView.xib */; };
+		1F4BE66B1DEF4CF000C9129A /* FSConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE65D1DEF4CF000C9129A /* FSConstants.swift */; };
+		1F4BE66C1DEF4CF000C9129A /* FSImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE65E1DEF4CF000C9129A /* FSImageCropView.swift */; };
+		1F4BE66D1DEF4CF000C9129A /* FSVideoCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE65F1DEF4CF000C9129A /* FSVideoCameraView.swift */; };
+		1F4BE66E1DEF4CF000C9129A /* FSVideoCameraView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE6601DEF4CF000C9129A /* FSVideoCameraView.xib */; };
+		1F4BE66F1DEF4CF000C9129A /* FusumaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4BE6611DEF4CF000C9129A /* FusumaViewController.swift */; };
+		1F4BE6701DEF4CF000C9129A /* FusumaViewController.swift.orig in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE6621DEF4CF000C9129A /* FusumaViewController.swift.orig */; };
+		1F4BE6711DEF4CF000C9129A /* FusumaViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F4BE6631DEF4CF000C9129A /* FusumaViewController.xib */; };
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 		1F7901AB1DEC679500D921C8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F7901AA1DEC679500D921C8 /* AppDelegate.swift */; };
 		1F7901BE1DEC680600D921C8 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F7901BC1DEC680600D921C8 /* Bolts.framework */; };
 		1F7901BF1DEC680600D921C8 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F7901BD1DEC680600D921C8 /* Parse.framework */; };
@@ -91,6 +111,7 @@
 		2AF187F02140C22A006943AA /* tagsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF187EF2140C22A006943AA /* tagsCollectionCell.swift */; };
 		2AF187F22140C25A006943AA /* tagsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF187F12140C25A006943AA /* tagsTableCell.swift */; };
 		2AF761A2213C375200AE3AEF /* suitcaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF761A1213C375200AE3AEF /* suitcaseVC.swift */; };
+<<<<<<< HEAD
 		9DC9BF352223B9430042A7C7 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC9BF332223B9430042A7C7 /* UIViewExtensions.swift */; };
 		9DC9BF362223B9430042A7C7 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC9BF342223B9430042A7C7 /* UIColorExtensions.swift */; };
 		9DC9BF3A2223BA540042A7C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9DC9BF392223BA530042A7C7 /* Assets.xcassets */; };
@@ -117,6 +138,27 @@
 		1F4BE65F1DEF4CF000C9129A /* FSVideoCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoCameraView.swift; sourceTree = "<group>"; };
 		1F4BE6611DEF4CF000C9129A /* FusumaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusumaViewController.swift; sourceTree = "<group>"; };
 		1F4BE6621DEF4CF000C9129A /* FusumaViewController.swift.orig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FusumaViewController.swift.orig; sourceTree = "<group>"; };
+=======
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		05CF842521D1997000BC850E /* SF Pro */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "SF Pro"; path = "../../../../../../Volumes/SF-Font/SF Pro"; sourceTree = "<group>"; };
+		05CF842621D1997000BC850E /* SF Compact */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "SF Compact"; path = "../../../../../../Volumes/SF-Font/SF Compact"; sourceTree = "<group>"; };
+		1F4BE6561DEF4CF000C9129A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1F4BE6571DEF4CF000C9129A /* FSAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumView.swift; sourceTree = "<group>"; };
+		1F4BE6581DEF4CF000C9129A /* FSAlbumView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAlbumView.xib; sourceTree = "<group>"; };
+		1F4BE6591DEF4CF000C9129A /* FSAlbumViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumViewCell.swift; sourceTree = "<group>"; };
+		1F4BE65A1DEF4CF000C9129A /* FSAlbumViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAlbumViewCell.xib; sourceTree = "<group>"; };
+		1F4BE65B1DEF4CF000C9129A /* FSCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraView.swift; sourceTree = "<group>"; };
+		1F4BE65C1DEF4CF000C9129A /* FSCameraView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSCameraView.xib; sourceTree = "<group>"; };
+		1F4BE65D1DEF4CF000C9129A /* FSConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSConstants.swift; sourceTree = "<group>"; };
+		1F4BE65E1DEF4CF000C9129A /* FSImageCropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSImageCropView.swift; sourceTree = "<group>"; };
+		1F4BE65F1DEF4CF000C9129A /* FSVideoCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoCameraView.swift; sourceTree = "<group>"; };
+		1F4BE6601DEF4CF000C9129A /* FSVideoCameraView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSVideoCameraView.xib; sourceTree = "<group>"; };
+		1F4BE6611DEF4CF000C9129A /* FusumaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusumaViewController.swift; sourceTree = "<group>"; };
+		1F4BE6621DEF4CF000C9129A /* FusumaViewController.swift.orig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = FusumaViewController.swift.orig; sourceTree = "<group>"; };
+		1F4BE6631DEF4CF000C9129A /* FusumaViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FusumaViewController.xib; sourceTree = "<group>"; };
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 		1F7901A71DEC679500D921C8 /* Snapgram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Snapgram.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F7901AA1DEC679500D921C8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1F7901B61DEC679500D921C8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -131,6 +173,10 @@
 		1F7901CE1DEC68CD00D921C8 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		1F7901D01DEC68D800D921C8 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		1F7901D21DEC68DF00D921C8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+<<<<<<< HEAD
+=======
+		1F7901D41DEC68E600D921C8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 		1F7901D61DEC68ED00D921C8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		1F7901D81DEC68F400D921C8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1F7901DA1DEC68FC00D921C8 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -198,6 +244,7 @@
 		2AF187EF2140C22A006943AA /* tagsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tagsCollectionCell.swift; sourceTree = "<group>"; };
 		2AF187F12140C25A006943AA /* tagsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tagsTableCell.swift; sourceTree = "<group>"; };
 		2AF761A1213C375200AE3AEF /* suitcaseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = suitcaseVC.swift; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		4755F28747E082CE373C8D5F /* Pods-Snapgram.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Snapgram.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Snapgram/Pods-Snapgram.debug.xcconfig"; sourceTree = "<group>"; };
 		9DC9BF332223B9430042A7C7 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		9DC9BF342223B9430042A7C7 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
@@ -214,6 +261,8 @@
 		9DCD72A2223B600400BE379F /* Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
 		9DCD72AA223B709800BE379F /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		D45442EC5445FCE9A3ADB14B /* Pods-Snapgram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Snapgram.release.xcconfig"; path = "Pods/Target Support Files/Pods-Snapgram/Pods-Snapgram.release.xcconfig"; sourceTree = "<group>"; };
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -224,6 +273,10 @@
 				1F7901E11DEC690E00D921C8 /* CFNetwork.framework in Frameworks */,
 				1F7901DF1DEC690900D921C8 /* AudioToolbox.framework in Frameworks */,
 				1F7901DD1DEC690200D921C8 /* CoreLocation.framework in Frameworks */,
+<<<<<<< HEAD
+=======
+				05CF842421CD65EE00BC850E /* StoreKit.framework in Frameworks */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F7901DB1DEC68FC00D921C8 /* CoreGraphics.framework in Frameworks */,
 				1F7901D91DEC68F400D921C8 /* QuartzCore.framework in Frameworks */,
 				1F7901D71DEC68ED00D921C8 /* Security.framework in Frameworks */,
@@ -232,7 +285,10 @@
 				1F7901CF1DEC68CD00D921C8 /* libz.tbd in Frameworks */,
 				1F7901BF1DEC680600D921C8 /* Parse.framework in Frameworks */,
 				1F7901BE1DEC680600D921C8 /* Bolts.framework in Frameworks */,
+<<<<<<< HEAD
 				F4A3BCD6D361688063CD607F /* Pods_Snapgram.framework in Frameworks */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +298,7 @@
 		1F4BE6551DEF4CF000C9129A /* Core */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				9DC9BF452223C6F60042A7C7 /* FusumaViewController.xib */,
 				9DC9BF432223C6400042A7C7 /* FSVideoCameraView.xib */,
 				9DC9BF412223C1470042A7C7 /* FSCameraView.xib */,
@@ -256,6 +313,22 @@
 				1F4BE65F1DEF4CF000C9129A /* FSVideoCameraView.swift */,
 				1F4BE6611DEF4CF000C9129A /* FusumaViewController.swift */,
 				1F4BE6621DEF4CF000C9129A /* FusumaViewController.swift.orig */,
+=======
+				1F4BE6561DEF4CF000C9129A /* Assets.xcassets */,
+				1F4BE6571DEF4CF000C9129A /* FSAlbumView.swift */,
+				1F4BE6581DEF4CF000C9129A /* FSAlbumView.xib */,
+				1F4BE6591DEF4CF000C9129A /* FSAlbumViewCell.swift */,
+				1F4BE65A1DEF4CF000C9129A /* FSAlbumViewCell.xib */,
+				1F4BE65B1DEF4CF000C9129A /* FSCameraView.swift */,
+				1F4BE65C1DEF4CF000C9129A /* FSCameraView.xib */,
+				1F4BE65D1DEF4CF000C9129A /* FSConstants.swift */,
+				1F4BE65E1DEF4CF000C9129A /* FSImageCropView.swift */,
+				1F4BE65F1DEF4CF000C9129A /* FSVideoCameraView.swift */,
+				1F4BE6601DEF4CF000C9129A /* FSVideoCameraView.xib */,
+				1F4BE6611DEF4CF000C9129A /* FusumaViewController.swift */,
+				1F4BE6621DEF4CF000C9129A /* FusumaViewController.swift.orig */,
+				1F4BE6631DEF4CF000C9129A /* FusumaViewController.xib */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			);
 			name = Core;
 			path = Sources;
@@ -267,7 +340,10 @@
 				1F7901A91DEC679500D921C8 /* Snapgram */,
 				1F7901A81DEC679500D921C8 /* Products */,
 				1F7901CD1DEC68CD00D921C8 /* Frameworks */,
+<<<<<<< HEAD
 				96EA0EC9326E4ED14B0ACB21 /* Pods */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			);
 			sourceTree = "<group>";
 		};
@@ -283,7 +359,10 @@
 			isa = PBXGroup;
 			children = (
 				1F7901E31DEC6B2200D921C8 /* Main.storyboard */,
+<<<<<<< HEAD
 				9DCD72962226632300BE379F /* Message.swift */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F7901AA1DEC679500D921C8 /* AppDelegate.swift */,
 				1F7901E51DEC6BDA00D921C8 /* signInVC.swift */,
 				2A769C59212CA79F00A297DE /* signUpOptionsVC.swift */,
@@ -347,10 +426,13 @@
 				1F7901C41DEC683500D921C8 /* Assets.xcassets */,
 				1F4BE6551DEF4CF000C9129A /* Core */,
 				1F7901E21DEC6AA600D921C8 /* Supporting Files */,
+<<<<<<< HEAD
 				9DCD729C223B584900BE379F /* MessagesViewController.swift */,
 				9DCD729E223B5C3900BE379F /* SelectSingleViewController.swift */,
 				9DCD72A0223B5CE800BE379F /* MessagesCell.swift */,
 				9DCD72A2223B600400BE379F /* Messages.swift */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			);
 			path = Snapgram;
 			sourceTree = "<group>";
@@ -358,6 +440,11 @@
 		1F7901CD1DEC68CD00D921C8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
+=======
+				05CF842621D1997000BC850E /* SF Compact */,
+				05CF842521D1997000BC850E /* SF Pro */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F7901C11DEC682900D921C8 /* KILabel.h */,
 				1F7901C21DEC682900D921C8 /* KILabel.m */,
 				1F7901C01DEC682800D921C8 /* Snapgram-Bridging-Header.h */,
@@ -369,10 +456,17 @@
 				1F7901DA1DEC68FC00D921C8 /* CoreGraphics.framework */,
 				1F7901D81DEC68F400D921C8 /* QuartzCore.framework */,
 				1F7901D61DEC68ED00D921C8 /* Security.framework */,
+<<<<<<< HEAD
 				1F7901D21DEC68DF00D921C8 /* SystemConfiguration.framework */,
 				1F7901D01DEC68D800D921C8 /* libsqlite3.tbd */,
 				1F7901CE1DEC68CD00D921C8 /* libz.tbd */,
 				1ED690869431BC6AB159E31F /* Pods_Snapgram.framework */,
+=======
+				1F7901D41DEC68E600D921C8 /* StoreKit.framework */,
+				1F7901D21DEC68DF00D921C8 /* SystemConfiguration.framework */,
+				1F7901D01DEC68D800D921C8 /* libsqlite3.tbd */,
+				1F7901CE1DEC68CD00D921C8 /* libz.tbd */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -380,7 +474,10 @@
 		1F7901E21DEC6AA600D921C8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
 				9DCD72AA223B709800BE379F /* ChatViewController.swift */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F7902491DEC80BA00D921C8 /* SplashScreen.storyboard */,
 				1F7901B61DEC679500D921C8 /* Info.plist */,
 				1F7901CB1DEC685500D921C8 /* bg.jpg */,
@@ -389,6 +486,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD
 		96EA0EC9326E4ED14B0ACB21 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -407,6 +505,8 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -414,12 +514,18 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1F7901B91DEC679500D921C8 /* Build configuration list for PBXNativeTarget "Snapgram" */;
 			buildPhases = (
+<<<<<<< HEAD
 				1AFCE1C8BA8D20783A8E077F /* [CP] Check Pods Manifest.lock */,
 				1F7901A31DEC679500D921C8 /* Sources */,
 				1F7901A41DEC679500D921C8 /* Frameworks */,
 				1F7901A51DEC679500D921C8 /* Resources */,
 				3CC1513E3AF540DE670A83BB /* [CP] Copy Pods Resources */,
 				E4018F0C2E629BD49FA2386B /* [CP] Embed Pods Frameworks */,
+=======
+				1F7901A31DEC679500D921C8 /* Sources */,
+				1F7901A41DEC679500D921C8 /* Frameworks */,
+				1F7901A51DEC679500D921C8 /* Resources */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			);
 			buildRules = (
 			);
@@ -442,12 +548,20 @@
 				TargetAttributes = {
 					1F7901A61DEC679500D921C8 = {
 						CreatedOnToolsVersion = 8.0;
+<<<<<<< HEAD
 						DevelopmentTeam = 7AXRKBH924;
+=======
+						DevelopmentTeam = KJ774AAHDL;
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
+<<<<<<< HEAD
 								enabled = 0;
+=======
+								enabled = 1;
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 							};
 						};
 					};
@@ -476,6 +590,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+<<<<<<< HEAD
 				9DC9BF3C2223BFE70042A7C7 /* FSAlbumView.xib in Resources */,
 				9DC9BF462223C6F70042A7C7 /* FusumaViewController.xib in Resources */,
 				1F7901C51DEC683600D921C8 /* Assets.xcassets in Resources */,
@@ -487,12 +602,28 @@
 				1F79024A1DEC80BA00D921C8 /* SplashScreen.storyboard in Resources */,
 				9DC9BF402223C0F80042A7C7 /* FSAlbumViewCell.xib in Resources */,
 				9DC9BF3A2223BA540042A7C7 /* Assets.xcassets in Resources */,
+=======
+				1F4BE66E1DEF4CF000C9129A /* FSVideoCameraView.xib in Resources */,
+				1F4BE6711DEF4CF000C9129A /* FusumaViewController.xib in Resources */,
+				1F4BE66A1DEF4CF000C9129A /* FSCameraView.xib in Resources */,
+				1F7901C51DEC683600D921C8 /* Assets.xcassets in Resources */,
+				05CF842821D1997000BC850E /* SF Compact in Resources */,
+				1F4BE6681DEF4CF000C9129A /* FSAlbumViewCell.xib in Resources */,
+				1F7901CA1DEC684A00D921C8 /* Pacifico.ttf in Resources */,
+				05CF842721D1997000BC850E /* SF Pro in Resources */,
+				1F4BE6661DEF4CF000C9129A /* FSAlbumView.xib in Resources */,
+				1F4BE6701DEF4CF000C9129A /* FusumaViewController.swift.orig in Resources */,
+				1F7901CC1DEC685500D921C8 /* bg.jpg in Resources */,
+				1F79024A1DEC80BA00D921C8 /* SplashScreen.storyboard in Resources */,
+				1F4BE6641DEF4CF000C9129A /* Assets.xcassets in Resources */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F7901E41DEC6B2200D921C8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
+<<<<<<< HEAD
 /* Begin PBXShellScriptBuildPhase section */
 		1AFCE1C8BA8D20783A8E077F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -558,6 +689,8 @@
 		};
 /* End PBXShellScriptBuildPhase section */
 
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 /* Begin PBXSourcesBuildPhase section */
 		1F7901A31DEC679500D921C8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -567,7 +700,10 @@
 				2A0BED7420FD8B13006AB72E /* extensions.swift in Sources */,
 				1F4BE6691DEF4CF000C9129A /* FSCameraView.swift in Sources */,
 				2A458DF2216FA620002384EB /* favoritesCell.swift in Sources */,
+<<<<<<< HEAD
 				9DC9BF352223B9430042A7C7 /* UIViewExtensions.swift in Sources */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F4BE66D1DEF4CF000C9129A /* FSVideoCameraView.swift in Sources */,
 				2A3C0B8B216C4ED9001FEECA /* SuitcaseCollectionCell.swift in Sources */,
 				2A65BA05211F64C000DC46EE /* postEditLocationVC.swift in Sources */,
@@ -584,7 +720,10 @@
 				2A6742A421066C6D00B13987 /* changePasswordVC.swift in Sources */,
 				2A6683F02139D72E005D94EE /* userCell.swift in Sources */,
 				1F79020F1DEC6BDA00D921C8 /* navVC.swift in Sources */,
+<<<<<<< HEAD
 				9DCD72972226632300BE379F /* Message.swift in Sources */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F7902001DEC6BDA00D921C8 /* usersVC.swift in Sources */,
 				1F7901C31DEC682900D921C8 /* KILabel.m in Sources */,
 				2A6683F42139E2C1005D94EE /* postCategory.swift in Sources */,
@@ -593,8 +732,11 @@
 				2A25147220FBE13D0079F3DE /* signUp2VC.swift in Sources */,
 				2A6FC84620FCEC380023B5DE /* signUp1VC.swift in Sources */,
 				1F7902091DEC6BDA00D921C8 /* postCell.swift in Sources */,
+<<<<<<< HEAD
 				9DCD729D223B584900BE379F /* MessagesViewController.swift in Sources */,
 				9DC9BF362223B9430042A7C7 /* UIColorExtensions.swift in Sources */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				2A57B7C1217FBF9B00309A74 /* friendCell.swift in Sources */,
 				2AF0994A2101313E007555CE /* settingsVC.swift in Sources */,
 				2AC4DB4A21001A7700040525 /* profileFollowersVC.swift in Sources */,
@@ -606,7 +748,10 @@
 				1F79020C1DEC6BDA00D921C8 /* commentVC.swift in Sources */,
 				2A8033002134561200A444F1 /* findFriendsVC.swift in Sources */,
 				1F79020D1DEC6BDA00D921C8 /* commentCell.swift in Sources */,
+<<<<<<< HEAD
 				9DCD72AB223B709800BE379F /* ChatViewController.swift in Sources */,
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				2A1935FA211E20B0006EC81A /* tagCell.swift in Sources */,
 				2A3088602121F0B200C79809 /* constants.swift in Sources */,
 				2ADF6B44212F1B710076B1B7 /* notificationCell.swift in Sources */,
@@ -614,12 +759,18 @@
 				2A57B7BF217FBEE500309A74 /* filterFriendsVC.swift in Sources */,
 				2A65BA03211F582B00DC46EE /* leftAlignedCollectionView.swift in Sources */,
 				1F7901AB1DEC679500D921C8 /* AppDelegate.swift in Sources */,
+<<<<<<< HEAD
 				9DCD72A1223B5CE800BE379F /* MessagesCell.swift in Sources */,
 				2A8A75E0214439E80093F63C /* searchUserCell.swift in Sources */,
 				2AC4DB462100199B00040525 /* profileFeedVC.swift in Sources */,
 				9DCD72A3223B600400BE379F /* Messages.swift in Sources */,
 				2AD306C220FE83ED006F16D0 /* profileVC.swift in Sources */,
 				9DCD729F223B5C3900BE379F /* SelectSingleViewController.swift in Sources */,
+=======
+				2A8A75E0214439E80093F63C /* searchUserCell.swift in Sources */,
+				2AC4DB462100199B00040525 /* profileFeedVC.swift in Sources */,
+				2AD306C220FE83ED006F16D0 /* profileVC.swift in Sources */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				1F4BE6671DEF4CF000C9129A /* FSAlbumViewCell.swift in Sources */,
 				2AF187F02140C22A006943AA /* tagsCollectionCell.swift in Sources */,
 				2A2957332107807700D60D7D /* followerCell.swift in Sources */,
@@ -633,6 +784,10 @@
 				2A179838210921CF0094FFF2 /* editProfileVC.swift in Sources */,
 				1F4BE66C1DEF4CF000C9129A /* FSImageCropView.swift in Sources */,
 				2AD2DD7820FFAF8300F65CD0 /* profileUserVC.swift in Sources */,
+<<<<<<< HEAD
+=======
+				1F4BE66B1DEF4CF000C9129A /* FSConstants.swift in Sources */,
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				2A8A75DE214439450093F63C /* searchVC.swift in Sources */,
 				2AF761A2213C375200AE3AEF /* suitcaseVC.swift in Sources */,
 				2A8A75E221447DEF0093F63C /* searchPlaceCell.swift in Sources */,
@@ -757,7 +912,10 @@
 		};
 		1F7901BA1DEC679500D921C8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = 4755F28747E082CE373C8D5F /* Pods-Snapgram.debug.xcconfig */;
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -765,16 +923,26 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 7AXRKBH924;
+=======
+				DEVELOPMENT_TEAM = KJ774AAHDL;
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Snapgram",
 				);
 				INFOPLIST_FILE = Snapgram/Info.plist;
+<<<<<<< HEAD
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tryll.iosapp;
+=======
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trill.iosapp;
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Snapgram/Snapgram-Bridging-Header.h";
@@ -785,7 +953,10 @@
 		};
 		1F7901BB1DEC679500D921C8 /* Release */ = {
 			isa = XCBuildConfiguration;
+<<<<<<< HEAD
 			baseConfigurationReference = D45442EC5445FCE9A3ADB14B /* Pods-Snapgram.release.xcconfig */;
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -793,16 +964,26 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = 7AXRKBH924;
+=======
+				DEVELOPMENT_TEAM = KJ774AAHDL;
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Snapgram",
 				);
 				INFOPLIST_FILE = Snapgram/Info.plist;
+<<<<<<< HEAD
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tryll.iosapp;
+=======
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trill.iosapp;
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Snapgram/Snapgram-Bridging-Header.h";

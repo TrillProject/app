@@ -173,8 +173,12 @@ class profileUserVC: UIViewController {
                                     self.isFollowing = true
                                     self.pendingRequest = false
                                 } else {
+<<<<<<< HEAD
                                     //self.followBtn.tintColor = mainFadedColor
                                     self.followBtn.tintColor = darkGrey
+=======
+                                    self.followBtn.tintColor = mainFadedColor
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                                     self.isFollowing = false
                                     self.pendingRequest = true
                                 }
@@ -238,8 +242,12 @@ class profileUserVC: UIViewController {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "followingUserChanged"), object: nil)
                         
                     } else {
+<<<<<<< HEAD
                         //self.followBtn.tintColor = mainFadedColor
                         self.followBtn.tintColor = darkGrey
+=======
+                        self.followBtn.tintColor = mainFadedColor
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                         self.privateLbl.text = "Follow request sent."
                         
                         // send request notification
@@ -322,7 +330,11 @@ class profileUserVC: UIViewController {
             })
             
         // delete follow request notification
+<<<<<<< HEAD
         } else if self.followBtn.tintColor == darkGrey {
+=======
+        } else if self.followBtn.tintColor == mainFadedColor {
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
             
             // delete follow request
             let requestQuery = PFQuery(className: "request")

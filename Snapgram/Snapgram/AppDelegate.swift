@@ -9,8 +9,11 @@
 import UIKit
 import Parse
 import Bolts
+<<<<<<< HEAD
 import GoogleMaps
 import GooglePlaces
+=======
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+<<<<<<< HEAD
         GMSServices.provideAPIKey("AIzaSyDztTkCcayrUSQKU3oKTZt-XM3kEr130dU")
         GMSPlacesClient.provideAPIKey("AIzaSyDztTkCcayrUSQKU3oKTZt-XM3kEr130dU")
         
@@ -26,12 +30,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // [Optional] Power your app with Local Datastore. For more info, go to
         // https://parse.com/docs/ios_guide#localdatastore/iOS
         
+=======
+        // Override point for customization after application launch.
+        
+        // [Optional] Power your app with Local Datastore. For more info, go to
+        // https://parse.com/docs/ios_guide#localdatastore/iOS
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         Parse.enableLocalDatastore()
         
         // Initialize Parse.
         // Go to heroku.com register and deploy parse server--You will need to make database classes and columns later but for now use this to see how it works
        
+<<<<<<< HEAD
         Message.registerSubclass()
+=======
+        
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         let parseConfig = ParseClientConfiguration { (ParseMutableClientConfiguration) in
             // accesing Heroku app via id & keys
             ParseMutableClientConfiguration.applicationId = "givmiIDbitEFMgFfJtWOUDvTySP"
@@ -40,6 +54,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         Parse.initialize(with: parseConfig)
         
+<<<<<<< HEAD
+=======
+        
+        
+        
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         // [Optional] Track statistics around application opens.
         PFAnalytics.trackAppOpened(launchOptions: launchOptions)
         

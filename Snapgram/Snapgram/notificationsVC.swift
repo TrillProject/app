@@ -525,8 +525,12 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 if followTypeArray[(indexPath as NSIndexPath).row] == 0 {
                     cell.followBtn.tintColor = lightGrey
                 } else if followTypeArray[(indexPath as NSIndexPath).row] == 1 {
+<<<<<<< HEAD
                     //cell.followBtn.tintColor = mainFadedColor
                     cell.followBtn.tintColor = darkGrey
+=======
+                    cell.followBtn.tintColor = mainFadedColor
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                 } else {
                     cell.followBtn.tintColor = highlightColor
                 }
@@ -809,8 +813,12 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                         newsObj.saveEventually()
                         
                     } else {
+<<<<<<< HEAD
                         //sender.tintColor = mainFadedColor
                         sender.tintColor = darkGrey
+=======
+                        sender.tintColor = mainFadedColor
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
                         
                         // send request notification
                         let requestObj = PFObject(className: "request")
@@ -834,8 +842,12 @@ class notificationsVC: UIViewController, UITableViewDelegate, UITableViewDataSou
                 }
             })
             
+<<<<<<< HEAD
         //} else if sender.tintColor == mainFadedColor {
         } else if sender.tintColor == darkGrey {
+=======
+        } else if sender.tintColor == mainFadedColor {
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
             // follow requested - delete follow request
             let requestQuery = PFQuery(className: "request")
             requestQuery.whereKey("by", equalTo: PFUser.current()!.username!)

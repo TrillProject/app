@@ -15,7 +15,11 @@ class navVC: UINavigationController {
         super.viewDidLoad()
         
         // color of title at the top in nav controller
+<<<<<<< HEAD
         self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.black, NSFontAttributeName: UIFont(name: "HelveticaNeue-Light", size: 20)!]
+=======
+        self.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.black, NSFontAttributeName: UIFont(name: "SFProDisplay-Regular", size: 20)!]
+>>>>>>> c28dcf5813b8b42094a7e7d5cc8eec304ec093cc
         
         // color of buttons in nav controller
         self.navigationBar.tintColor = .black
