@@ -8,6 +8,21 @@
 
 import UIKit
 
-class friendCell: UICollectionViewCell {
+class friendCell: UITableViewCell {
+
+    @IBOutlet weak var avaImg: UIButton!
+    @IBOutlet weak var usernameBtn: UIButton!
+    @IBOutlet weak var checkBtn: UIButton!
+    @IBOutlet weak var usernameLbl: UILabel!
     
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        let checkImage = UIImage(named: "check")
+        let tintedCheckImage = checkImage?.withRenderingMode(.alwaysTemplate)
+        checkBtn.setImage(tintedCheckImage, for: .normal)
+        checkBtn.tintColor = mainColor
+    }
+
 }
