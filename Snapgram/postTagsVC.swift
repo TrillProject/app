@@ -39,13 +39,13 @@ let shopTags = ["Shopping Mall", "Boutique", "Bookshop", "Market", "Thrift Store
 let hotelTags = ["Vacation Resort", "AirBnB", "Hostel", "Bed and Breakfast", "Rental Apartment", "Inn", "Luxury Hotel", "Family Hotels", "Motel"]
 
 class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
+
     // value to hold keyboard frame size
     var keyboard = CGRect()
     var keyboardVisible = false
-    
+
     @IBOutlet weak var scrollView: UIScrollView!
-    
+
     @IBOutlet weak var tagsCollectionView: UICollectionView! {
         didSet {
             tagsCollectionView.dataSource = self
@@ -53,68 +53,68 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         }
     }
     @IBOutlet weak var layout: UICollectionViewFlowLayout!
-    
+
     @IBOutlet weak var customTagsCollectionView: UICollectionView! {
         didSet {
             customTagsCollectionView.dataSource = self
             customTagsCollectionView.delegate = self
         }
     }
-    
+
     @IBOutlet weak var customTagsLayout: LeftAlignedCollectionViewFlowLayout!
-    
+
     @IBOutlet weak var addTagTxt: UITextField!
     @IBOutlet weak var addBtn: UIButton!
-    
+
     @IBOutlet weak var tagsCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var addTagTxtBottomSpace: NSLayoutConstraint!
     @IBOutlet weak var customTagsCollectionViewBottomSpace: NSLayoutConstraint!
     @IBOutlet weak var customTagsCollectionViewHeight: NSLayoutConstraint!
-    
+
     @IBOutlet weak var backgroundView: UIView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.navigationItem.title = "Post"
-        
+
         layout.estimatedItemSize = CGSize(width: 100.0, height: 30.0)
         customTagsLayout.estimatedItemSize = CGSize(width: 100.0, height: 30.0)
-        
+
         let addImg = addBtn.image(for: .normal)?.withRenderingMode(.alwaysTemplate)
         addBtn.setImage(addImg, for: .normal)
         addBtn.tintColor = mainColor
-        
+
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: self.addTagTxt.frame.height))
         addTagTxt.leftView = paddingView
         addTagTxt.leftViewMode = UITextFieldViewMode.always
-        
+
         // check notifications of keyboard - shown or not
         NotificationCenter.default.addObserver(self, selector: #selector(postTagsVC.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(postTagsVC.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
+
         // tap to hide keyboard
         let hideTap = UITapGestureRecognizer(target: self, action: #selector(postTagsVC.hideKeyboard))
         hideTap.numberOfTapsRequired = 1
         self.backgroundView.isUserInteractionEnabled = true
         self.backgroundView.addGestureRecognizer(hideTap)
-        
+
         // to connect with apple/google maps
         //postAddress = "122 North 5th Street, Brooklyn, NY 11211"
         //postCountry = "USA"
         //postCity = "New York"
-        
+
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         tagsCollectionViewHeight.constant = tagsCollectionView.contentSize.height
     }
 
     // cell number
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
+
         if (selectedCategory == "country") {
             tags = countryTags
         } else if (selectedCategory == "city"){
@@ -130,14 +130,14 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         } else {
             tags = hotelTags
         }
-        
+
         if collectionView == tagsCollectionView {
             return tags.count
         } else {
             return customTags.count
         }
     }
-    
+
     // cell config
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // define cell
@@ -157,7 +157,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             return cell
         }
     }
-    
+
     // clicked on tag
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == tagsCollectionView {
@@ -177,7 +177,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             customTagsCollectionView.reloadData()
         }
     }
-    
+
     @IBAction func addBtn_clicked(_ sender: UIButton) {
         if !addTagTxt.text!.isEmpty {
             if !customTags.contains(addTagTxt.text!.lowercased()) && !tags.contains(addTagTxt.text!.lowercased()) {
@@ -189,14 +189,14 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             }
         }
     }
-    
+
     // add post
     @IBAction func publishBtn_clicked(_ sender: UIBarButtonItem) {
-        
+
         sender.isEnabled = false
          //dissmiss keyboard
         self.view.endEditing(true)
-        
+
         // send data to server to "posts" class in Parse
         let object = PFObject(className: "posts")
         object["username"] = PFUser.current()!.username
@@ -206,25 +206,25 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             object["firstname"] = PFUser.current()!.username
         }
         object["ava"] = PFUser.current()!.value(forKey: "ava") as! PFFile
-        
+
         let uuid = UUID().uuidString
         object["uuid"] = "\(PFUser.current()!.username!) \(uuid)"
-        
+
         if postComment == nil {
             object["title"] = ""
         } else {
             object["title"] = postComment!.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         }
-        
+
         // send pic to server after converting to FILE and compression
         if selectedImg != nil {
             let imageData = UIImageJPEGRepresentation(selectedImg!, 0.5)
             let imageFile = PFFile(name: "post.jpg", data: imageData!)
             object["pic"] = imageFile
         }
-        
+
         let objTags = selectedTags + customTags
-        
+
         object["location"] = postLocation
         object["address"] = postAddress
         //object["country"] = postCountry
@@ -233,7 +233,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
         object["tags"] = objTags
         object["rating"] = postRating
         object["favorite"] = isPostFavorite
-        
+
         // send favorite to server
         if isPostFavorite {
             let favoriteObj = PFObject(className: "postFavorites")
@@ -247,7 +247,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
                 }
             })
         }
-        
+
         // send tags to server
         for tag in objTags {
             let tagObj = PFObject(className: "postTags")
@@ -262,21 +262,21 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
                 }
             })
         }
-        
+
         // send #hashtag to server
         if postComment != nil {
             let words:[String] = postComment!.components(separatedBy: CharacterSet.whitespacesAndNewlines)
-        
+
             // define tagged word
             for var word in words {
-                
+
                 // save #hasthag in server
                 if word.hasPrefix("#") {
-                    
+
                     // cut symbol
                     word = word.trimmingCharacters(in: CharacterSet.punctuationCharacters)
                     word = word.trimmingCharacters(in: CharacterSet.symbols)
-                    
+
                     let hashtagObj = PFObject(className: "hashtags")
                     hashtagObj["to"] = "\(PFUser.current()!.username!) \(uuid)"
                     hashtagObj["by"] = PFUser.current()?.username
@@ -292,33 +292,33 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
                 }
             }
         }
-        
+
         // finally save information
         object.saveInBackground (block: { (success, error) -> Void in
             if error == nil {
-                
+
                 // send notification with name "uploaded"
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "uploaded"), object: nil)
-                
+
                 // switch to another ViewController at 0 index of tabbar
                 self.dismiss(animated: true, completion: {
-                    
+
                 })
             }
         })
     }
-    
+
     // func to hide keyboard
     @objc func hideKeyboard() {
         self.view.endEditing(true)
     }
-    
+
     // func when keyboard is shown
     @objc func keyboardWillShow(_ notification: Notification) {
-        
+
         // define keyboard frame size
         keyboard = (((notification as NSNotification).userInfo?[UIKeyboardFrameEndUserInfoKey]! as AnyObject).cgRectValue)!
-        
+
         // move up with animation
         UIView.animate(withDuration: 0.4, animations: { () -> Void in
             self.customTagsCollectionViewBottomSpace.constant = self.customTagsCollectionViewBottomSpace.constant + self.keyboard.height
@@ -328,7 +328,7 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             }
         })
     }
-    
+
     // func when keyboard is hidden
     @objc func keyboardWillHide(_ notification: Notification) {
         keyboardVisible = false
@@ -338,11 +338,11 @@ class postTagsVC: UIViewController, UICollectionViewDataSource, UICollectionView
             self.customTagsCollectionViewBottomSpace.constant = self.customTagsCollectionViewBottomSpace.constant - self.keyboard.height
         })
     }
-    
-    
+
+
     @IBAction func backBtn_clicked(_ sender: UIBarButtonItem) {
         self.view.endEditing(true)
         self.dismiss(animated: true, completion: nil)
     }
-    
+
 }

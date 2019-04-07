@@ -14,7 +14,7 @@ class locationCell: UITableViewCell {
 
     @IBOutlet weak var locationTitle: UILabel!
     @IBOutlet weak var addressLbl: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

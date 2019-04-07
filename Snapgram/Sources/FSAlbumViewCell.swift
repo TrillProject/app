@@ -16,29 +16,29 @@ final class FSAlbumViewCell: UICollectionViewCell {
             checkmarkImageView.isHidden = true
         }
     }
-    
+
     var selectedLayer = CALayer()
-    
+
     var image: UIImage? {
         didSet {
             imageView.image = image
         }
     }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         isSelected = false
         selectedLayer.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.5).cgColor
     }
-    
+
     override var isSelected : Bool {
         didSet {
             if selectedLayer.superlayer == self.layer {
                 selectedLayer.removeFromSuperlayer()
                 checkmarkImageView.isHidden = true
             }
-            
+
             if isSelected {
                 selectedLayer.frame = self.bounds
                 layer.addSublayer(selectedLayer)

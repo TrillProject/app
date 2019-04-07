@@ -18,22 +18,22 @@ class postCell: UITableViewCell {
     @IBOutlet weak var locationBtn: UIButton!
     @IBOutlet weak var locationTitleBtn: UIButton!
     @IBOutlet weak var addressLbl: UILabel!
-    
+
     // main picture
     @IBOutlet weak var picImg: UIImageView!
-    
+
     // review
     @IBOutlet weak var reviewBackground: UIView!
     @IBOutlet weak var reviewOverlay: UIView!
     @IBOutlet weak var reviewOverlayLeadingSpace: NSLayoutConstraint!
-    
+
     // buttons
     @IBOutlet weak var likeBtn: UIButton!
     @IBOutlet weak var commentBtn: UIButton!
     @IBOutlet weak var suitcaseBtn: UIButton!
     @IBOutlet weak var suitcaseBtnLeadingSpace: NSLayoutConstraint!
     @IBOutlet weak var suitcaseBtnHeight: NSLayoutConstraint!
-    
+
     // tags
     @IBOutlet weak var tag1View: UIView!
     @IBOutlet weak var tag1Btn: UIButton!
@@ -41,36 +41,36 @@ class postCell: UITableViewCell {
     @IBOutlet weak var tag2Btn: UIButton!
     @IBOutlet weak var tag3View: UIView!
     @IBOutlet weak var tag3Btn: UIButton!
-    
+
     // labels
     @IBOutlet weak var commentLbl: UILabel!
     @IBOutlet weak var likeLbl: UILabel!
     @IBOutlet weak var titleLbl: KILabel!
     @IBOutlet weak var uuidLbl: UILabel!
-    
+
     @IBOutlet weak var usernameLbl: UILabel!
-    
+
     @IBOutlet weak var locationImgWidth: NSLayoutConstraint!
-    
+
     // default func
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         // clear like button & suitcase button title color
         likeBtn.setTitleColor(UIColor.clear, for: UIControlState())
         suitcaseBtn.setTitleColor(UIColor.clear, for: UIControlState())
-        
+
     }
-    
+
     // clicked suitcase button
     @IBAction func suitcaseBtn_click(_ sender: UIButton) {
-        
+
         // declare title of button
         let title = sender.title(for: UIControlState())
-        
+
         // to add to suitcase
         if title == "notAdded" {
-            
+
             let object = PFObject(className: "suitcase")
             object["user"] = PFUser.current()?.username
             object["location"] = self.locationTitleBtn.currentTitle!
@@ -78,10 +78,10 @@ class postCell: UITableViewCell {
             object.saveInBackground(block: { (success, error) -> Void in
                 if success {
                     print("added to suitcase")
-                    
+
                     // send notification if we liked to refresh TableView
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
-                    
+
                     self.suitcaseBtn.setTitle("added", for: UIControlState())
                     self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-fill1.png"), for: UIControlState())
                 } else {
@@ -89,7 +89,7 @@ class postCell: UITableViewCell {
                 }
             })
         }
-            
+
         // to remove from suitcase
         else {
             let query = PFQuery(className: "suitcase")
@@ -101,10 +101,10 @@ class postCell: UITableViewCell {
                     object.deleteInBackground(block: { (success, error) -> Void in
                         if success {
                             print("removed from suitcase")
-                            
+
                             // send notification if we liked to refresh TableView
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "suitcase"), object: nil)
-                            
+
                             self.suitcaseBtn.setTitle("notAdded", for: UIControlState())
                             self.suitcaseBtn.setBackgroundImage(UIImage(named: "suitcase-outline1.png"), for: UIControlState())
                         } else {
@@ -115,16 +115,16 @@ class postCell: UITableViewCell {
             })
         }
     }
-    
+
     // clicked like button
     @IBAction func likeBtn_click(_ sender: AnyObject) {
-        
+
         // declare title of button
         let title = sender.title(for: UIControlState())
-        
+
         // to like
         if title == "unlike" {
-            
+
             let object = PFObject(className: "likes")
             object["by"] = PFUser.current()?.username
             object["to"] = uuidLbl.text
@@ -133,10 +133,10 @@ class postCell: UITableViewCell {
                     print("liked")
                     self.likeBtn.setTitle("like", for: UIControlState())
                     self.likeBtn.setBackgroundImage(UIImage(named: "heart-fill.png"), for: UIControlState())
-                    
+
                     // send notification if we liked to refresh TableView
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
-                    
+
                     // send notification as like
                     if self.usernameLbl.text != PFUser.current()?.username {
                         let newsObj = PFObject(className: "news")
@@ -154,30 +154,30 @@ class postCell: UITableViewCell {
                     }
                 }
             })
-            
+
         // to dislike
         } else {
-            
+
             // request existing likes of current user to show post
             let query = PFQuery(className: "likes")
             query.whereKey("by", equalTo: PFUser.current()!.username!)
             query.whereKey("to", equalTo: uuidLbl.text!)
             query.findObjectsInBackground(block: { (objects, error) -> Void in
-                
+
                 // find objects - likes
                 for object in objects! {
-                    
+
                     // delete found like(s)
                     object.deleteInBackground(block: { (success, error) -> Void in
                         if success {
                             print("disliked")
                             self.likeBtn.setTitle("unlike", for: UIControlState())
                             self.likeBtn.setBackgroundImage(UIImage(named: "heart-outline.png"), for: UIControlState())
-                            
+
                             // send notification if we liked to refresh TableView
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "liked"), object: nil)
-                            
-                            
+
+
                             // delete like notification
                             let newsQuery = PFQuery(className: "news")
                             newsQuery.whereKey("by", equalTo: PFUser.current()!.username!)
@@ -197,14 +197,14 @@ class postCell: UITableViewCell {
             })
         }
     }
-    
-    
+
+
     // set post rating
     func setRating(_ rating : CGFloat) {
         reviewOverlayLeadingSpace.constant = rating * reviewBackground.frame.size.width
         Review.colorReview(rating, reviewBackground)
     }
-    
+
     // set tags
     func setTags(_ assignedTags : [String]) {
         let numberOfTags = assignedTags.count
@@ -227,10 +227,10 @@ class postCell: UITableViewCell {
             tag3View.isHidden = true
         }
     }
-    
+
     // DELETE post action
     class func deletePostData(_ uuid : String, _ isFavorite : Bool) {
-        
+
         // STEP 1. Delete likes of post from server
         let likeQuery = PFQuery(className: "likes")
         likeQuery.whereKey("to", equalTo: uuid)
@@ -241,7 +241,7 @@ class postCell: UITableViewCell {
                 }
             }
         })
-        
+
         // STEP 2. Delete comments of post from server
         let commentQuery = PFQuery(className: "comments")
         commentQuery.whereKey("to", equalTo: uuid)
@@ -252,7 +252,7 @@ class postCell: UITableViewCell {
                 }
             }
         })
-        
+
         // STEP 3. Delete hashtags of post from server
         let hashtagQuery = PFQuery(className: "hashtags")
         hashtagQuery.whereKey("to", equalTo: uuid)
@@ -263,7 +263,7 @@ class postCell: UITableViewCell {
                 }
             }
         })
-        
+
         // STEP 4. Delete tags to post from server
         let tagQuery = PFQuery(className: "postTags")
         tagQuery.whereKey("to", equalTo: uuid)
@@ -274,7 +274,7 @@ class postCell: UITableViewCell {
                 }
             }
         })
-        
+
         // STEP 5. Delete post favorites from server
         if isFavorite {
             let favoriteQuery = PFQuery(className: "postFavorites")
@@ -287,7 +287,7 @@ class postCell: UITableViewCell {
                 }
             })
         }
-        
+
         // STEP 6. Delete news related to post from server
         let newsQuery = PFQuery(className: "news")
         newsQuery.whereKey("uuid", equalTo: uuid)

@@ -47,7 +47,6 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         isPostFavorite = false
     }
     
-    
     // value to hold keyboard frame size
     private var keyboard = CGRect()
     private var keyboardVisible = false
@@ -65,7 +64,6 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     @IBOutlet weak var titleTxt: UITextView!
     @IBOutlet weak var locationLbl: UILabel!
     @IBOutlet weak var editLocationBtn: UIButton!
-    
     
     @IBOutlet weak var categoryOverlayView: UIView!
     @IBOutlet weak var imgOverlayView: UIView!
@@ -99,6 +97,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         // standard UI containt
         picImg.image = UIImage(named: "pbg.jpg")
         
+
         editLocationBtn.addTarget(self, action: #selector(autocompleteClicked), for: .touchUpInside)
         
         titleTxt.delegate = self
@@ -169,6 +168,7 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             fusuma.delegate = self
             //fusuma.availableModes = [FusumaMode.library, FusumaMode.camera, FusumaMode.video]
             fusuma.availableModes = [FusumaMode.library, FusumaMode.camera]
+            //fusuma.allowMultipleSelection = true
             self.present(fusuma, animated: true, completion: nil)
             loadCamera = false
         } else {
@@ -498,7 +498,6 @@ class uploadVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     // MARK: FusumaDelegate Protocol
     /* func fusumaImageSelected(_ image: UIImage) {
         
-        print("Image selected")
         picImg.image = image
         selectedImg = image
         
